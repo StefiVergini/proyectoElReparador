@@ -1,0 +1,109 @@
+/* Estilos CSS Calendario */
+.div-calendario { display: flex; justify-content: center; padding: 20px; gap: 20px;}
+.lista-eventos { position: relative; width: 300px; background-color: #f5f5f5; border-radius: 8px; padding-top: 50px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); }
+.lista-eventos-header { font-weight: bold; background-color: #1d4b9f; color: white; text-align: center; padding: 10px; }
+.evento-item { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #ddd; }
+.titulo-evento { font-size: 0.9em;  flex: 1; margin-right: 10px; }
+.agregar-evento-btn { position: absolute; top: 10px; right: 10px; width: 40px; height: 40px; background-color: #1d4b9f; color: white; font-size: 1.5em; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 1; }
+#calendar { width: 600px; background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); border: 1px solid black; cursor: pointer;}
+
+/*h3{
+    color: #494949;
+    background-color: #8c3939;
+    color: #d1d10d;
+    background-color:#105810;
+
+}*/
+/* Estilos del modal */
+.modal { 
+display: none; 
+position: fixed; 
+top: 0; 
+left: 0; 
+width: 100%; 
+height: 100%; 
+background-color: rgba(0,0,0,0.5); 
+z-index: 1000; /* Asegura que esté por encima del calendario */
+}
+
+.modal-contenido { 
+background-color: #8497c5;
+margin: 10% auto; 
+padding: 20px; 
+border-radius: 5px; 
+width: 400px;
+height: auto; 
+border: 12px ridge #3f3c3b;
+position: relative; 
+transform: translateY(-50%); 
+top: 25%;
+text-align:center;
+}
+.h2-modal{
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    margin-top: 2px;
+    margin-bottom: 5px;
+    text-align:center;
+}
+.fieldset-modal {
+    border: 2px dashed #3f3c3b;
+    border-radius: 15px;
+    margin: 1rem;
+}
+
+.label-modal{
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    color: black;
+    font-size: 1.25rem;
+    text-align: center;
+    padding: 0 1rem;
+   
+}
+.cerrar-modal { 
+    color: #aaa; 
+    float: right; 
+    font-size: 28px; 
+    font-weight: bold; 
+    cursor: pointer; 
+}
+
+.cerrar-modal:hover { 
+    color: black; 
+}
+.btn-calendario{
+    display: inline-block;
+    color: #fff;
+    text-align: justify;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 16px;
+    font-weight:bolder;
+    background-color: #3f3c3b;
+    cursor: pointer;
+    border: 2px outset #0608a2;
+    border-radius: 15px;
+    padding: 0.75em 0.75em 0.75em;
+    transition: all .1s ease;
+    animation: aparecer1 2s ease 1 backwards;
+}
+.btn-calendario:hover{
+    border: 4px outset #07eafa;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.icono-eventos{
+    background-color:black; 
+    border: 1px inset #fff;
+    border-radius:5px; 
+    margin:3px;
+    padding:2px;
+    display: inline-flex;        
+    justify-content: center;     
+    align-items: center;           
+    width: 30px;                  
+    height: 35px;    
+    cursor: pointer;
+}
+.icono-eventos:hover{
+    border: 3px outset #07eafa;
+}

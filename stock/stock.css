@@ -1,0 +1,90 @@
+.principal-actions{
+    display: flex;
+    margin-top: 1rem;
+    justify-content: start;
+    align-items: center;
+}
+
+.table-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+.stock_search-label{
+    display: block;
+    color: var(--negroPrincipal);
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.stock-search{
+    caption-side:top;
+}
+
+.stock-report{
+    height: 48px;
+}
+
+.principal-actions{
+    display: flex;
+    gap: 2rem;
+    margin-top: 1rem;
+    justify-content: center;
+    align-items: center;
+}
+
+/*EDIT*/
+.form-edit-stock{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: column;
+    
+}
+
+.form_input-container{
+    display: flex;
+    justify-content:center;
+    /*align-items: center;*/
+    flex-direction: column;
+    max-width: 100%;
+    gap:1rem;
+    margin-top: 2rem;
+}
+
+.stock_inputs-edit-type{
+    display: flex;
+    justify-content: space-between;
+}
+
+.form-search-prov{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap:2rem;
+}
+
+.stock_search-prov-titles{
+    margin-bottom: 2rem;
+}
+
+.stock_add-btn{
+    display: flex;
+    justify-content: center;
+    gap:1rem;
+}
+
+.flex-inputs{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+
+

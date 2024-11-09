@@ -1,0 +1,102 @@
+
+/* Estilo general del formulario */
+.formulario-contenedor {
+    display: grid;
+    background-color: #8194c4;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 80%;
+    margin: auto;
+    margin-bottom: 10px;
+}
+.formulario-contenedor h1{      
+    color: #0201B4;
+    margin-bottom: 15px;
+    font-size: 2.5rem;
+}
+
+form {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    align-items: center;
+}
+.form-group{
+    border: 1px solid #0201B4;
+    box-shadow: 2px 1px 1px #0201B4; 
+    padding: 10px;
+    border-radius: 8px;
+}
+.form-group input,
+.form-group select {
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    width: 100%;
+}
+        
+.radio-group {
+    display: block;
+    flex-direction: column;
+    gap: 5px;
+    margin-top: 8px;
+}
+
+/* Estilo individual para cada radio button */
+.radio-group label {
+            
+    align-items: center;
+    color:black;
+            
+}
+        
+.radio-group input[type="radio"] {
+
+    transform: scale(1.2);
+}
+
+/* Estilo de los botones en línea y a la derecha */
+.button-group {
+    grid-column: span 2;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+/* Estilo de los botones */
+.boton {
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: bold;
+    color: white;
+    border: 1px solid gray;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom:10px;
+}
+.boton:hover{
+    text-transform: uppercase;
+    border: 3px double #353535;
+}
+.boton.submit {
+    background-color: #4041FB;
+}
+
+.boton.cancelar {
+    background-color: #FC0800;
+}
+
+.boton a {
+    color: white;
+    text-decoration: none;
+}
+@media (max-width: 768px) {
+    form {
+        grid-template-columns: 1fr;
+    }
+    .button-group {
+        grid-column: span 1;
+        justify-content: center;
+    }
+}

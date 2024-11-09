@@ -1,0 +1,262 @@
+@import "../colors.css";
+/*Electrodomesticos*/
+.contenedor-electro {
+  background-color: #8497c5;
+  color: #8497c5;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 600px;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.pantalla-electro {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  flex-grow: 1;
+}
+
+.botones-electro {
+  background-color: var(--azulSecundario);
+  color: var(--blancoPrincipal);
+  font-weight: bold;
+  border: none;
+  padding: 15px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 22px;
+  transition: background-color 0.3s;
+  width: 220px;
+  height: 120px;
+  text-align: left;
+  text-decoration: none;
+}
+.consulta-electro {
+  text-decoration: none;
+  color: black;
+}
+/*Consulta-electro*/
+h4 {
+  color: var(--blancoPrincipal);
+  text-align: center;
+  margin-bottom: 20px;
+}
+.tabla-consulta {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+.tabla-consulta td {
+  padding: 10px;
+  vertical-align: middle;
+}
+.label {
+  font-size: 14px;
+  color: var(--blancoPrincipal);
+}
+.botones {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+.contenedor-consulta {
+  background-color: #8497c5;
+  display: flex;
+  flex-direction: column;
+  /*height: 600px;*/
+  padding: 20px;
+  box-sizing: border-box;
+  /*position: relative;*/
+  overflow: auto;
+  justify-content: center;
+  align-items:center;
+}
+.opciones {
+  display: inline-block;
+  border-radius: 5px;
+  margin: 10px;
+  padding: 1px;
+}
+.tipo-identificacion {
+  margin-right: 20px;
+}
+
+label {
+  margin-right: 20px;
+  font-size: 14px;
+  color: var(--negroPrincipal);
+}
+
+.input-identificacion {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+  margin-bottom: 15px;
+}
+.input-identificacion input {
+  padding: 12px 20px;
+  font-size: 18px;
+  width: 100%;
+  max-width: 500px;
+}
+.formulario-consulta {
+  border: 2px solid var(--azulPrincipal);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: var(--azulPrincipal);
+  width: 60%;
+  /*max-width: 600%;*/
+ 
+  /*margin: auto;*/
+}
+
+.resultados {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.tarjeta {
+  background-color: var(--azulPrincipal);
+  color: var(--negroPrincipal);
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 15px;
+  width: 100%;
+  max-width: 500px;
+  min-height: 200px;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin: 10px 0;
+}
+
+.tarjeta:hover {
+  transform: scale(1.05);
+}
+
+.campo {
+  margin-bottom: 10px;
+}
+.detalles {
+  display: none;
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  background-color: #8d8e89;
+}
+
+/*Agregar_reparacion*/
+
+.contenedor_agregar {
+  background-color: #8497c5;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  box-sizing: border-box;
+  /*position: relative;*/
+  overflow: auto;
+  display: flex;
+  justify-content: center;
+  align-items:center;
+}
+.tarjeta-datos-cliente {
+  background-color: var(--blancoPrincipal);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+.tarjeta-datos-cliente input {
+  padding: 16px;
+  font-size: 18px;
+  border: 2px solid var(--grisPrincipal);
+  border-radius: 8px;
+  background-color: var(--blancoPrincipal);
+  width: 300px;
+  height: 50px;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+  display: inline-block;
+  vertical-align: middle;
+  line-height: normal;
+}
+.tarjeta-datos-cliente select {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  margin: 0px;
+  padding: 0px;
+  font-size: 16px;
+  border: 2px solid var(--grisPrincipal);
+  border-radius: 8px;
+  background-color: var(--blancoPrincipal);
+  width: 300px;
+  height: 50px;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+  padding-left: 12px;
+  display: inline-block;
+  vertical-align: middle;
+  line-height: normal;
+}
+.tarjeta-datos-cliente textarea {
+  padding: 16px;
+  font-size: 18px;
+  border: 2px solid var(--grisPrincipal);
+  border-radius: 8px;
+  background-color: var(--blancoPrincipal);
+  width: 300px;
+  height: 50px;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+  display: inline-block;
+  resize: vertical;
+  vertical-align: middle;
+  line-height: normal;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.btn-agregar {
+  text-decoration: none;
+  background-color: var(--azulSecundario);
+  color: var(--blancoPrincipal);
+  font-size: 1.5rem;
+  border-radius: 0.5rem;
+  height: 88px;
+  text-align: center;
+  cursor: pointer;
+  border: none;
+  padding: 0.5rem;
+  display: inline-block;
+  width: 200px;
+}
+.cont-btn {
+  text-align: center;
+}
+.btn-e{
+  text-decoration: none;
+  background-color: var(--azulSecundario);
+  color: var(--blancoPrincipal);
+  font-size: 1.5rem;
+  border-radius: 0.5rem;
+  height: 48px;
+  text-align: center;
+  cursor: pointer;
+  border: none;
+  padding: 0.5rem;
+  display: inline-block;
+  width: 150px;
+}
+.form-add{
+  width: 700px;
+}

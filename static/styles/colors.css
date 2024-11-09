@@ -1,0 +1,18 @@
+/* Variables de todos los colores del proyecto.
+Reemplazar todos los colores del proyecto por estas variables.
+Si se quiere probar alguna variable, comentarla y volverla a escribir con otro valor de color
+*/
+:root{
+    --azulPrincipal:#0201B4;
+    --azulSecundario: #4041FB;
+    --azulBtnHover: #0f0fca;
+    --blancoPrincipal: #FFFFFF;
+    --grisPrincipal: #8D8E89;
+    --grisSecundario: #E5EBEF;
+    --negroPrincipal: #000000;
+    --rojoPrincipal: #FC0800;
+    --rojoSecundario: #aa1813;
+    --verdePrincipal: #2db60a;
+    --verdeSecundario: #247510;
+  }
+

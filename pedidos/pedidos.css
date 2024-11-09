@@ -1,0 +1,81 @@
+.principal-actions{
+    display: flex;
+    gap: 2rem;
+    margin-top: 1rem;
+    justify-content: center;
+    align-items: center;
+}
+
+.ped-report{
+    height: 48px;
+}
+
+.table-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+/*.ped_item-actions{
+    /*background-color: var(--blancoPrincipal);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}*/
+
+.pedido-search{
+    caption-side:top;
+}
+
+.pedido-search-label{
+    display: block;
+    color: var(--negroPrincipal);
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+/*CERRAR PEDIDO*/
+
+.ped-close{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/*AGREGAR PEDIDOS*/
+
+.ped-add-btn{
+    display: flex;
+    justify-content: end;
+    gap:1rem;
+}
+
+.form-add-ped{
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 2rem;
+}
+
+.ped_inputs{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.form_input-container-pedidos{
+    display: flex;
+    justify-content: start;
+    flex-direction: column;
+    gap:2rem;
+}
+
+.input-wrap{
+    display: flex;
+    justify-content: end;
+    align-items: center;
+}

@@ -1,0 +1,20 @@
+.mail-form{
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    flex-direction: column;
+    margin: 2rem 0 2rem 0;
+    gap:2rem;
+}
+
+.text-area{
+    min-width: 40%;
+    min-height: 200px;
+}
+
+.text-area::placeholder{
+    color: var(--negroPrincipal);
+    font-style: italic;
+    font-size: 1.5rem;
+    padding: 1rem 0 0 1rem;
+  }
