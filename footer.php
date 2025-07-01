@@ -3,6 +3,6 @@
         El Reparador - Servicio Tecnico especializado
     </div>
     <div>
-        Desarrollado por Grupo Nro. 3 - Stefania - Carolina - Soledad - Maximiliano
+        - Desarrollado por Carolina Ibarrola - Soledad Ortiz - Stefania Vergini -
     </div>
 </footer>

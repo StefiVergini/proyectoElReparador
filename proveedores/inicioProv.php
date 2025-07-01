@@ -30,9 +30,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Proveedores</title>
-    <link rel="stylesheet" href="../static/styles/style.css" />
+    <title>Proveedores | Pedidos </title>
+    <link rel="stylesheet" href="../static/styles/style.css" /> 
     <link rel="stylesheet" href="../static/styles/tablas.css" />
+    <script src="../static/js/funciones_empleados.js"></script>
     <script src="../static/js/funciones_select_nav.js"></script>
 </head>
 <body>
@@ -41,7 +42,7 @@
     <div class="div-con-botones">
         <div class="form-container">
             <div class="desplegable" style="margin-right: 5rem;">
-                <button class="btn">Exportar</button>
+                <button class="btn">Exportar &#9207;</button>
                 <div class="link">
                     <a target="_blank" href="pdf_prov.php">pdf</a>
                     <a class="excel" href="excel_prov.php">excel</a>
@@ -53,12 +54,28 @@
                     <button class="btn-iconos" type="submit"><img src="../static/images/lupa.png" alt="Buscar" width='30' height='20' /></button>
                 </form>
             </div>
-            <button class="btn"> Agregar
-                <a class="btn-iconos" href="altaProv.php"><img src="../static/images/agregar.png" alt="agregar" title="Agregar Proveedor" width="30" height="30"></a>
-            </button>
+            <form action='altaProv.php' method='post' style='display:inline;'>
+                <button type='submit' class='btn'> Agregar +
+
+                </button>
+            </form>
 
         </div>
     </div>
+    <div class="div-con-botones">
+        <div class="form-container">
+            <div class="desplegable" style="margin-right: 5rem;">
+                <button class="btn">Pedidos &#9207;</button>
+                <div class="link">
+                    <a href="../pedidos/nuevoPedido.php">Nuevo Pedido</a>
+                    <a href="../pedidospedidosActivos.php">Pedidos Activos</a>
+                    <a href="../pedidos/historialPedidos.php">Historial de Pedidos</a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="table-container"  style="margin-top: 1rem;">
 
         <table class="tabla">
@@ -112,13 +129,6 @@
                             } else {
                                 // Si está inactivo (estado == 0), deshabilita el botón de editar y cambia el botón de eliminar por actualizar
                                 echo "<td class='tabla-data'>
-                                        <form action='modificarProv.php' method='post' style='display:inline;'>
-                                            <input type='hidden' name='id' value='" . $proveedor->getIdProv() . "'>
-                                            <button type='submit' class='btn-iconos' disabled>
-                                                <img src='../static/images/editar.png' alt='modificar' title='Editar Proveedor' width='20' height='20'>
-                                            </button>
-                                        </form>
-                                        |
                                         <form action='actualizarProv.php' method='post' style='display:inline;'  onsubmit='return confirmarActualizacion(\"" . $proveedor->getNomProv() . "\", \"" . $proveedor->getCuit() . "\")'>
                                             <input type='hidden' name='id' value='" . $proveedor->getIdProv() . "'>
                                             <button type='submit' class='btn-iconos'>

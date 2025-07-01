@@ -18,6 +18,8 @@ document.addEventListener('DOMContentLoaded', function() {
         },
         events: function(fetchInfo, successCallback, failureCallback) {
             fetchEventsFromDatabase(successCallback, failureCallback);
+            
+            
         },
         dateClick: function(info) {
             // Llenar los campos de fecha y hora en el formulario del modal
@@ -58,23 +60,30 @@ document.addEventListener('DOMContentLoaded', function() {
     .then(data => {
         //console.log(data);
         const eventListContainer = document.getElementById('event-list-container');
-        eventListContainer.innerHTML = '';
+        eventListContainer.innerHTML = ''; // Limpiar el contenedor antes de agregar los nuevos eventos
+    
+        let contador = 0;  // Contador de eventos que se van agregando
+        let maximo = 7;    // Número máximo de eventos a mostrar
+    
+        // Itera sobre los eventos hasta 7
         data.forEach(evento => {
-            // Crear un objeto Date para las fechas
+            if (contador >= maximo) return; // Detener si ya se han agregado 7 eventos
+    
             const hoy = new Date();
-            
             console.log(hoy.toLocaleDateString());
             const fechaInicio = new Date(evento.fecha_inicio);
             const fechaFin = new Date(evento.fecha_fin);
     
-            // Sumar un día a cada fecha - aparecen mal en js es un error comun
+            // Sumar un día a cada fecha - esto corrige un error común en JavaScript con las fechas
             fechaInicio.setDate(fechaInicio.getDate() + 1);
             fechaFin.setDate(fechaFin.getDate() + 1);
     
-            const eventItem = document.createElement('div');
-            eventItem.className = `evento-item evento-tipo-${evento.tipo}`;
-            eventItem.style.backgroundColor = evento.color;
-            if(fechaFin >= hoy){
+            // Solo mostrar eventos cuya fecha de fin sea mayor o igual a hoy
+            if (fechaFin >= hoy) {
+                const eventItem = document.createElement('div');
+                eventItem.className = `evento-item evento-tipo-${evento.tipo}`;
+                eventItem.style.backgroundColor = evento.color;
+    
                 // Construcción del HTML de cada evento
                 let eventHTML = `
                     <span class="titulo-evento" style="font-weight: bold; font-size: 15px; text-transform: capitalize;">
@@ -82,8 +91,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         Inicio: ${fechaInicio.toLocaleDateString()} - 
                         Fin: ${fechaFin.toLocaleDateString()}
                     </span>`;
+                
                 const estadoEvento = Number(evento.estado_evento);
-                // Botón de editar
                 if (estadoEvento === 1) { // Evento activo
                     eventHTML += `
                         <span class="icono-eventos editar-evento" data-id="${evento.idcalendario}" 
@@ -93,28 +102,23 @@ document.addEventListener('DOMContentLoaded', function() {
                             data-fecha-fin="${evento.fecha_fin}" 
                             data-hora-fin="${evento.hora_fin}">
                             <img class= "img" src="../static/images/editar.png" alt="Editar" width='20' height='20'>
-                        </span>`;
-                    
-                    // Botón de eliminar
-                    eventHTML += `
+                        </span>
                         <span class="icono-eventos eliminar-evento" data-id="${evento.idcalendario}">
                             <img class= "img" src="../static/images/borrar.png" alt="Eliminar" width='20' height='20'>
                         </span>`;
                 } else {
-                    
-                    // Botón de reactivar (actualizar)
                     eventHTML += `
                         <span class="icono-eventos actualizar-evento" data-id="${evento.idcalendario}">
                             <img class= "img" src="../static/images/actualizar.png" alt="Reactivar" width='20' height='20'>
                         </span>`;
                 }
-        
-                // Insertar el HTML en el contenedor del evento
+    
                 eventItem.innerHTML = eventHTML;
                 eventListContainer.appendChild(eventItem);
+                contador++;  
             }
-
         });
+    
     
         // Agregar listeners para los botones de editar y eliminar/actualizar después de renderizar los eventos
         document.querySelectorAll('.editar-evento').forEach(span => {
@@ -150,7 +154,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Cerrar modal de editar evento
     cerrarModalEditar.onclick = function() {
         modalEditarEvento.style.display = "none";
-        modalEditarEvento.style.zIndex = ""; // Restablecer el z-index original
+        modalEditarEvento.style.zIndex = "";
     };
     // Cerrar el modal de agregar
     cerrarModalAgregar.onclick = function() {
@@ -178,15 +182,10 @@ function abrirModalAgregar() {
 function abrirModalEditar(idEvento, descripcion, fechaInicio, horaInicio, fechaFin, horaFin) {
     const modalEditar = document.getElementById("modalEditarEvento");
     document.getElementById('idcalendario').value = idEvento; 
-    //console.log("HOLAAAAAAA");
     if (modalEditar) {
-        modalEditar.style.display = "block"; // Asegúrate de que esté aquí
-        //console.log("Modal de edición abierto con ID:", idEvento); // Para verificar que esta línea se ejecuta
-        // Aumentar el z-index del modal
+        modalEditar.style.display = "block"; 
         modalEditar.style.zIndex = "9999";
-        // Asegura de que idEvento sea numérico
         const numericId = parseInt(idEvento, 10);
-        // Llenar campos dentro del modal
         document.getElementById('inputDescripcion').value = descripcion;
         document.getElementById('inputFechaInicio').value = fechaInicio;
         document.getElementById('inputHoraInicio').value = horaInicio;
@@ -210,10 +209,10 @@ function guardarCambiosEvento() {
     fetch('editar_evento.php', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json' // Mantener como JSON
+            'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            idcalendario: idEvento, // cambiar a idcalendario
+            idcalendario: idEvento,
             inputDescripcion: descripcion,
             inputFechaInicio: fechaInicio,
             inputHoraInicio: horaInicio,
@@ -228,10 +227,9 @@ function guardarCambiosEvento() {
     })
     .catch(error => console.error('Error al actualizar evento:', error));
 }
-// Función para finalizar un evento
+
 function reactivarEvento(idEvento) {
     if (confirm('¿Estás seguro de que deseas reactivar este evento?')) {
-        // Realiza una petición a tu archivo PHP para eliminar el evento
         fetch('actualizar_evento.php', {
             method: 'POST',
             headers: {
@@ -255,7 +253,6 @@ function reactivarEvento(idEvento) {
 // Función para eliminar un evento
 function eliminarEvento(idEvento) {
     if (confirm('¿Estás seguro de que deseas finalizar este evento?')) {
-        // Realiza una petición a tu archivo PHP para eliminar el evento
         fetch('eliminar_evento.php', {
             method: 'POST',
             headers: {

@@ -16,10 +16,8 @@ try {
     }
 
     // Prepara y ejecuta la consulta para actualizar el estado y fechas del evento
-    $sql = "UPDATE calendario SET fecha_fin = :fecha_fin, hora_fin = :hora_fin, estado_evento = 0 WHERE idcalendario = :id_evento";
+    $sql = "UPDATE calendario SET estado_evento = 0 WHERE idcalendario = :id_evento";
     $stmt = $base->prepare($sql);
-    $stmt->bindParam(':fecha_fin', $fecha_fin);
-    $stmt->bindParam(':hora_fin', $hora_fin);
     $stmt->bindParam(':id_evento', $id_evento, PDO::PARAM_INT);
     
     $success = $stmt->execute();

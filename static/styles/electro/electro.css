@@ -1,5 +1,18 @@
 @import "../colors.css";
 /*Electrodomesticos*/
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden; 
+}
+main {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
 .contenedor-electro {
   background-color: #8497c5;
   color: #8497c5;
@@ -7,7 +20,8 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 600px;
+  /*min-height: 600px;
+  height: auto;*/
   box-sizing: border-box;
   position: relative;
 }
@@ -70,13 +84,14 @@ h4 {
   display: flex;
   flex-direction: column;
   /*height: 600px;*/
-  padding: 20px;
+  padding: 20px; 
   box-sizing: border-box;
   /*position: relative;*/
   overflow: auto;
   justify-content: center;
   align-items:center;
 }
+
 .opciones {
   display: inline-block;
   border-radius: 5px;
@@ -108,8 +123,11 @@ label {
   max-width: 500px;
 }
 .formulario-consulta {
+  /*width: 100%;*/
+  max-width: 700px;
   border: 2px solid var(--azulPrincipal);
   padding: 20px;
+  margin: top 50px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   background-color: var(--azulPrincipal);
@@ -120,9 +138,19 @@ label {
 }
 
 .resultados {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
+  flex-grow: 1;
+  max-height: 60vh; /* Ajusta según el diseño */
+  overflow-y: auto;
+  padding: 10px;
+  /*descomentar todo lo de abajo
+  display: flex;*/
+ /* flex-wrap: wrap;   Permitir que las tarjetas pasen a la siguiente línea */
+  /*gap: 20px;*/
+  /*justify-content: center; Centrar tarjetas en el contenedor */
+  /*max-height: 80vh;  Limitar altura para que no desborde toda la pantalla */
+ /* overflow-y: auto;  Habilitar scroll vertical si hay muchas tarjetas */
+  /*padding: 10px;*/
+  
 }
 
 .tarjeta {
@@ -131,10 +159,9 @@ label {
   border: 1px solid #ccc;
   border-radius: 5px;
   padding: 15px;
-  width: 100%;
+  width: calc(50% - 20px); /* Hacer que las tarjetas ocupen el 50% del ancho con margen */
   max-width: 500px;
   min-height: 200px;
-  height: auto;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -259,4 +286,7 @@ label {
 }
 .form-add{
   width: 700px;
+}
+.separador{
+  margin-top: 30px;
 }

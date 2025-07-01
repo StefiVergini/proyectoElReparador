@@ -1,9 +1,9 @@
-                
+         
 .titulo {
     font-size: 2.5rem;
     padding:10px;
     color: #0201B4;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
         
 .table-container {
@@ -11,7 +11,8 @@
     width: 100%;
     overflow-x: auto; 
     margin-bottom: 20px;
-    padding-top: 20px;
+    margin-top: 0;
+    padding-top: 10px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -29,7 +30,7 @@
         
 .tabla-head .tabla-data {
     padding: 5px;
-    border: 1px solid #ddd;
+    border: 3px solid #ddd;
 }
         
 .tabla-head{
@@ -91,8 +92,44 @@
 .div-con-botones{
     display: flex;
     justify-content: center;
-    flex-wrap: nowrap;
-    
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+    height: 100px;
+
+}
+.button-group {
+    grid-column: span 2;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+/* Estilo de los botones */
+.boton {
+    padding: 8px 16px;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    border: 1px solid gray;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom:10px;
+}
+.boton:hover{
+    text-transform: uppercase;
+    border: 3px double #353535;
+}
+.boton.submit {
+    background-color: #4041FB;
+}
+
+.boton.cancelar {
+    background-color: #FC0800;
+}
+
+.boton a {
+    color: white;
+    text-decoration: none;
 }
 
 /* Vista móvil: Cambia a una columna */
@@ -102,3 +139,4 @@
     }
 
 }
+

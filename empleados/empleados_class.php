@@ -378,6 +378,41 @@ class Empleados {
             return false;
         }
     }
+    public function tecnicosXLocal($local) {
+        try {
+
+            $query = "SELECT e.idempleados, e.nom_empleado, e.ape_empleado
+                    FROM empleados e
+                    INNER JOIN historial_empleados h ON e.idempleados = h.idempleados
+                    WHERE e.idlocal = :mi_local
+                    AND h.idcategorias_empleados IN (1, 7, 8)
+                    AND h.estado_empleado = 1
+                    AND h.fecha_fin_puesto IS NULL";
+                    $ps = $this->db->prepare($query);
+                    $ps->bindParam(':mi_local', $local, PDO::PARAM_INT);
+
+                    $ps->execute();
+                    $empleados = [];
+            
+                    while ($fila = $ps->fetch(PDO::FETCH_ASSOC)) {
+                        // Instanciar las clases
+                        $empleado = new Empleados($this->db);
+                        
+                        // Asignar los datos del empleado
+                        $empleado->setIdEmp($fila['idempleados']);
+                        $empleado->setNomEmp($fila['nom_empleado']);
+                        $empleado->setApeEmp($fila['ape_empleado']);
+                        
+                        $empleados[] = $empleado;
+                    }
+            
+                    return $empleados;
+            
+                } catch (Exception $e) {
+                    echo "Error al obtener los Técnicos: " . $e->getMessage();
+                    return [];
+                }
+    }
     //getters 
     public function getIdEmp(){
         return $this->id_emp;

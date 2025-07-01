@@ -19,7 +19,7 @@
 <meta charset="UTF-8">
 <table>
     <caption class='stock-search'>
-    </caption>
+    <strong>EL REPARADOR SRL - STOCK</strong></caption>
     <!--<colgroup>
     <col class="stock_id-art">
     <col class="stock_desc">
@@ -36,7 +36,6 @@
         <th>ID Proveedor</th>
         <th>Tipo</th>
         <th>Estado</th>
-        <th>Editar/Eliminar</th>
     </tr>
     </thead>
 

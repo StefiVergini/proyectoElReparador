@@ -119,41 +119,43 @@ require '../conexionPDO.php';
         </div>
         </form>
       </div>
-      <?php if (!empty($clientes)): ?>
-        <h3>Resultados</h3>
-        <div class="resultados">
-          <?php foreach ($clientes as $cliente): ?>
-            <div class="tarjeta" onclick="toggleDetalles(this)">
-              <div class="campo">
-                <strong>ID Reparación:</strong> <?php echo htmlspecialchars($cliente['id_reparacion']); ?>
+      <div class="separador">
+        <?php if (!empty($clientes)): ?>
+          <h3>Resultados</h3>
+          <div class="resultados">
+            <?php foreach ($clientes as $cliente): ?>
+              <div class="tarjeta" onclick="toggleDetalles(this)">
+                <div class="campo">
+                  <strong>ID Reparación:</strong> <?php echo htmlspecialchars($cliente['id_reparacion'] ?? ''); ?>
+                </div>
+                <div class="campo">
+                  <strong>ID Electrodoméstico:</strong> <?php echo htmlspecialchars($cliente['idelectrodomesticos'] ?? ''); ?>
+                </div>
+                <div class="campo">
+                  <strong>Marca:</strong> <?php echo htmlspecialchars($cliente['marca'] ?? ''); ?>
+                </div>
+                <div class="campo">
+                  <strong>Modelo:</strong> <?php echo htmlspecialchars($cliente['modelo'] ?? ''); ?>
+                </div>
+                <div class="campo">
+                  <strong>Nombre del Cliente:</strong> <?php echo htmlspecialchars($cliente['nom_cliente'] ?? ''); ?>
+                </div>
+                <div class="campo">
+                  <strong>Apellido del Cliente:</strong> <?php echo htmlspecialchars($cliente['ape_cliente'] ?? ''); ?>
+                </div>
+                <div class="campo">
+                  <strong>Fecha de Inicio:</strong> <?php echo htmlspecialchars($cliente['fecha_inicio'] ?? ''); ?>
+                </div>
+                <div class="campo">
+                  <strong>Fecha de Finalización:</strong> <?php echo htmlspecialchars($cliente['fecha_finalizacion'] ?? ''); ?>
+                </div>
+                <div class="detalles">
+                  <p><strong>Mas Detalles</strong></p>
+                  <p><strong>Descripción:</strong> <?php echo htmlspecialchars($cliente['descripcion'] ?? ''); ?></p> <!-- Agregado -->
+                </div>
               </div>
-              <div class="campo">
-                <strong>ID Electrodoméstico:</strong> <?php echo htmlspecialchars($cliente['idelectrodomesticos']); ?>
-              </div>
-              <div class="campo">
-                <strong>Marca:</strong> <?php echo htmlspecialchars($cliente['marca']); ?>
-              </div>
-              <div class="campo">
-                <strong>Modelo:</strong> <?php echo htmlspecialchars($cliente['modelo']); ?>
-              </div>
-              <div class="campo">
-                <strong>Nombre del Cliente:</strong> <?php echo htmlspecialchars($cliente['nom_cliente']); ?>
-              </div>
-              <div class="campo">
-                <strong>Apellido del Cliente:</strong> <?php echo htmlspecialchars($cliente['ape_cliente']); ?>
-              </div>
-              <div class="campo">
-                <strong>Fecha de Inicio:</strong> <?php echo htmlspecialchars($cliente['fecha_inicio']); ?>
-              </div>
-              <div class="campo">
-                <strong>Fecha de Finalización:</strong> <?php echo htmlspecialchars($cliente['fecha_finalizacion']); ?>
-              </div>
-              <div class="detalles">
-                <p><strong>Mas Detalles</strong></p>
-                <p><strong>Descripción:</strong> <?php echo htmlspecialchars($cliente['descripcion']); ?></p> <!-- Agregado -->
-              </div>
-            </div>
-          <?php endforeach; ?>
+            <?php endforeach; ?>
+          </div>
         </div>
         <div class="botones">
           <button class="botones-electro" onclick="document.getElementById('identificacion').value=''; document.getElementsByName('tipo')[0].checked=false; document.getElementsByName('tipo')[1].checked=false; document.querySelector('.resultados').innerHTML='';">Nueva Consulta</button>

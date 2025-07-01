@@ -40,21 +40,23 @@
 <body class="body">
 <h1 class="titulo">Equipo de Trabajo</h1>
     
-    <div class="form-container">
-        <form action="" method="post">
+    <div class="div-con-botones">
+        
+        <?php if($rol == 2 || $rol == 4 || $rol == 5 || $rol == 6): ?>
+            <form action="altaEmp.php" method="post">
+                <button class="btn" type="submit" style="margin-right:15px">Agregar +</button>
+            </form>
+        <?php endif; ?>
+         <form action="" method="post">
             <input class="input" type="text" name="buscar" placeholder="Buscar por DNI o nombre" id="buscar" required>
-            <button class="btn-iconos" type="submit"><img src="../static/images/lupa.png" alt="Buscar" width='30' height='20' /></button>
+            <button class="btn-iconos" type="submit" ><img src="../static/images/lupa.png" alt="Buscar" width='30' height='20' /></button>
         </form>
+        
     </div>
 
 
     <div class="table-container">
 
-        <?php if($rol == 2 || $rol == 4 || $rol == 5 || $rol == 6): ?>
-            <button class="boton-agregar"> Agregar
-                <a class="btn-iconos" href="altaEmp.php"><img src="../static/images/agregar.png" alt="agregar" title="Agregar Empleado" width="30" height="30"></a>
-            </button>
-        <?php endif; ?>
         <table class="tabla">
             <thead>
                 <tr>

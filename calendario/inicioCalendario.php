@@ -83,8 +83,5 @@ include("../conexionPDO.php");
 </main>
 <script src="../static/js/eventos_calendario.js"></script>
 <!--<button class="btn-cancelar" type="button" id="btn-finalizar" onclick="finalizarEvento()">Finalizar Evento</button>-->
-    <?php
-    require "../footer.php";
-    ?>
 </body>
 </html>

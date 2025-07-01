@@ -2,8 +2,8 @@
     require '../conexionPDO.php';
     ob_start();
     require('../fpdf/fpdf.php');
-    if($_SERVER["REQUEST_METHOD"]=="POST"){
-        try{
+    /*if($_SERVER["REQUEST_METHOD"]=="POST"){
+        try{*/
             $sql = "SELECT * FROM stock";
         
             $resultado=$base->prepare($sql);
@@ -140,20 +140,20 @@
             $pdf->Cell(30,10,'Descripcion', 'B', 0, 'C',0);
             $pdf->Cell(30,10,'Cantidad', 'B', 0, 'C',0);
             $pdf->Cell(30,10,'ID Proveedor', 'B', 0, 'C',0);
-            $pdf->Cell(30,10,'Cuit Proveedor', 'B', 0, 'C',0);
             $pdf->Cell(30,10,'Tipo', 'B', 0, 'C',0);
             $pdf->Cell(30,10,'Estado', 'B', 1, 'C',0);
-            $pdf->SetWidths(array(30, 30, 30, 30, 30, 30, 30, 30));
+            $pdf->SetWidths(array(30, 30, 30, 30, 30, 30));
 
             for($i=0;$i<count($data);$i++){
                 $pdf->SetX(50);
                 //$pdf->SetY(50);
                 $pdf->Ln(0.6); 
-                $pdf->Row(array($data[$i]['idstock'], utf8_decode($data[$i]['descripcion_art']),$data[$i]['cantidad'], $data[$i]['idproveedores'],$data[$i]['cuit_prov'], utf8_decode($data[$i]['tipo_stock']), $data[$i]['estado_stock']),30);
+                $pdf->Row(array($data[$i]['idstock'], $data[$i]['descripcion_art'],$data[$i]['cantidad'], $data[$i]['idproveedores'], $data[$i]['tipo_stock'], $data[$i]['estado_stock']),30);
             }
     
             $pdf->Output();
             ob_end_flush();
+            /*
           }catch(Exception $e){
             echo $e-> getMessage();
             echo "Línea del error: " . $e->getLine();
@@ -161,4 +161,5 @@
               $base=null;
         }
     }
+        */
 ?>

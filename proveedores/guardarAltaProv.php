@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Guardando Proveedor</title>
     <link rel="stylesheet" href="../static/styles/style.css" />
     <link rel="stylesheet" href="../static/styles/formularios.css" />
     <script src="../static/js/funciones_select_nav.js"></script>
@@ -47,6 +47,7 @@
 
             if ($proveedor->altaProv()) {
                 echo "<h2 style='text-align:center;'>¡Se ha agregado al proveedor con éxito!</h2>";
+                
             } else {
                 echo "<h2 style='text-align:center;'>Ups! Error al agregar al proveedor.</h2>";
             }
@@ -54,7 +55,8 @@
         
     }
     echo "<div class='button-group' style='margin-top:50px;'>";
-    echo "<br><button class='boton submit' style='margin-right:auto; margin-left:auto;'><a style='text-decoration:none; color:white;' href='inicioProv.php'>Proveedores</a></button>";
+    echo "<br><button class='boton submit' style='margin-right:auto; margin-left:auto;'><a style='text-decoration:none; color:white;' href='inicioProv.php'>Ver Proveedores</a></button>";
+    echo "<button class='boton submit' style='margin-right:auto; margin-left:auto;'><a style='text-decoration:none; color:white;' href='../stock/altaStock.php'>Agregar Artículos</a></button>";
     echo "</div>";
 
 ?>

@@ -104,8 +104,8 @@
                                             $categoria = $emp['categoria'];
                                             $fecha_inicio = $hist->getFechaInicio();
                                             $fecha_inicio_mysql = date("d-m-Y", strtotime($fecha_inicio));
-                                            $fecha_fin = $hist->getFechaFin();
-                                            $fecha_fin_mysql = date("d-m-Y", strtotime($fecha_fin));
+                                            $fecha_fin = $hist->getFechaFin();                                          
+                                            
                                             $descripcion = $hist->getDescripcion();
                                             echo "<tr>";
                                             echo "<td class='tabla-data'>" . $hist->getIdCategoria() . "</td>";
@@ -113,6 +113,7 @@
                                             echo "<td class='tabla-data'>" . $fecha_inicio_mysql . "</td>";
                                         
                                             if($fecha_fin !== null){
+                                                $fecha_fin_mysql = date("d-m-Y", strtotime($fecha_fin));
                                                 echo "<td class='tabla-data'>" . $fecha_fin_mysql . "</td>";
                                             }else{
                                                 echo "<td class='tabla-data'>     -      </td>";

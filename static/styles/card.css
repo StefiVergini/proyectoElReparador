@@ -1,0 +1,215 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+strong{
+    color: blue;
+}
+table {
+    border-collapse: collapse;
+    width: fit-content; 
+    max-width: 100%; 
+    text-align: center;
+    margin: 0 auto;
+    
+    
+}
+        
+th, td {
+    padding: 5px;
+    border: 2px dashed black;
+    background-color: #aab4be;
+    
+}
+        
+th{
+    color: black;
+    background-color: #6f7780;
+}
+.titulo {
+    font-size: 2.5rem;
+    padding:10px;
+    color: #0201B4;
+    margin-bottom: 10px;
+}
+.grid-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+    padding: 10px;
+    max-width: 1300px;
+    margin: 0 auto;
+}
+.card {
+    width: 400px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: transform 0.3s;
+    background: #fcf2d0;
+    margin-bottom: 30px;
+}
+.card:hover {
+    transform: scale(1.05);
+}
+.card-header {
+    /*4040fbdc*/
+    background: #5959f8dc;
+    padding: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    border-bottom: 1px solid #ccc;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+.list-group {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.list-group-item {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+.list-group-item:last-child {
+    border-bottom: none;
+}
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    display: none;
+    overflow-y: auto;
+    justify-content: center;
+    align-items: center;
+   
+}
+.expanded-card {
+    width: 50%;
+    height: auto;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    background: #fcf2d0;
+    margin: 30px;
+    /**/
+    position: relative;
+    border: 8px ridge #888787;
+    padding: 0;
+    max-height: 90vh;
+    overflow-y: auto; 
+    /*box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);*/
+    /*width: 90%;*/
+    /*max-width: 600px;*/
+    
+}
+.close-btn {
+    position: absolute;
+    top: 22.5px;
+    right: 15px;
+    background: red;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+.close-btn:hover {
+    background: darkred;
+}
+.input , .label{
+    font-size: 1rem;
+}
+.list-group-item.centered {
+   
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.list-group-item.centered .input, 
+.list-group-item.centered .label {
+    display: block;
+    margin: auto;
+}
+
+.list-group-item.centered .btn {
+    display: block;
+    margin: 10px auto;
+}
+.button{
+    border-radius: 5px; 
+    padding: 10px 20px; 
+    font-size: 16px; 
+    margin-left: 10px; 
+    margin-right: 10px;
+    margin-top: 30px;
+    margin-bottom: 80px;  
+    color: white;
+    cursor: pointer;
+}
+.button.red{
+    background-color: red;
+}
+.button.blue{
+    background-color: blue;
+}
+.button:hover {
+    transform: scale(1.15);
+}
+.div-con-botones{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+    gap: 20px;
+    height: 100px;
+
+}
+.form-group{
+    border: 1px solid #0201B4;
+    box-shadow: 2px 1px 1px #0201B4; 
+    padding: 10px;
+    border-radius: 8px;
+    width: 100%;
+    justify-items: center;
+    
+}
+.form-group .input{
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    width: 20%;
+    margin-bottom: 5px;
+}
+#filtros {
+    display: none;
+    margin: 0;
+}
+.btn-iconos {
+    background-color: #FFFFFF;
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    margin: 5px;
+    padding: 5px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 35px;
+    height: 35px;
+    cursor: pointer;
+    transition: border 0.2s;
+}
+.btn-iconos:hover {
+    border: 2px solid #07eafa;
+}

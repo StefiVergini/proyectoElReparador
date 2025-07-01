@@ -43,7 +43,7 @@
                 </div>
                 <div class="button-group">
                     <input class="boton submit" type="submit" value="Agregar">
-                    <button class="boton cancelar"> <a href="inicioProv.php">Cancelar</a></button>
+                    <button class="boton cancelar" type="button"> <a href="inicioProv.php">Cancelar</a></button>
                 </div>
             </form>
             <?php

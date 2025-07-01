@@ -11,8 +11,8 @@
     $pdf->Cell(10, 10,'Cod', 1, 0, 'L', 0);
     $pdf->Cell(30, 10,'CUIT', 1, 0, 'L', 0);
     $pdf->Cell(60, 10,'Nombre', 1, 0, 'L', 0);
-    $pdf->Cell(30, 10, utf8_decode('Teléfono'), 1, 0, 'L', 0);
-    $pdf->Cell(60, 10, utf8_decode('Dirección'), 1, 0, 'L', 0);
+    $pdf->Cell(30, 10,'Telefono', 1, 0, 'L', 0);
+    $pdf->Cell(60, 10, 'Direccion', 1, 0, 'L', 0);
     $pdf->Cell(70, 10,'Email', 1, 0, 'L', 0);
     $pdf->Cell(15, 10,'Saldo', 1, 0, 'L', 0);
     $pdf->Cell(16, 10,'Estado', 1, 1, 'L', 0);
