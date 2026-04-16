@@ -180,9 +180,9 @@ th{
     box-shadow: 2px 1px 1px #0201B4; 
     padding: 10px;
     border-radius: 8px;
-    width: 100%;
+    max-width: 80%;
     justify-items: center;
-    
+    margin-left: 10%;
 }
 .form-group .input{
     padding: 8px;
@@ -195,6 +195,51 @@ th{
 #filtros {
     display: none;
     margin: 0;
+}
+
+@media (min-width: 534px) and (max-width: 949px) {
+  #filtros {
+    display: none;
+    margin-bottom: 0;
+  }
+
+  #filtros.mostrar {
+    display: block;
+    margin-bottom: 20%; 
+  }
+  #filtrosRepa{
+    display: block;
+    margin-bottom: 50%; 
+  }
+
+  .grid-container {
+    position: relative;
+    top: 0;
+    margin-top: 0;
+  }
+}
+@media (max-width: 533px){
+    #filtros {
+        display: none;
+        margin-bottom: 0;
+    }
+
+    #filtros.mostrar {
+        display: block;
+        margin-top: 10%;
+        margin-bottom: 30%; /* o más si hace falta espacio */
+    }
+    #filtrosRepa{
+        display: block;
+        margin-bottom: 50%; 
+    }
+
+    .grid-container {
+        /* importante: que pueda empujarse hacia abajo */
+        position: relative;
+        top: 0;
+        margin-top: 0;
+    }
 }
 .btn-iconos {
     background-color: #FFFFFF;

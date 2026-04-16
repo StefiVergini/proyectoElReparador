@@ -3,6 +3,6 @@
         El Reparador - Servicio Tecnico especializado
     </div>
     <div>
-        - Desarrollado por Carolina Ibarrola - Soledad Ortiz - Stefania Vergini -
+        - Desarrollado por Stefania Vergini -
     </div>
 </footer>

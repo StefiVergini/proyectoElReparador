@@ -24,6 +24,11 @@ $local = $_SESSION['local'];
       src='../static/images/logo.png'
       alt="logo"
       class="logo" /></a>
+
+
+    <button class="menu-toggle" onclick="toggleMenu()">
+      <i class="fas fa-bars"></i>
+    </button>
     <div class="header-derecha">
 
       <div class="header-container-mensaje">
@@ -71,43 +76,20 @@ $local = $_SESSION['local'];
         
       </div>
       <nav class='nav-container'>
-        <ul class="navegacion">
+        <ul class="navegacion" id="nav-menu">
+           <li class="color">
+            <a class="link-navegacion" href="/php/proyectoElReparador/calendario/inicioCalendario.php">
+              Calendario</a>
+          </li>
+           <li class="color">
+            <a class="link-navegacion" href="/php/proyectoElReparador/clientes/inicioClientes.php">
+              Clientes</a>
+          </li>
           <li class="color">
             <a class="link-navegacion" href="/php/proyectoElReparador/electrodomesticos/inicioElectro.php">Electrodomesticos
             </a>
           </li>
-          <li class="color">
-            <a class="link-navegacion" href="/php/proyectoElReparador/stock/inicioStock.php">
-              Stock</a>
-          </li>
-          <li class="color">
-            <a class="link-navegacion" href="/php/proyectoElReparador/pedidos/pedidosActivos.php">
-              Pedidos</a>
-          </li>
-          <li class="color">
-            <a class="link-navegacion" href="/php/proyectoElReparador/proveedores/inicioProv.php">
-              Proveedores</a>
-          </li>
-          <li class="color">
-            <a class="link-navegacion" href="/php/proyectoElReparador/clientes/inicioClientes.php">
-              Clientes</a>
-          </li>
-
-          <li class="color">
-            <a class="link-navegacion" href="/php/proyectoElReparador/calendario/inicioCalendario.php">
-              Calendario</a>
-          </li>
-          <li class="color">
-              <div class="desplegable">
-                  <button class="link-navegacion nav-button">Reportes&#9207;</button>
-                  <div class="link">
-                      <a href="/php/proyectoElReparador/reportes/reporte_reparaciones.php">Reparaciones</a>
-                      <a href="/php/proyectoElReparador/reportes/reporte_ingresos.php">Ingreso de Dinero</a>
-                      <a href="/php/proyectoElReparador/reportes/reporte_tecnicos.php">Estadisticas tecnicos</a>
-                  </div>
-              </div>   
-          </li>
-          <li class="color "> 
+           <li class="color "> 
             <div class="desplegable">
                 <button class="link-navegacion nav-button">Empleados&#9207;</button>
                   <div class="link">
@@ -129,6 +111,29 @@ $local = $_SESSION['local'];
                   </div>
             </div>
 	        </li>
+          <li class="color">
+              <div class="desplegable">
+                  <button class="link-navegacion nav-button">Reportes&#9207;</button>
+                  <div class="link">
+                      <a href="/php/proyectoElReparador/reportes/reporte_reparaciones.php">Reparaciones</a>
+                      <a href="/php/proyectoElReparador/reportes/reporte_ingresos.php">Ingreso de Dinero</a>
+                      <a href="/php/proyectoElReparador/reportes/reporte_tecnicos.php">Estadisticas tecnicos</a>
+                  </div>
+              </div>   
+          </li>
+          
+          <li class="color">
+            <a class="link-navegacion" href="/php/proyectoElReparador/pedidos/pedidosActivos.php">
+              Pedidos</a>
+          </li>
+          <li class="color">
+            <a class="link-navegacion" href="/php/proyectoElReparador/proveedores/inicioProv.php">
+              Proveedores</a>
+          </li>
+          <li class="color">
+            <a class="link-navegacion" href="/php/proyectoElReparador/stock/inicioStock.php">
+              Stock</a>
+          </li>
         </ul>
       </nav>
     </div>
@@ -137,5 +142,48 @@ $local = $_SESSION['local'];
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
   <script src="/php/proyectoElReparador/static/js/notificaciones.js"></script>
+  <script>
+    function toggleMenu() {
+      const menu = document.getElementById("nav-menu");
+      menu.classList.toggle("active");
+    }
+  </script>
+  <script>
+    function setupMobileDropdowns() {
+      const isMobile = window.innerWidth <= 694;
+
+      if (isMobile) {
+        // Selecciona todos los botones con submenús
+        const buttons = document.querySelectorAll('.desplegable .nav-button');
+
+        buttons.forEach(button => {
+          button.addEventListener('click', function (e) {
+            e.preventDefault(); // Previene que el link se dispare
+
+            const submenu = this.nextElementSibling;
+
+            // Alternar visibilidad
+            if (submenu.style.display === 'block') {
+              submenu.style.display = 'none';
+            } else {
+              // Ocultar otros desplegables abiertos
+              document.querySelectorAll('.desplegable .link').forEach(el => {
+                el.style.display = 'none';
+              });
+              submenu.style.display = 'block';
+            }
+          });
+        });
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', setupMobileDropdowns);
+    window.addEventListener('resize', () => {
+      // Reiniciar estado si el tamaño cambia
+      document.querySelectorAll('.desplegable .link').forEach(el => el.style.display = '');
+      setupMobileDropdowns();
+    });
+  </script>
+
 </header>
 

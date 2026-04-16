@@ -47,13 +47,15 @@
                 <button class="btn" type="submit" style="margin-right:15px">Agregar +</button>
             </form>
         <?php endif; ?>
+        
+        
+    </div>
+    <div class="div-con-botones">
          <form action="" method="post">
             <input class="input" type="text" name="buscar" placeholder="Buscar por DNI o nombre" id="buscar" required>
             <button class="btn-iconos" type="submit" ><img src="../static/images/lupa.png" alt="Buscar" width='30' height='20' /></button>
         </form>
-        
     </div>
-
 
     <div class="table-container">
 

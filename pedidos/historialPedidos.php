@@ -48,11 +48,12 @@
             event.preventDefault();
 
             var filtros = document.getElementById('filtros');
+            filtros.classList.toggle('mostrar');
             var gridContainer = document.querySelector('.grid-container');
 
             if (filtros.style.display === 'none' || filtros.style.display === '') {
                 filtros.style.display = 'block';
-                gridContainer.style.marginTop = '50px'; // Ajusta este valor según sea necesario
+                gridContainer.style.marginTop = '90px'; 
             } else {
                 filtros.style.display = 'none';
             }
@@ -78,7 +79,7 @@
             <img src='../static/images/filter.png' alt='filtro' title='Filtrar' width='23' height='23'>
         </button>
     </div>
-    <div class="div-con-botones" id="filtros" style="display: none; margin-left: 40px; margin-right:40px;">
+    <div class="div-con-botones" id="filtros" style="display: none; grid-column: 1 / -1; text-align:center;">
         <form action="" method="post">
             <div  class="form-group">
                 <h2>Filtros: </h2>

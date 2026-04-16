@@ -96,14 +96,14 @@ date_default_timezone_set('America/Argentina/Buenos_Aires');
                 $fecha_est_repa = date("d/m/Y", strtotime($rep->getFechaFinEst()));
                 $fecha_fin = date("d/m/Y", strtotime($rep->getFechaFin()));
 
-                $descPresu = $rep->getObservaciones();
-                $partes = explode(" Detalle de la Reparación: ", $descPresu);
+                $descPresu = trim((string)$rep->getObservaciones());
+                $descPresu = str_replace("Reparacion", "Reparación", $descPresu);
 
-                // La primera parte contiene "Materiales: ..."
+                $partes = explode(" Detalle de la Reparación: ", $descPresu);
                 $materiales = trim(str_replace("Materiales: ", "", $partes[0]));
+                $detalleReparacion = isset($partes[1]) ? trim($partes[1]) : 'Sin detalle registrado';
                                 
                 // La segunda parte contiene el detalle de la reparación
-                $detalleReparacion = trim($partes[1]);
                 $presup = $rep->getPresupuesto();
                 $monto_fijo = $rep->getMontoFijoIni();
                 $cant_a_abonar = $presup - $monto_fijo;
@@ -114,9 +114,10 @@ date_default_timezone_set('America/Argentina/Buenos_Aires');
                 <ul class="list-group">
                     <li class="list-group-item"><strong>Monto a Abonar Final:</strong> <strong style="color:red;">$<?= $cant_a_abonar ?> </strong> </li>
                     <li class="list-group-item"><strong>Presupuesto:</strong> $<?= $presup ?></li>
-                    <li class="list-group-item"><strong>Arancel Inicio Abonado:</strong> $<?= $monto_fijo ?></li>
+                    <li class="list-group-item"><strong>Arancel Inicial Abonado: </strong> $<?= $monto_fijo ?></li>
+                    <li class="list-group-item"><strong>ID Electro: </strong><?= $rep->getIdElectro() ?></li>
                     <li class="list-group-item"><strong>Electrodoméstico:</strong> <?= ucwords($rep->getNomTipo()) . " - " . strtoupper($rep->getMarca()) ?><br>Modelo: <?= $rep->getModelo() ?></li>
-                    <li class="list-group-item"><strong>Detalle de la reparación a realizada:</strong> <?= htmlspecialchars($detalleReparacion, ENT_QUOTES, 'UTF-8')   ?></li>
+                    <li class="list-group-item"><strong>Detalle de la reparación realizada:</strong> <?= htmlspecialchars($detalleReparacion, ENT_QUOTES, 'UTF-8')   ?></li>
                     <li class="list-group-item"><strong>Materiales a utilizados:</strong> <?= ucwords($materiales) ?></li>
                     <li class="list-group-item centered"><strong>Fecha Inicio:</strong> <?= $fecha_inicio ?> &nbsp; <strong>Fecha Fin:</strong> <?= $fecha_fin ?></li>
                     <li class="list-group-item"><strong>Fecha Fin Estimada:</strong> <?= $fecha_est_repa ?></li>
@@ -149,18 +150,42 @@ date_default_timezone_set('America/Argentina/Buenos_Aires');
                 $fecha_est_repa_dt = DateTime::createFromFormat('d/m/Y', $fecha_est_repa);
 
                 $hoy = new DateTime(); // Fecha actual
-
                 $diferencia = $hoy->diff($fecha_est_repa_dt);
-                $dias_quedan = $diferencia->days;
-                $dias_quedan = $dias_quedan + 1;
-                $descPresu = $rep->getObservaciones();
-                $partes = explode(" Detalle de la Reparación: ", $descPresu);
+                $dias = $diferencia->days + 1; // Incluye el día actual
 
-                // La primera parte contiene "Materiales: ..."
-                $materiales = trim(str_replace("Materiales: ", "", $partes[0]));
-                                
-                // La segunda parte contiene el detalle de la reparación
-                $detalleReparacion = trim($partes[1]);
+                if ($diferencia->invert == 0) {
+                    // Fecha futura o hoy
+                    if ($dias == 1) {
+                        $mensaje_dias = "La reparación debería finalizar hoy";
+                        $color_mensaje = "blue";
+                    } else {
+                        $mensaje_dias = "Quedan {$dias} días para terminar la reparación";
+                        $color_mensaje = "red";
+                    }
+                } else {
+                    // Fecha pasada
+                    if ($dias == 1) {
+                        $mensaje_dias = "La reparación debería haber finalizado ayer";
+                        $color_mensaje = "orange";
+                    } else {
+                        $mensaje_dias = "La reparación debería haber finalizado hace {$dias} días";
+                        $color_mensaje = "orange";
+                    }
+                }
+
+               $descPresu = $rep->getObservaciones() ?? "";
+               $partes = explode(" Detalle de la Reparación: ", $descPresu);
+               $materiales = "";
+               $detalleReparacion = "";
+               if (count($partes) === 2) {
+                    // La primera parte contiene "Materiales: ..."
+                    $materiales = trim(str_replace("Materiales: ", "", $partes[0]));
+                    // La segunda parte contiene el detalle de la reparación
+                    $detalleReparacion = trim($partes[1]);
+                }else{
+                    $materiales = "-";
+                    $detalleReparacion = "-";
+                }
                 $presup = $rep->getPresupuesto();
                 $monto_fijo = $rep->getMontoFijoIni();
                 $cant_a_abonar = $presup - $monto_fijo;
@@ -171,7 +196,8 @@ date_default_timezone_set('America/Argentina/Buenos_Aires');
                 <ul class="list-group">
                     <li class="list-group-item"><strong>Fecha Inicio:</strong> <?= $fecha_inicio ?></li>
                     <li class="list-group-item"><strong>Fecha Fin Estimada:</strong> <?= $fecha_est_repa ?></li>
-                    <li class="list-group-item"><strong style="color:red;">Quedan <?= $dias_quedan ?> días para terminar la reparación</strong></li>
+                     <li class="list-group-item"><strong style="color:<?= $color_mensaje ?>;"><?= $mensaje_dias ?></strong></li>
+                     <li class="list-group-item"><strong>ID Electro: </strong><?= $rep->getIdElectro() ?></li>
                     <li class="list-group-item"><strong>Electrodoméstico:</strong> <?= ucwords($rep->getNomTipo()) . " - " . strtoupper($rep->getMarca()) ?><br>Modelo: <?= $rep->getModelo() ?></li>
                     <li class="list-group-item"><strong>Detalle de la reparación a realizar:</strong> <?= htmlspecialchars($detalleReparacion, ENT_QUOTES, 'UTF-8')   ?></li>
                     <li class="list-group-item"><strong>Materiales a utilizar:</strong> <?= $materiales ?></li>
@@ -197,23 +223,68 @@ date_default_timezone_set('America/Argentina/Buenos_Aires');
         <h1 class="titulo" style="grid-column: 1 / -1; text-align:center;">Presupuestos a Realizar</h1>
         <?php
         $contador_presupuestos = 0;
-        foreach ($reparaciones as $rep):
+        $idsMostrados = [];
+        foreach ($reparaciones as $rep){
+            if (in_array($rep->getIdReparacion(), $idsMostrados)) {
+                continue; // ya se mostró la card, entonces lo saltea
+            }
             //var_dump($reparaciones);
-            if ($rep->getEstadoPresu() == 'Presupuesto a Enviar' && empty($rep->getPresupuesto()) && empty($rep->getFechaEnvioPresup()) && $rep->getConfirmaPresupuesto() == 0):
+            if ($rep->getEstadoPresu() == 'Presupuesto a Enviar' && empty($rep->getPresupuesto()) && empty($rep->getFechaEnvioPresup()) && $rep->getConfirmaPresupuesto() == 0){
                 $contador_presupuestos++;
                 $fecha_ing_electro = date("d/m/Y", strtotime($rep->getFechaIngElectro()));
-        ?>
-            <div class="card" onclick="expandirDetalle(<?= $rep->getIdReparacion() ?>)">
-                <div class="card-header">Presupuesto pendiente - Reparación #<?= $rep->getIdReparacion() ?></div>
-                <ul class="list-group">
-                    <li class="list-group-item"><strong>Fecha que Ingresó el Electrodoméstico:</strong> <?= $fecha_ing_electro ?></li>
-                    <li class="list-group-item"><strong>Electrodoméstico:</strong> <?= ucwords($rep->getNomTipo()) . " - " . strtoupper($rep->getMarca()) ?><br>Modelo: <?= $rep->getModelo() ?></li>
-                    <li class="list-group-item"><strong>Cliente:</strong> <?= ucwords($rep->getNomCli() . " " . $rep->getApeCliente()) ?></li>
-                    <li class="list-group-item"><strong>Técnico Asignado:</strong> <?= ucwords($rep->getNomTecnico() . " " . $rep->getApeTecnico()) ?></li>
-                    <li class="list-group-item" style="text-align: center;"><strong>&#9207;</strong></li>
-                </ul>
-            </div>
-        <?php endif; endforeach; ?>
+            ?>
+                <div class="card" onclick="expandirDetalle(<?= $rep->getIdReparacion() ?>)">
+                    <div class="card-header">Presupuesto pendiente - Reparación #<?= $rep->getIdReparacion() ?></div>
+                    <ul class="list-group">
+                        <li class="list-group-item"><strong>Fecha que Ingresó el Electrodoméstico:</strong> <?= $fecha_ing_electro ?></li>
+                        <li class="list-group-item"><strong>Electrodoméstico:</strong> <?= ucwords($rep->getNomTipo()) . " - " . strtoupper($rep->getMarca()) ?><br>Modelo: <?= $rep->getModelo() ?></li>
+                        <li class="list-group-item"><strong>ID Electro: </strong><?= $rep->getIdElectro() ?></li>
+                        <li class="list-group-item"><strong>Cliente:</strong> <?= ucwords($rep->getNomCli() . " " . $rep->getApeCliente()) ?></li>
+                        <li class="list-group-item"><strong>Técnico Asignado:</strong> <?= ucwords($rep->getNomTecnico() . " " . $rep->getApeTecnico()) ?></li>
+                        <li class="list-group-item" style="text-align: center;"><strong>&#9207;</strong></li>
+                    </ul>
+                </div>
+            <?php } elseif ($rep->getEstadoPresu() == 'Reparacion por Garantia' && $rep->getConfirmaPresupuesto() == 0){
+                    $contador_presupuestos++;
+                    $fecha_ing_electro = date("d/m/Y", strtotime($rep->getFechaIngElectro()));
+                    $idCli = $rep->getIdCli();
+                    $idAnt = $rep->getDescReparacion();
+                    $electroXCli = $electro->filtrarHistorialReparaciones('','','',$idCli); 
+                    $electroFiltrados = [];
+                    foreach ($electroXCli as $e) {
+                        $estadoPresup = $e->getEstadoPresu(); // estado_presup del presupuesto
+                        $idRepa = $e->getIdReparacion();
+
+                        if ($estadoPresup === 'Reparacion Cobrada' && $idRepa == $idAnt){
+                            $electroFiltrados[] = $e;
+                        }
+                    }
+                    if (!empty($electroFiltrados)) {
+                        $e = $electroFiltrados[0]; // tomás el primero
+                        $datoBase["anterior"]  = [
+                            "idAnt" => $e->getIdReparacion(),
+                            "idElectroAnt" => $e->getIdElectro(),
+                            "idCliAnt" => $e->getIdCli(),
+                            "fechaFinGarantiaAnt" => $e->getFechaFinGarantia(),
+                            "observacionesAnt" => $e->getObservaciones(),
+                        ];
+                    }
+                    ?>
+                        <div class="card" onclick="expandirDetalle(<?= $rep->getIdReparacion() ?>)">
+                            <div class="card-header">Garantía Activa - Reparación #<?= $rep->getIdReparacion() ?></div>
+                            <ul class="list-group">
+                                <li class="list-group-item"><strong>Fecha que Ingresó el Electrodoméstico:</strong> <?= $fecha_ing_electro ?></li>
+                                <li class="list-group-item"><strong>ID Electro: </strong><?= $rep->getIdElectro() ?></li>
+                                <li class="list-group-item"><strong>Electrodoméstico:</strong> <?= ucwords($rep->getNomTipo()) . " - " . strtoupper($rep->getMarca()) ?><br>Modelo: <?= $rep->getModelo() ?></li>
+                                <li class="list-group-item"><strong>Cliente:</strong> <?= ucwords($rep->getNomCli() . " " . $rep->getApeCliente()) ?></li>
+                                <li class="list-group-item"><strong>Técnico Asignado:</strong> <?= ucwords($rep->getNomTecnico() . " " . $rep->getApeTecnico()) ?></li>
+                                <li class="list-group-item" style="text-align: center;"><strong>&#9207;</strong></li>
+                            </ul>
+                        </div>
+                <?php 
+                }
+            $idsMostrados[] = $rep->getIdReparacion(); 
+        } ?>
 
         <?php if ($contador_presupuestos == 0): ?>
             <div style="grid-column: 1 / -1; text-align: center;">
@@ -246,6 +317,7 @@ date_default_timezone_set('America/Argentina/Buenos_Aires');
                 <ul class="list-group">
                     <li class="list-group-item"><strong>Fecha de Envío del Presupuesto:</strong> <?= $fecha_env_presup ?> <strong>Hace:</strong> <?= $dias_transcurridos ?><strong> días</strong>  </li>
                     <li class="list-group-item"><strong>Fecha que Ingresó el Electrodoméstico:</strong> <?= $fecha_ing_electro ?></li>
+                    <li class="list-group-item"><strong>ID Electro: </strong><?= $rep->getIdElectro() ?></li>
                     <li class="list-group-item"><strong>Electrodoméstico:</strong> <?= ucwords($rep->getNomTipo()) . " - " . strtoupper($rep->getMarca()) ?><br>Modelo: <?= $rep->getModelo() ?></li>
                     <li class="list-group-item"><strong>Cliente:</strong> <?= ucwords($rep->getNomCli() . " " . $rep->getApeCliente()) ?></li>
                     <li class="list-group-item"><strong>Técnico Asignado:</strong> <?= ucwords($rep->getNomTecnico() . " " . $rep->getApeTecnico()) ?></li>
@@ -305,214 +377,459 @@ date_default_timezone_set('America/Argentina/Buenos_Aires');
         });
 
 
+        
         //Expandir tarjetas
 
-        function expandirDetalle(id) {
-            let overlay = document.getElementById("overlay");
-            let contenido = document.getElementById("contenido-reparacion");
+     // Paso 1: preparar el array PHP con toda la info necesaria para todas las reparaciones
+    const datosReparaciones = <?= json_encode(array_map(function($r) {
+    return [
+        // —————— Datos básicos ——————
+        "id"                      => $r->getIdReparacion(),
+        "idElectro"               => $r->getIdElectro(),
+        "marcaModelo"             => strtoupper($r->getMarca()) . " " . $r->getModelo(),
+        "tipoElectro"             => $r->getTipoElectro(),             // ← nuevo
+        "tipo"                    => ucwords($r->getNomTipo()),
+        "numSerie"                => $r->getNumSerie(),
+        "edComent"                => $r->getEdComentario(),
 
-            // Obtener los datos de la reparación seleccionada
-            <?php foreach ($reparaciones as $reparacion) : ?>
-                if (id === <?= $reparacion->getIdReparacion() ?>) {
-                    <?php  $fecha_ing_electro = date("d/m/Y", strtotime($reparacion->getFechaIngElectro()));?>
-                    contenido.innerHTML = `
-                        <div class="card-header">
-                            Reparación #<?= $reparacion->getIdReparacion() ?>
-                        </div>
-                        <ul class="list-group">
-                            <li class="list-group-item"><strong>Fecha que Ingresó el Electrodoméstico:</strong> <?= $fecha_ing_electro ?></li>
-                            <li class="list-group-item"><strong>Electrodoméstico:</strong> <?= strtoupper($reparacion->getMarca()) . " " . $reparacion->getModelo() ?> <?= "<br>Tipo: ". ucwords($reparacion->getNomTipo()) ."<br>N° de Serie: ". $reparacion->getNumSerie() ?></li>
-                            <li class="list-group-item"><strong>Cliente:</strong> <?= "<br>Nombre: ". ucwords($reparacion->getNomCli() . " " . $reparacion->getApeCliente())."<br>Email: ". $reparacion->getEmailCliente(). "<br><strong>Problema según el Cliente: </strong>". ucwords($reparacion->getDescripcion()) ?></li>
-                            <li class="list-group-item"><strong>Técnico Asignado:</strong> <?= ucwords($reparacion->getNomTecnico() . " " . $reparacion->getApeTecnico()) ?></li>
-                        </ul>
-                        <?php if($reparacion->getEstadoPresu() == 'Presupuesto a Enviar' && empty($reparacion->getPresupuesto()) && empty($reparacion->getFechaEnvioPresup()) && $reparacion->getConfirmaPresupuesto() == 0):?>
-                            
-                            <form action="guardarPresupuesto.php" method="POST">
-                                <div class="card-header">
-                                    Realizar Presupuesto:
-                                </div>
-                                <input type="hidden" name="id_reparacion" value="<?= $reparacion->getIdReparacion() ?>">
-                                <input type="hidden" name="id_cli" value="<?= $reparacion->getIdCli() ?>">
-                                <input type="hidden" name="id_electro" value="<?= $reparacion->getIdElectro() ?>">
-                                 <input type="hidden" name="nom_tipo" value="<?= $reparacion->getNomTipo() ?>">
-                                <ul class="list-group" style="background:#fdf1b7;">
-                                    <li class="list-group-item centered">
-                                        <strong><label class="label" for="materiales">Materiales a utilizar:<textarea class="input"  name="materiales" id="materiales" cols="40" rows="10"></textarea></label></strong>
-                                    </li>
-                                    <li class="list-group-item centered">
-                                        <strong><label class="label" for="descRePresu">Descripción de la Reparación:<textarea class="input"  name="descRePresu" id="descRePresu" cols="40" rows="10"></textarea></label></strong>
-                                    </li>
-                                    <li class="list-group-item centered">
-                                        <strong><label class="label" for="presup">Presupuesto total:<input class="input" type="number" name="presup" placeholder="$" required></label></strong>
-                                    </li>
-                                    <li class="list-group-item centered"><button class="btn" type="submit">Enviar Presupuesto</button></li> 
-                                </ul>   
-                            </form>
-                        <?php elseif ($reparacion->getEstadoPresu() == 'Presupuesto enviado' && !empty($reparacion->getPresupuesto()) && !empty($reparacion->getFechaEnvioPresup()) && $reparacion->getConfirmaPresupuesto() == 0 && empty($reparacion->getFechaInicio())):?>
-                            <?php $descPresu = $reparacion->getObservaciones();
-                                $partes = explode(" Detalle de la Reparación: ", $descPresu);
+        // —————— Cliente ——————
+        "idCli"                   => $r->getIdCli(),
+        "cliente" => [
+            "nombre"              => ucwords($r->getNomCli() . " " . $r->getApeCliente()),
+            "email"               => $r->getEmailCliente(),
+            "problema"            => ucwords($r->getDescripcion())
+        ],
 
-                                // La primera parte contiene "Materiales: ..."
-                                $materiales = trim(str_replace("Materiales: ", "", $partes[0]));
-                                
-                                // La segunda parte contiene el detalle de la reparación
-                                $detalleReparacion = trim($partes[1]);
-                                $detalleReparacion = ucfirst($detalleReparacion);
-                                $fecha_envio_presu = date("d/m/Y", strtotime($reparacion->getFechaEnvioPresup()));
-                                
-                            ?>
-                            <form action="guardarRespuestaPresup.php" method="POST">
-                                <div class="card-header">
-                                    Presupuesto Enviado:
-                                </div>
-                                <ul class="list-group">
-                                    <li class="list-group-item"><strong>Fecha de Envío del Presupuesto:</strong> <?= $fecha_envio_presu ?></li>
-                                    <li class="list-group-item"><strong> Monto del presupuesto: $</strong> <?= $reparacion->getPresupuesto() ?></li>
-                                    <li class="list-group-item"><strong>Materiales a usar:</strong> <?= ucwords($materiales) ?></li>
-                                    <li class="list-group-item"><strong>Descripción de la Reparación:</strong> <?= htmlspecialchars($detalleReparacion, ENT_QUOTES, 'UTF-8')  ?></li>
-                                    <li class="list-group-item"><strong>Empleado que envió el Presupuesto:</strong> <?= ucwords($reparacion->getNomEmpPresu() . " " . $reparacion->getApeEmpPresu()) ?></li>
-                                    <li class="list-group-item centered" id="fecha-fin-container" style="display: none;">
-                                    <label class="label" for="fecha_fin_estimada"><strong>Fecha estimada de fin: </strong><input class="input" type="date" name="fecha_fin_estimada"></label>
-                                    </li>
+        // —————— Técnico ——————
+        "idTecnico"               => $r->getIdTecnico(),                // ← nuevo
+        "tecnico"                 => ucwords($r->getNomTecnico() . " " . $r->getApeTecnico()),
 
-                                </ul>
-                                <input type="hidden" name="id_reparacion" value="<?= $reparacion->getIdReparacion() ?>">
-                                <input type="hidden" name="id_cli" value="<?= $reparacion->getIdCli() ?>">
-                                <input type="hidden" name="nom_cli" value="<?= $reparacion->getNomCli() ?>">
-                                <input type="hidden" name="email_cli" value="<?= $reparacion->getEmailCliente() ?>">
-                                <input type="hidden" name="id_electro" value="<?= $reparacion->getIdElectro() ?>">
-                                <input type="hidden" name="marca" value="<?= $reparacion->getMarca() ?>">
-                                <input type="hidden" name="modelo" value="<?= $reparacion->getModelo() ?>">
-                                <input type="hidden" name="nom_tipo" value="<?= $reparacion->getNomTipo() ?>">
-                                <input type="hidden" name="coment_cobro" value="<?= $reparacion->getComentariosCobro() ?>">
-                                 <div class="card-header">
-                                    ¿Respondió el cliente?
-                                </div>
-                                <ul class="list-group" style="background:#fdf1b7;">
-                                    
-                                    <li class="list-group-item centered">
-                                        <button name="accion" value="si" class="btn" type="submit" onclick="mostrarFechaFin(event)">Confirma Presupuesto</button> 
-                                        <button name="accion" value="no" class="reject-btn btn" type="submit">Rechaza Presupuesto</button>
-                                    </li>
+        // —————— Presupuesto ——————
+        "estadoPresu"             => $r->getEstadoPresu(),
+        "presupuesto"             => $r->getPresupuesto(),
+        "fechaEnvioPresup"        => $r->getFechaEnvioPresup(),
+        "confirmaPresupuesto"     => $r->getConfirmaPresupuesto(),
 
-                                </ul>   
-                            </form>
-                        <?php elseif ($reparacion->getEstadoReparacion() == 1 && $reparacion->getConfirmaPresupuesto() == 1 && $reparacion->getEstadoPresu() == 'Presupuesto Confirmado' && !empty($reparacion->getFechaInicio()) ):?>
-                            <?php $descPresu = $reparacion->getObservaciones();
-                                $partes = explode(" Detalle de la Reparación: ", $descPresu);
+        // —————— Reparación ——————
+        "estadoReparacion"        => $r->getEstadoReparacion(),
+        "fechaIngElectro"         => $r->getFechaIngElectro(),
+        "fechaInicio"             => $r->getFechaInicio(),
+        "fechaFinEst"             => $r->getFechaFinEst(),
+        "fechaFin"                => $r->getFechaFin(),
+        "fechaFinGarantia"        => $r->getFechaFinGarantia(),         // ← nuevo
+        "fechaConfirmReparacion"  => $r->getFechaConfirmReparacion(),   // ← nuevo
+        "observaciones"           => $r->getObservaciones(),
+        "descReparacion"          => $r->getDescReparacion(),
 
-                                // La primera parte contiene "Materiales: ..."
-                                $materiales = trim(str_replace("Materiales: ", "", $partes[0]));
-                                
-                                // La segunda parte contiene el detalle de la reparación
-                                $detalleReparacion = trim($partes[1]);
-                                $fecha_inicio = date("d/m/Y", strtotime($reparacion->getFechaInicio()));
-                                $fecha_est_repa = date("d/m/Y", strtotime($reparacion->getFechaFinEst()));
-                                $fecha_est_repa_dt = DateTime::createFromFormat('d/m/Y', $fecha_est_repa);
+        // —————— Empleado de atención y presupuesto ——————
+        "idEmpAtencion"           => $r->getIdEmpAtencion(),            // ← nuevo
+        "nomEmpAtencion"          => $r->getNomEmpAtencion(),           // ← nuevo
+        "apeEmpAtencion"          => $r->getApeEmpAtencion(),           // ← nuevo
+        "idEmpPresu"              => $r->getIdEmpPresu(),               // ← nuevo
+        "nomEmpPresu"             => $r->getNomEmpPresu(),
+        "apeEmpPresu"             => $r->getApeEmpPresu(),
 
-                                $hoy = new DateTime(); // Fecha actual
+        // —————— Cobros ——————
+        "idCobro"                 => $r->getIdCobro(),                  // ← nuevo
+        "montoFijoIni"            => $r->getMontoFijoIni(),
+        "fechaCobroIni"           => $r->getFechaCobroIni(),            // ← nuevo
+        "nroComproIni"            => $r->getNroComproIni(),             // ← nuevo
+        "medioPagoIni"            => $r->getMedioPagoIni(),             // ← nuevo
+        "comentariosCobro"        => $r->getComentariosCobro(),
+        "montoFinRepa"            => $r->getMontoFinRepa(),
+        "fechaCobroFin"           => $r->getFechaCobroFin(),
+        "fechaRetiro"             => $r->getFechaDeRetiro(),
+        "medioPagoFin"            => $r->getMedioPagoFin(),
+        "nroComproFin"            => $r->getNroComproFin(),             // ← nuevo
 
-                                $diferencia = $hoy->diff($fecha_est_repa_dt);
-                                $dias_quedan = $diferencia->days;
-                                $dias_quedan = $dias_quedan + 1;
-                                $presup = $reparacion->getPresupuesto();
-                                $monto_fijo = $reparacion->getMontoFijoIni();
-                                $cant_a_abonar = $presup - $monto_fijo;
-                        ?>
+       
+    ];
+}, $reparaciones)) ?>;
+
+function parseObservaciones(observaciones) {
+    let descPresu = observaciones || "";
+    let partes = descPresu.split(" Detalle de la Reparación: ");
+
+    let materiales = "";
+    let detalleReparacion = "";
+
+    if (partes.length === 2) {
+        materiales = partes[0].replace("Materiales: ", "").trim();
+        detalleReparacion = partes[1].trim();
+        detalleReparacion = detalleReparacion.charAt(0).toUpperCase() + detalleReparacion.slice(1);
+    }
+
+    return {
+        materiales,
+        detalleReparacion
+    };
+}
+function formatearFecha(fecha) {
+    if (!fecha) return "-";
+    
+    let d = new Date(fecha);
+
+    // se suma un día porque js siempre reconoce mal la fecha acá
+    d.setDate(d.getDate() + 1);
+
+    return d.toLocaleDateString("es-AR", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric"
+    });
+}
+const datosRepaAnt = <?= json_encode(array_map(function($ant) {
+    return [
+        "idAnt"          => $ant->getIdReparacion(),
+        "idElectroAnt"      => $ant->getIdElectro(),
+        "idCliAnt"          => $ant->getIdCli(),
+        "fechaFinGarantiaAnt" => $ant->getFechaFinGarantia(),
+        "observacionesAnt"  => $ant->getObservaciones(),
+    ];
+}, $electroFiltrados ?? [])) ?>;
+
+function expandirDetalle(id) {
+    let overlay = document.getElementById("overlay");
+    let contenido = document.getElementById("contenido-reparacion");
+    
+    const reparacion = datosReparaciones.find(r => r.id === id);
+  
+    let fechaIngElectro    = formatearFecha(reparacion.fechaIngElectro);
+    let fechaEnvioPresup    = formatearFecha(reparacion.fechaEnvioPresup);
+    let fechaIni    = formatearFecha(reparacion.fechaInicio);
+    let fechaFin   = formatearFecha(reparacion.fechaFin);
+    let fechaFinGarantia   = formatearFecha(reparacion.fechaFinGarantia);
+    let fechaConfirmReparacion = formatearFecha(reparacion.fechaConfirmReparacion);
+    let fechaCobroIni = formatearFecha(reparacion.fechaCobroIni);
+    let fechaCobroFin = formatearFecha(reparacion.fechaCobroFin);
+    let fechaRetiro = formatearFecha(reparacion.fechaRetiro);
+    let fechaFinEstimada = formatearFecha(reparacion.fechaFinEst);
+
+    let html = `
+        <div class="card-header">Reparación #${reparacion.id}</div>
+        <ul class="list-group">
+            <li class="list-group-item"><strong>Fecha que ingresó:</strong> ${fechaIngElectro}</li>
+            <li class="list-group-item"><strong>Electrodoméstico:</strong> <strong>Tipo:</strong> ${reparacion.tipo} |  ${reparacion.marcaModelo} |<strong>N° Serie:</strong> ${reparacion.numSerie}</li>
+            <li class="list-group-item"><strong>Cliente:</strong> ${reparacion.cliente.nombre} | <strong>Email:</strong> ${reparacion.cliente.email}<br><strong>Problema según el cliente:</strong> ${reparacion.cliente.problema}</li>
+            <li class="list-group-item"><strong>Técnico asignado:</strong> ${reparacion.tecnico}</li>
+            <li class="list-group-item"><strong>Monto Inicial Abonado:</strong>$ ${reparacion.montoFijoIni}<br> <strong>Nro de Comprobante:</strong>${reparacion.nroComproIni}<br> <strong>Medio de Pago:</strong> ${reparacion.medioPagoIni}</li>
+        </ul>
+    `;
+    // Presupuesto a Enviar
+    if ((reparacion.estadoPresu === 'Presupuesto a Enviar' && !reparacion.presupuesto) || (reparacion.estadoPresu === 'Reparacion por Garantia')) {
+        if (reparacion.estadoPresu === 'Presupuesto a Enviar' && !reparacion.presupuesto){
+
+            html += `
+                <form action="guardarPresupuesto.php" method="POST">
+                    <input type="hidden" name="id_reparacion" value="${reparacion.id}">
+                    <input type="hidden" name="id_cli" value="${reparacion.idCli}">
+                    <input type="hidden" name="id_electro" value="${reparacion.idElectro}">
+                    <input type="hidden" name="nom_tipo" value="${reparacion.tipo}">
+                    <div class="card-header">Realizar Presupuesto</div>
+                    <ul class="list-group">
+                        <li class="list-group-item centered">
+                            <strong><label class="label" for="materiales">Materiales a utilizar:<textarea class="input"  name="materiales" id="materiales" cols="40" rows="10"></textarea></label></strong>
+                        </li>
+                        <li class="list-group-item centered">
+                            <strong><label class="label" for="descRePresu">Descripción de la Reparación:<textarea class="input"  name="descRePresu" id="descRePresu" cols="40" rows="10"></textarea></label></strong>
+                        </li>
+                        <li class="list-group-item centered">
+                            <strong><label class="label" for="presup">Presupuesto total:<input class="input" type="number" name="presup" placeholder="$" required></label></strong>
+                        </li>
+                        <li class="list-group-item centered"><button class="btn" type="submit">Enviar Presupuesto</button></li> 
+                    </ul>
+                </form>
+            `;
+        } else{
+
+            const reparacionAnterior = datosRepaAnt[0];
+
+            const obsAnterior = reparacionAnterior?.observacionesAnt || "";
+            const { materiales, detalleReparacion } = parseObservaciones(obsAnterior);
+            html += `
+                <form action="garantiaAceptadaORechazada.php" method="POST">
+                    <div class="card-header">Reparación Anterior del Electro:</div>
+                    <ul class="list-group">
+                        <li class="list-group-item"><strong>Id Reparación Anterior:</strong> ${reparacionAnterior.idAnt}</li>
+                        <li class="list-group-item"><strong>Fin Garantía:</strong> ${formatearFecha(reparacionAnterior.fechaFinGarantiaAnt)}</li>
+                        <li class="list-group-item"><strong>Materiales usados:</strong> ${materiales}</li>
+                        <li class="list-group-item"><strong>Descripción:</strong> ${detalleReparacion}</li>
+                    </ul>
+                    <div class="card-header">Detalle de la Reparación:</div>
+                    <ul class="list-group">
+                        <li class="list-group-item centered">
+                            <strong><label class="label" for="materiales">Materiales a utilizar:<textarea class="input"  name="materiales" id="materiales" cols="40" rows="10"></textarea></label></strong>
+                        </li>
+                        <li class="list-group-item centered">
+                            <strong><label class="label" for="descRePresu">Descripción de la Reparación:<textarea class="input"  name="descRePresu" id="descRePresu" cols="40" rows="10"></textarea></label></strong>
+                        </li>
+                        <li class="list-group-item centered" id="fecha-fin-container" style="display: none;">
+                            <label class="label" for="fecha_fin_estimada">
+                                <strong>Fecha estimada de fin: </strong>
+                                <input class="input" type="date" name="fecha_fin_estimada">
+                            </label>
+                        </li>
+                    </ul>
                     
-                            <ul class="list-group">
-                                <li class="list-group-item centered"><strong> Fecha Inicio:</strong> <?= $fecha_inicio ?> &nbsp; &nbsp; &nbsp; <strong>Fecha Fin Estimada:</strong> <?= $fecha_est_repa ?></li>
-                                <li class="list-group-item centered"><strong style="color:red;">Quedan <?= $dias_quedan ?> días para terminar la reparación</strong></li>
-                                <li class="list-group-item"><strong>Electrodoméstico:</strong> <?= ucwords($reparacion->getNomTipo()) . " - " . strtoupper($reparacion->getMarca()) ?><br>Modelo: <?= $reparacion->getModelo() ?></li>
-                                <li class="list-group-item"><strong>Detalle de la reparación a realizar:</strong> <?=  json_encode($detalleReparacion) ?></li>
-                                <li class="list-group-item"><strong>Materiales a utilizar:</strong> <?= $materiales ?></li>
-                                <li class="list-group-item centered"><strong>Monto a Abonar Final:</strong> $<strong style="color:black;"><?= $cant_a_abonar ?> </strong> </li>
-                                <li class="list-group-item centered">
-                                    <button class="btn" type="button" id="retirar-materiales"><a href="retirarMateriales.php" style="text-decoration:none; color:white;">Retirar Materiales</a></button>
-                                </li>
-
-                                    
-                            </ul> 
-                             <form action="finalizarReparacion.php" method="POST">
-                                <div class="card-header">
-                                    Finalizar Reparación:
-                                </div>
-                                <input type="hidden" name="id_reparacion" value="<?= $reparacion->getIdReparacion() ?>">
-                                
-                                <input type="hidden" name="id_cli" value="<?= $reparacion->getIdCli() ?>">
-                                <input type="hidden" name="nom_cli" value="<?= $reparacion->getNomCli() ?>">
-                                <input type="hidden" name="mail_cli" value="<?= $reparacion->getEmailCliente() ?>">
-                                <input type="hidden" name="monto_cobrar" value="<?= $cant_a_abonar ?>"> 
-                                <input type="hidden" name="id_electro" value="<?= $reparacion->getIdElectro() ?>">
-                                <input type="hidden" name="marca" value="<?= $reparacion->getMarca() ?>">
-                                <input type="hidden" name="modelo" value="<?= $reparacion->getModelo() ?>">
-                                <input type="hidden" name="nom_tipo" value="<?= $reparacion->getNomTipo() ?>">
-                                <ul class="list-group" style="background:#fdf1b7;">
-                                <li class="list-group-item centered"><button class="btn" type="submit" id = "btn-finalizar-reparacion">Finalizar Reparación</button></li> 
-                                </ul>   
-                            </form>
-                        <?php elseif ($reparacion->getEstadoReparacion() == 0 && $reparacion->getEstadoPresu() == 'Reparacion Finalizada' && !empty($reparacion->getFechaFin()) && empty($reparacion->getFechaDeRetiro()) && empty($reparacion->getFechaCobroFin()) && empty($reparacion->getMontoFinRepa()) && empty($reparacion->getMedioPagoFin())):?>
-                            <?php
-                                $fecha_inicio = date("d/m/Y", strtotime($reparacion->getFechaInicio()));
-                                $fecha_fin = date("d/m/Y", strtotime($reparacion->getFechaFin()));
-                                $presup = $reparacion->getPresupuesto();
-                                $monto_fijo = $reparacion->getMontoFijoIni();
-                                $cant_a_abonar = $presup - $monto_fijo;
-                        ?>
                     
-                            <ul class="list-group">
-                                <li class="list-group-item centered"><strong> Fecha Inicio:</strong> <?= $fecha_inicio ?> &nbsp; &nbsp; &nbsp; <strong>Fecha Finalizó:</strong> <?= $fecha_fin ?></li>
-                                <li class="list-group-item centered"><strong >Monto a Abonar: &nbsp; </strong><strong style="color:red;">$<?= $cant_a_abonar ?></strong></li>
-                                <li class="list-group-item"><strong>Electrodoméstico:</strong> <?= ucwords($reparacion->getNomTipo()) . " - " . strtoupper($reparacion->getMarca()) ?><br>Modelo: <?= $reparacion->getModelo() ?></li>
-                                    
-                            </ul> 
-                            <form action="cobrarReparacion.php" method="POST">
-                                <div class="card-header">
-                                    Cobrar Reparación:
-                                </div>
-                                 <ul class="list-group" style="background:#fdf1b7;">
-                                    <li class="list-group-item centered">
-                                        <strong><label class="label" for="monto_abona">Monto que Abona:<input class="input" type="number" name="monto_abona" placeholder="$" required></label></strong>
-                                    </li>
-                                    <li class="list-group-item centered">
-                                        <strong><label class="label" for="medio_pago" >Medio de Pago</label>
-                                        <input type="radio" name="medio_pago" value="efectivo" required onclick="mostrarComprobante(this.value)">
-                                        <label for="efectivo">Efectivo</label><br>
-                                        <input type="radio" name="medio_pago" value="transferencia" required onclick="mostrarComprobante(this.value)">
-                                        <label for="transferencia">Transferencia Bancaria</label></strong>
-                                    </li>
-                                    <li class="list-group-item centered">
-                                        <div class="form-group" id="comprobante-container" style="display: none;">
-                                            <label class="label" for="nro_comprobante">N° de Comprobante</label>
-                                            <input type="text" class="input" name="nro_comprobante" id="nro_comprobante">
-                                        </div>
-                                    </li>
-                                    <li class="list-group-item centered">
-                                        <strong><label class="label" for="coment_cobro">Algún comentario sobre el cobro:<textarea class="input"  name="coment_cobro" id="coment_cobro" cols="40" rows="10"></textarea></label></strong>
-                                    </li>
-                                </ul>   
-                                <input type="hidden" name="id_reparacion" value="<?= $reparacion->getIdReparacion() ?>">
-                                <input type="hidden" name="comentarios" value="<?= $reparacion->getComentariosCobro() ?>">
-                                <input type="hidden" name="id_cli" value="<?= $reparacion->getIdCli() ?>">
-                                <input type="hidden" name="nom_cli" value="<?= $reparacion->getNomCli() ?>">
-                                <input type="hidden" name="mail_cli" value="<?= $reparacion->getEmailCliente() ?>">
-                                <input type="hidden" name="monto_a_cobrar" value="<?= $cant_a_abonar ?>"> 
-                                <input type="hidden" name="id_electro" value="<?= $reparacion->getIdElectro() ?>">
-                                <input type="hidden" name="marca" value="<?= $reparacion->getMarca() ?>">
-                                <input type="hidden" name="modelo" value="<?= $reparacion->getModelo() ?>">
-                                <input type="hidden" name="nom_tipo" value="<?= $reparacion->getNomTipo() ?>">
-                                <ul class="list-group" style="background:#fdf1b7;">
-                                <li class="list-group-item centered"><button class="btn" type="submit" id = "cobrar">Cobrar Reparación</button></li> 
-                                </ul>   
-                            </form>
-                        <?php endif;?>
-                       
-                    `;
-                }
-            <?php endforeach; ?>
-            
-            overlay.style.display = "flex";  // Mostrar el overlay centrado
+                    <div class="card-header" id="titulo-noCubre" style="display: none;">Datos - Garantía Rechazada:</div>
+                    <ul class="list-group">
+                        <li class="list-group-item centered" id="xqNoCubre" style="display: none;">
+                            <label class="label" for="xqNoCubre"><strong>Explique por qué no cubre la Garantía:</strong><textarea class="input"  name="xqNoCubre" id="xqNoCubre" cols="40" rows="10"></textarea></label>
+                        </li>
+                        <li class="list-group-item centered" id="presup" style="display: none;">
+                            <label class="label" for="presup"><strong>Presupuesto total:</strong><input class="input" type="number" name="presup" placeholder="$"</label>
+                        </li>
+                    </ul>
+                    <!-- Campos ocultos -->
+                    <input type="hidden" name="id_reparacion" value="${reparacion.id}">
+                    <input type="hidden" name="id_cli" value="${reparacion.idCli}">
+                    <input type="hidden" name="nom_cli" value="${reparacion.cliente?.nombre || ''}">
+                    <input type="hidden" name="email_cli" value="${reparacion.cliente?.email || ''}">
+                    <input type="hidden" name="id_electro" value="${reparacion.idElectro}">
+                    <input type="hidden" name="marca" value="${reparacion.marcaModelo?.split(" ")[0] || ''}">
+                    <input type="hidden" name="modelo" value="${reparacion.marcaModelo?.split(" ")[1] || ''}">
+                    <input type="hidden" name="nom_tipo" value="${reparacion.tipo || ''}">
+                    <input type="hidden" name="tecnico" value="${reparacion.idTecnico}">
+                    <input type="hidden" name="ed_coment" value="${reparacion.edComent || ''}">
+                    <input type="hidden" name="email_cli" value="${reparacion.cliente?.email || ''}">
+                    <input type="hidden" name="fecha_ing" value="${reparacion.fechaIngElectro}">
+                    
+
+                    <div class="card-header"> Una vez analizado el Electro, ¿cubre la garantía?</div>
+                    <ul class="list-group" style="background:#fdf1b7;">
+                        <li class="list-group-item centered">
+                            <button name="accion" value="si" class="btn" type="submit" onclick="mostrarFechaFin(event)">
+                                Sí - Reparar Electro
+                            </button> 
+                            <button name="accion" value="no" class="reject-btn btn" type="submit" onclick="mostrarDatosNoCubreGarant(event)">
+                                No - Enviar Presupuesto
+                            </button>
+                        </li>
+                    </ul>                    
+                </form>
+            `;
         }
+    }
+    
+   // Esperando confirmación del cliente
+    else if (reparacion.estadoPresu === 'Presupuesto enviado' && reparacion.presupuesto && reparacion.confirmaPresupuesto == 0) {
+        let { materiales, detalleReparacion } = parseObservaciones(reparacion.observaciones);
+        // --------------------
+        // Formulario con toda la info y botones
+        // --------------------
+        html += `
+            <form action="guardarRespuestaPresup.php" method="POST">
+                <div class="card-header">Presupuesto Enviado:</div>
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <strong>Fecha de Envío del Presupuesto:</strong> ${fechaEnvioPresup || "-"}
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Monto del presupuesto: $</strong> ${reparacion.presupuesto}
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Materiales a usar:</strong> ${materiales || "-"}
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Descripción de la Reparación:</strong> ${detalleReparacion || "-"}
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Empleado que envió el Presupuesto:</strong> ${reparacion.nomEmpPresu} ${reparacion.apeEmpPresu}
+                    </li>
+                    <li class="list-group-item centered" id="fecha-fin-container" style="display: none;">
+                        <label class="label" for="fecha_fin_estimada">
+                            <strong>Fecha estimada de fin: </strong>
+                            <input class="input" type="date" name="fecha_fin_estimada">
+                        </label>
+                    </li>
+                </ul>
+
+                <!-- Campos ocultos -->
+                <input type="hidden" name="id_reparacion" value="${reparacion.id}">
+                <input type="hidden" name="id_cli" value="${reparacion.idCli}">
+                <input type="hidden" name="nom_cli" value="${reparacion.cliente?.nombre || ''}">
+                <input type="hidden" name="email_cli" value="${reparacion.cliente?.email || ''}">
+                <input type="hidden" name="id_electro" value="${reparacion.idElectro}">
+                <input type="hidden" name="marca" value="${reparacion.marcaModelo?.split(" ")[0] || ''}">
+                <input type="hidden" name="modelo" value="${reparacion.marcaModelo?.split(" ")[1] || ''}">
+                <input type="hidden" name="nom_tipo" value="${reparacion.tipo || ''}">
+                <input type="hidden" name="coment_cobro" value="${reparacion.comentariosCobro || ''}">
+
+                <div class="card-header">¿Respondió el cliente?</div>
+                <ul class="list-group" style="background:#fdf1b7;">
+                    <li class="list-group-item centered">
+                        <button name="accion" value="si" class="btn" type="submit" onclick="mostrarFechaFin(event)">
+                            Confirma Presupuesto
+                        </button> 
+                        <button name="accion" value="no" class="reject-btn btn" type="submit">
+                            Rechaza Presupuesto
+                        </button>
+                    </li>
+                </ul>
+            </form>
+        `;
+    }
+    // Confirmación aceptada - iniciar reparación
+    else if (reparacion.confirmaPresupuesto == 1 && reparacion.estadoPresu === 'Presupuesto Confirmado') {
+       let { materiales, detalleReparacion } = parseObservaciones(reparacion.observaciones);
+
+        let fechaInicio = new Date(reparacion.fechaInicio);
+        let fechaEstRepa = new Date(reparacion.fechaFinEst);
+
+        // Fecha actual
+        let hoy = new Date();
+        hoy.setDate(hoy.getDate() + 1);
+        // Calculamos la diferencia en milisegundos
+        let diffMs = fechaEstRepa - hoy; // positivo si fecha futura
+        let diffDias = Math.ceil(diffMs / (1000 * 60 * 60 * 24)); // convertir ms a días, redondeando hacia arriba
+
+        let mensajeDias = "";
+        let colorMensaje = "";
+
+        if (diffDias >= 0) {
+            // Fecha futura o hoy
+            if (diffDias === 0) {
+                mensajeDias = "La reparación debería finalizar hoy";
+                colorMensaje = "blue";
+            } else {
+                mensajeDias = `Quedan ${diffDias} días para terminar la reparación`;
+                colorMensaje = "red";
+            }
+        } else {
+            // Fecha pasada
+            let diasPasados = Math.abs(diffDias);
+            if (diasPasados === 1) {
+                mensajeDias = "La reparación debería haber finalizado ayer";
+                colorMensaje = "orange";
+            } else {
+                mensajeDias = `La reparación debería haber finalizado hace ${diasPasados} días`;
+                colorMensaje = "orange";
+            }
+        }
+
+        let cant_a_abonar = (reparacion.presupuesto) - (reparacion.montoFijoIni);
+       
+        html += `
+            <form action="finalizarReparacion.php" method="POST">
+                <input type="hidden" name="id_reparacion" value="${reparacion.id}">
+            
+                <div class="card-header">Reparación Aprobada</div>
+                <ul class="list-group">
+                    <li class="list-group-item"><strong>Presupuesto Confirmado:</strong> $${reparacion.presupuesto}</li>
+                    <li class="list-group-item"><strong>Fecha de confirmación:</strong> ${fechaConfirmReparacion || '-'}</li>
+                    <li class="list-group-item centered"><strong>Monto a Abonar Final:</strong> $<strong style="color:black;">${cant_a_abonar} </strong> </li>
+                    <li class="list-group-item centered"><strong> Fecha Inicio:</strong> ${fechaIni} &nbsp; &nbsp; &nbsp; <strong>Fecha Fin Estimada:</strong>${fechaFinEstimada}</li>
+                    <li class="list-group-item centered"><strong style="color:${colorMensaje}">${mensajeDias}</strong></li>
+                    <li class="list-group-item">
+                        <strong>Materiales a usar:</strong> ${materiales || "-"}
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Descripción de la Reparación:</strong> ${detalleReparacion || "-"}
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Empleado que envió el Presupuesto:</strong> ${reparacion.nomEmpPresu} ${reparacion.apeEmpPresu}
+                    </li>
+                    
+                    <li class="list-group-item centered">
+                    <button class="btn" type="button" id="retirar-materiales"><a href="retirarMateriales.php" style="text-decoration:none; color:white;">Retirar Materiales</a></button>
+                    </li>
+                </ul>
+            
+            </form>
+
+              </ul> 
+            <form action="finalizarReparacion.php" method="POST">
+                <div class="card-header">
+                    Finalizar Reparación:
+                </div>
+                <input type="hidden" name="id_reparacion" value=" ${reparacion.id}">
+                
+                <input type="hidden" name="id_reparacion" value="${reparacion.id}">
+                <input type="hidden" name="id_cli" value="${reparacion.idCli}">
+                <input type="hidden" name="nom_cli" value="${reparacion.cliente?.nombre || ''}">
+                <input type="hidden" name="mail_cli" value="${reparacion.cliente?.email || ''}">
+                <input type="hidden" name="id_electro" value="${reparacion.idElectro}">
+                <input type="hidden" name="marca" value="${reparacion.marcaModelo?.split(" ")[0] || ''}">
+                <input type="hidden" name="modelo" value="${reparacion.marcaModelo?.split(" ")[1] || ''}">
+                <input type="hidden" name="nom_tipo" value="${reparacion.tipo || ''}">
+                <input type="hidden" name="monto_cobrar" value=" ${cant_a_abonar}"> 
+
+                <ul class="list-group" style="background:#fdf1b7;">
+                <li class="list-group-item centered"><button class="btn" type="submit" id = "btn-finalizar-reparacion">Finalizar Reparación</button></li> 
+                </ul>   
+        </form>
+        `;
+    }
+
+    // Reparación terminada - pasar a cobro
+    if (reparacion.estadoPresu === 'Reparacion Finalizada' && !reparacion.fechaCobroFin && !reparacion.fechaDeRetiro && !reparacion.montoFinRepa) {
+        let monto_a_abonar = (reparacion.presupuesto) - (reparacion.montoFijoIni);
+        html += `
+            <ul class="list-group">
+                 <li class="list-group-item centered"><strong> Fecha Inicio:</strong> ${fechaIni} &nbsp; &nbsp; &nbsp; <strong>Fecha Finalizó:</strong> ${fechaFin}</li>
+                <li class="list-group-item centered"><strong >Monto a Abonar: &nbsp; </strong><strong style="color:red;">${monto_a_abonar}</strong></li>                
+                                    
+            </ul> 
+            <form action="cobrarReparacion.php" method="POST">
+                <div class="card-header">
+                    Cobrar Reparación:
+                </div>
+                    <ul class="list-group" style="background:#fdf1b7;">
+                    <li class="list-group-item centered">
+                        <strong><label class="label" for="monto_abona">Monto que Abona:<input class="input" type="number" name="monto_abona" placeholder="$" required></label></strong>
+                    </li>
+                    <li class="list-group-item centered">
+                        <strong><label class="label" for="medio_pago" >Medio de Pago</label>
+                        <input type="radio" name="medio_pago" value="efectivo" required onclick="mostrarComprobante(this.value)">
+                        <label for="efectivo">Efectivo</label><br>
+                        <input type="radio" name="medio_pago" value="transferencia" required onclick="mostrarComprobante(this.value)">
+                        <label for="transferencia">Transferencia Bancaria</label></strong>
+                    </li>
+                    <li class="list-group-item centered">
+                        <div class="form-group" id="comprobante-container" style="display: none;">
+                            <label class="label" for="nro_comprobante">N° de Comprobante</label>
+                            <input type="text" class="input" name="nro_comprobante" id="nro_comprobante">
+                        </div>
+                    </li>
+                    <li class="list-group-item centered">
+                        <strong><label class="label" for="coment_cobro">Algún comentario sobre el cobro:<textarea class="input"  name="coment_cobro" id="coment_cobro" cols="40" rows="10"></textarea></label></strong>
+                    </li>
+                </ul>   
+                <input type="hidden" name="id_reparacion" value="${reparacion.id}">
+                <input type="hidden" name="comentarios" value="${reparacion.comentariosCobro}">
+                <input type="hidden" name="id_cli" value="${reparacion.idCli}">
+                 <input type="hidden" name="nom_cli" value="${reparacion.cliente?.nombre || ''}">
+                <input type="hidden" name="mail_cli" value="${reparacion.cliente?.email || ''}">
+                <input type="hidden" name="id_electro" value="${reparacion.idElectro}">
+                <input type="hidden" name="marca" value="${reparacion.marcaModelo?.split(" ")[0] || ''}">
+                <input type="hidden" name="modelo" value="${reparacion.marcaModelo?.split(" ")[1] || ''}">
+                <input type="hidden" name="nom_tipo" value="${reparacion.tipo || ''}">
+                <input type="hidden" name="monto_a_cobrar" value="${monto_a_abonar}">
+                <ul class="list-group" style="background:#fdf1b7;">
+                <li class="list-group-item centered"><button class="btn" type="submit" id = "cobrar">Cobrar Reparación</button></li> 
+                </ul>   
+            </form>
+        `;
+    }
+
+    // Retiro completado
+    if (reparacion.fechaDeRetiro) {
+        html += `
+            <div class="card mt-2">
+                <div class="card-header">Reparación retirada</div>
+                <ul class="list-group">
+                    <li class="list-group-item"><strong>Fecha de retiro:</strong> ${reparacion.fechaDeRetiro}</li>
+                    <li class="list-group-item"><strong>Monto final cobrado:</strong> $${reparacion.montoFinRepa || '-'}</li>
+                    <li class="list-group-item"><strong>Medio de pago:</strong> ${reparacion.medioPagoFin || '-'}</li>
+                </ul>
+            </div>
+        `;
+    }
+
+    contenido.innerHTML = html;
+    overlay.style.display = "flex";
+}
 
         function cerrarDetalle() {
             document.getElementById("overlay").style.display = "none";
@@ -545,6 +862,56 @@ date_default_timezone_set('America/Argentina/Buenos_Aires');
             fechaFinInput.setAttribute("required", "true");
 
 
+        }
+       function mostrarDatosNoCubreGarant(event) {
+            const btn = event.target;
+            const form = btn.closest('form');
+            if (!form) return;
+
+            // buscar dentro del mismo form (no globalmente)
+            const titulo = form.querySelector('#titulo-noCubre');
+            const presupContainer = form.querySelector('#presup');
+            const noCubreContainer = form.querySelector('#xqNoCubre');
+            const presupInput = form.querySelector('input[name="presup"]');
+            const noCubreTextArea = form.querySelector('textarea[name="xqNoCubre"]');
+
+            const isVisible = el => !!el && window.getComputedStyle(el).display !== 'none';
+
+            // Si los campos ya están visibles -> validar y permitir envío si están completos
+            if (isVisible(presupContainer) || isVisible(noCubreContainer)) {
+                const valPresup = presupInput ? String(presupInput.value).trim() : '';
+                const valNoCubre = noCubreTextArea ? String(noCubreTextArea.value).trim() : '';
+
+                // Requerir ambos
+                if (valPresup !== '' && valNoCubre !== '') {
+                    // permitir el envío (no hacemos preventDefault)
+                    return true;
+                }
+
+                // Si faltan datos, evitar envío y pedir completar
+                event.preventDefault();
+                if (valNoCubre === '') {
+                    alert('Por favor explique por qué no cubre la garantía.');
+                    noCubreTextArea?.focus();
+                } else {
+                    alert('Por favor ingrese el presupuesto.');
+                    presupInput?.focus();
+                }
+                return false;
+            }
+
+            // Si aún NO están visibles -> mostrarlos y evitar el envío por ahora (primer click)
+            event.preventDefault();
+            if (titulo) titulo.style.display = 'block';
+            if (presupContainer) presupContainer.style.display = 'block';
+            if (noCubreContainer) noCubreContainer.style.display = 'block';
+
+            if (presupInput) presupInput.required = true;
+            if (noCubreTextArea) noCubreTextArea.required = true;
+
+            // foco en el textarea para que el usuario empiece a escribir
+            noCubreTextArea?.focus();
+            return false;
         }
 
         

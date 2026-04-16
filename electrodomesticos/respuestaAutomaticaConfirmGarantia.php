@@ -7,7 +7,8 @@
         require_once __DIR__ . '/../PHPMailer/src/Exception.php';
         require_once __DIR__ . '/../PHPMailer/src/SMTP.php';
 
-function rtaAutomaticaCobro($mailCli,$nomCli,$idRepa, $nomTipo, $marca, $modelo, $montoAbonado){
+function rtaAutomaticaConfirmacion($mailCli,$nomCli,$idRepa, $nomTipo, $marca, $modelo, $fechaFin){
+
 
 
     $mail = new PHPMailer(true);
@@ -31,11 +32,10 @@ function rtaAutomaticaCobro($mailCli,$nomCli,$idRepa, $nomTipo, $marca, $modelo,
         $logoPath = '../static/images/logo.png'; // Ruta al logo
         $cidLogo = 'logo_cid'; // Identificador único para el logo
         $mail->addEmbeddedImage($logoPath, $cidLogo);
-        $nomCli = ucwords($nomCli);
     
         // Configurar contenido del correo
         $mail->isHTML(true);
-        $mail->Subject = 'Reparacion Cobrada y Retirada';
+        $mail->Subject = 'Garantia Confirmada';
         $mail->Body = "
                     <html>
                         <body style='background-color: #8497c5; font-family: Segoe UI, Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 10px; border-radius: 10px;'>
@@ -49,11 +49,10 @@ function rtaAutomaticaCobro($mailCli,$nomCli,$idRepa, $nomTipo, $marca, $modelo,
                             <hr> 
                             <br>
                             <p style='font-weight: bold; font-size: 18px; margin: 15px 0;'>Estimado/a {$nomCli}:</p>  
-                            <p style='text-align: center; font-weight: bold; font-size: 18px;'>Has retirado tu Electrodoméstico: {$nomTipo} {$marca} {$modelo} </p>
-                            <p style='text-align: center; font-weight: bold; font-size: 18px; margin: 15px 0;'>Monto Abonado: $ {$montoAbonado}</p>
-                            <br>
-                            <hr>
-                            <p style='text-align: center; font-weight: bold; font-size: 18px; margin: 15px 0;'>A partir de hoy, tenés 3 meses de Garantía.</p>
+                            <p style='text-align: center; font-weight: bold; font-size: 18px;'>Confirmamos la validez de la Garantía de su Electrodoméstico: {$nomTipo} {$marca} {$modelo} </p>
+                            <p style='text-align: center; font-weight: bold; font-size: 18px; margin: 15px 0;'>La fecha estimada de finalización de la Reparación es: {$fechaFin}</p>
+                            <p style='text-align: center; font-weight: bold; font-size: 18px; margin: 15px 0;'>De todas formas, le enviaremos un correo cuando se encuentre reparado el electrodoméstico.</p>
+                            <p style='text-align: center; font-weight: bold; font-size: 18px; margin: 15px 0;'>Recuerde que debe presentar el código de reparación.</p>
                             <br>
                             <hr>
                             <p style='text-align: center; font-weight: bold; font-size: 18px;'>Ante cualquier duda o consulta, estamos a su disposición.</p>

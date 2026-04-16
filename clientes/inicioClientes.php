@@ -39,28 +39,27 @@
 
     <h1  class="titulo">Clientes</h1>
     <div class="div-con-botones">
-        <div class="form-container">
-            <div class="desplegable" style="margin-right: 5rem;">
-                <button class="btn">Exportar &#9207;</button>
-                <div class="link">
-                    <a target="_blank" href="pdf.php">pdf</a>
-                    <a class="excel" href="excel.php">excel</a>
-                </div>
+        <form action='altaCliente.php' method='post' style='display:inline;'>
+            <button type='submit' class='btn'> Agregar +
+            </button>
+        </form>
+        <div class="desplegable">
+            <button class="btn">Exportar &#9207;</button>
+            <div class="link">
+                <a target="_blank" href="pdf.php">pdf</a>
+                <a class="excel" href="excel.php">excel</a>
             </div>
-            <div style="margin-right: 5rem;">
-                <form action="" method="post">
-                    <input class="input" type="text" name="buscar" placeholder="Buscar por DNI o Nombre" id="buscar" required>
-                    <button class="btn-iconos" type="submit"><img src="../static/images/lupa.png" alt="Buscar" width='30' height='20' /></button>
-                </form>
-            </div>
-            <form action='altaCliente.php' method='post' style='display:inline;'>
-                <button type='submit' class='btn'> Agregar +
-                </button>
-            </form>
-
         </div>
     </div>
-    <div class="table-container"  style="margin-top: 1rem;">
+    <div class="div-con-botones">
+        <div class="form-group">
+            <form action="" method="post">
+                <input class="input" type="text" name="buscar" placeholder="Buscar por DNI o Nombre" id="buscar" required>
+                    <button class="btn-iconos" type="submit"><img src="../static/images/lupa.png" alt="Buscar" width='30' height='20' /></button>
+            </form>
+        </div>
+    </div>
+    <div class="table-container">
 
         <table class="tabla">
             <tr>
@@ -72,6 +71,7 @@
                 <th class="tabla-head">Dirección</th>
                 <th class="tabla-head">Email</th>
                 <th class="tabla-head">Estado</th>
+                <th class="tabla-head">Ver Electros</th>
                 <?php
                 if($rol == 2 || $rol == 4 || $rol == 5 || $rol == 6){
                     ?>
@@ -92,6 +92,17 @@
                         echo "<td class='tabla-data'>" . $cliente->getDirCli() . "</td>";
                         echo "<td class='tabla-data'>" . $cliente->getEmailCli() . "</td>";
                         echo "<td class='tabla-data'>" . ($cliente->getEstadoCli() == 1 ? 'Activo' : 'Deshabilitado') . "</td>";
+                        echo "<td class='tabla-data'>
+                                <form action='verElectrosDeUnCli.php' method='post' style='display:inline;'>
+                                    <input type='hidden' name='id' value='" . $cliente->getIdCli() . "'>          
+                                    <input type='hidden' name='dniCli' value='" .  $cliente->getDniCli() . "'>
+                                    <input type='hidden' name='emailCli' value='" . $cliente->getEmailCli() . "'>
+                                    <input type='hidden' name='telCli' value='" . $cliente->getTelCli() . "'>
+                                    <button type='submit' class='btn-iconos'>
+                                        <img src='../static/images/eye1.png' alt='ver' title='Ver Electros' width='20' height='20'>
+                                    </button>
+                                </form>
+                            </td>";
                         if($rol == 2 || $rol == 4 || $rol == 5 || $rol == 6){
                             if ($cliente->getEstadoCli() == 1) {
                                 // Si está activo (estado == 1), muestra los botones de editar y eliminar
@@ -122,6 +133,7 @@
                                     </td>";
                             }
                         }
+                        
                         echo "</tr>";
                     }
                 } else {

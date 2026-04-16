@@ -12,6 +12,8 @@ class Electro {
     private $ape_cli;
     private $email_cli;
     private $tipo_electro;
+    private $ed_comentario;
+    private $ed_fecha_ing;
     // atributos del tipo de electro
     private $nom_tipo;
     // atributos de la reparacion
@@ -83,36 +85,39 @@ class Electro {
             return [];
         }
     }
-    public function filtrarHistorialReparaciones($desde, $hasta, $cliente) {
+
+    public function filtrarHistorialReparaciones($desde, $hasta, $cliente, $idCli = null) {
         try {
-                    // 1) Base de la consulta (sin WHERE ni ORDER)
+            // 1) Base de la consulta (sin WHERE ni ORDER)
             $sql = "SELECT 
-                    r.id_reparacion, r.idelectrodomesticos, r.id_tecnico, 
-                    r.fecha_inicio, r.fecha_fin_estimada, r.fecha_finalizacion, 
-                    r.fecha_retiro_electro, r.fecha_finaliza_garantia, r.descripcion_re, r.estado_reparacion, 
+                r.id_reparacion, r.idelectrodomesticos, r.id_tecnico, 
+                r.fecha_inicio, r.fecha_fin_estimada, r.fecha_finalizacion, 
+                r.fecha_retiro_electro, r.fecha_finaliza_garantia, r.descripcion_re, r.estado_reparacion, 
 
-                    e.marca, e.modelo, e.num_serie, e.descripcion, e.idclientes, e.tipo_electro, 
-                    t.nom_tipo, 
+                e.marca, e.modelo, e.num_serie, ed.descripcion, ed.fecha_ingElectro, e.idclientes, e.tipo_electro, 
+                t.nom_tipo, 
 
-                    a.idemp_atencion AS id_atencion, a.idemp_presup AS id_presupuestador, a.presupuesto, a.fecha_ing_electro, a.fecha_env_presup, a.fecha_confirma_re, a.estado_presup,
-                    a.confirm_presup, a.observaciones, 
+                ed.idemp_atencion AS id_atencion, ed.comentarios, a.idemp_presup AS id_presupuestador, a.presupuesto, a.fecha_ing_electro, a.fecha_env_presup, a.fecha_confirma_re, a.estado_presup,
+                a.confirm_presup, a.observaciones, 
 
-                    c.nom_cliente, c.ape_cliente, c.email_cliente, 
+                c.nom_cliente, c.ape_cliente, c.email_cliente, 
 
-                    tecnico.nom_empleado AS nom_tecnico, tecnico.ape_empleado AS ape_tecnico, 
-                    presupuestador.nom_empleado AS nom_presupuestador, presupuestador.ape_empleado AS ape_presupuestador,
-                    atencion.nom_empleado AS nom_atencion, atencion.ape_empleado AS ape_atencion,
+                tecnico.nom_empleado AS nom_tecnico, tecnico.ape_empleado AS ape_tecnico, 
+                presupuestador.nom_empleado AS nom_presupuestador, presupuestador.ape_empleado AS ape_presupuestador,
+                atencion.nom_empleado AS nom_atencion, atencion.ape_empleado AS ape_atencion,
 
-                    co.id_cobro, co.fecha_cobro_inicial, co.arancel_fijo_cobrado, co.medio_pago_inicial, co.nro_comprobante_inicial, co.fecha_cobro_final, co.monto_final_repa, co.medio_pago_final, co.nro_comprobante_final, co.observacion 
-                FROM reparaciones AS r
-                INNER JOIN electrodomesticos AS e      ON r.idelectrodomesticos = e.idelectrodomesticos
-                INNER JOIN empleados AS tecnico       ON r.id_tecnico          = tecnico.idempleados 
-                INNER JOIN tipo_electro AS t          ON t.idtipo_electro      = e.tipo_electro
-                INNER JOIN atencion_presupuesto AS a  ON a.id_reparacion       = r.id_reparacion
-                LEFT JOIN empleados AS presupuestador ON presupuestador.idempleados = a.idemp_presup
-                INNER JOIN empleados AS atencion      ON atencion.idempleados  = a.idemp_atencion
-                INNER JOIN clientes AS c              ON c.idclientes          = e.idclientes
-                INNER JOIN cobros AS co               ON co.id_reparacion      = r.id_reparacion";
+                co.id_cobro, co.fecha_cobro_inicial, co.arancel_fijo_cobrado, co.medio_pago_inicial, co.nro_comprobante_inicial, co.fecha_cobro_final, co.monto_final_repa, co.medio_pago_final, co.nro_comprobante_final, co.observacion 
+            FROM reparaciones AS r
+            INNER JOIN electrodomesticos AS e ON r.idelectrodomesticos = e.idelectrodomesticos
+            INNER JOIN electro_desc AS ed ON e.idelectrodomesticos = ed.id_electro
+            INNER JOIN empleados AS tecnico ON r.id_tecnico = tecnico.idempleados 
+            INNER JOIN tipo_electro AS t ON t.idtipo_electro = e.tipo_electro
+            INNER JOIN atencion_presupuesto AS a ON a.id_reparacion = r.id_reparacion
+            LEFT JOIN empleados AS presupuestador ON presupuestador.idempleados = a.idemp_presup
+            INNER JOIN empleados AS atencion ON atencion.idempleados = ed.idemp_atencion
+            INNER JOIN clientes AS c ON c.idclientes = e.idclientes
+            INNER JOIN cobros AS co ON co.id_reparacion = r.id_reparacion";
+
 
             // 2) Construir dinámicamente el WHERE
             $conds  = ["(a.estado_presup = 'Reparacion Cobrada' OR a.estado_presup = 'Presupuesto Rechazado')"];
@@ -129,6 +134,11 @@ class Electro {
             if (!empty($cliente)) {
                 $conds[] = "(c.nom_cliente LIKE :cliente OR c.ape_cliente LIKE :cliente)";
                 $params[':cliente'] = "%" . $cliente . "%"; // Agregar comodines para búsqueda parcial
+            }
+            // **Filtro por idCliente:**
+            if (!empty($idCli)) {
+                $conds[] = "(c.idclientes = :id_cli)";
+                $params[':id_cli'] = $idCli; // Agregar comodines para búsqueda total id cliente
             }
             // Unir condiciones
             $sql .= " WHERE " . implode(" AND ", $conds);
@@ -158,6 +168,8 @@ class Electro {
                 $reparacion->setFechaFinGarantia($fila['fecha_finaliza_garantia']);
                 $reparacion->setDescReparacion($fila['descripcion_re']);
                 $reparacion->setEstadoReparacion($fila['estado_reparacion']);
+                $reparacion->setEdComentario($fila['comentarios']);
+                $reparacion->setEdFechaIng($fila['fecha_ingElectro']);
     
                 $reparacion->setMarca($fila['marca']);
                 $reparacion->setModelo($fila['modelo']);
@@ -208,7 +220,7 @@ class Electro {
         }
     }
 
-    public function leerReparaciones() {
+    public function leerReparaciones($idElectro = null, $idCli = null) {
        
         try {
             $query = "SELECT 
@@ -216,10 +228,10 @@ class Electro {
                 r.fecha_inicio, r.fecha_fin_estimada, r.fecha_finalizacion, 
                 r.fecha_retiro_electro, r.fecha_finaliza_garantia, r.descripcion_re, r.estado_reparacion, 
 
-                e.marca, e.modelo, e.num_serie, e.descripcion, e.idclientes, e.tipo_electro, 
+                e.marca, e.modelo, e.num_serie, ed.descripcion, ed.fecha_ingElectro, e.idclientes, e.tipo_electro, 
                 t.nom_tipo, 
 
-                a.idemp_atencion AS id_atencion, a.idemp_presup AS id_presupuestador, a.presupuesto, a.fecha_ing_electro, a.fecha_env_presup, a.fecha_confirma_re, a.estado_presup,
+                ed.idemp_atencion AS id_atencion, ed.comentarios, a.idemp_presup AS id_presupuestador, a.presupuesto, a.fecha_ing_electro, a.fecha_env_presup, a.fecha_confirma_re, a.estado_presup,
                 a.confirm_presup, a.observaciones, 
 
                 c.nom_cliente, c.ape_cliente, c.email_cliente, 
@@ -234,23 +246,47 @@ class Electro {
             INNER JOIN empleados AS tecnico ON r.id_tecnico = tecnico.idempleados 
             INNER JOIN tipo_electro AS t ON t.idtipo_electro = e.tipo_electro
             INNER JOIN atencion_presupuesto AS a ON a.id_reparacion = r.id_reparacion
+            INNER JOIN electro_desc AS ed ON e.idelectrodomesticos = ed.id_electro AND ed.fecha_ingElectro = a.fecha_ing_electro
             LEFT JOIN empleados AS presupuestador ON presupuestador.idempleados = a.idemp_presup
-            INNER JOIN empleados AS atencion ON atencion.idempleados = a.idemp_atencion
+            INNER JOIN empleados AS atencion ON atencion.idempleados = ed.idemp_atencion
             INNER JOIN clientes AS c ON c.idclientes = e.idclientes
             INNER JOIN cobros AS co ON co.id_reparacion = r.id_reparacion";
 
+            $condiciones = [];
             // Si el rol es de tecnico = 1, 7 o 8 se muestran solo las reparaciones asignadas a ese tecnico
             if (isset($_SESSION['rol']) && in_array($_SESSION['rol'], [1, 7, 8])) {
-                $query .= " WHERE r.id_tecnico = :id_tecnico";
+                $condiciones[] = "r.id_tecnico = :id_tecnico";
             }
-            
-            
+
+            // Filtro opcional por idElectro
+            if (!empty($idElectro)) {
+                $condiciones[] = "r.idelectrodomesticos = :idElectro";
+            }
+
+            if (!empty($idCli)) {
+                $condiciones[] = "e.idclientes = :idCli";
+            }
+
+            // Si hay condiciones, agregarlas a la query
+            if (!empty($condiciones)) {
+                $query .= " WHERE " . implode(" AND ", $condiciones);
+            }
+
             $query .= " ORDER BY a.fecha_ing_electro";
+
 
             // Preparar la consulta
             $ps = $this->db->prepare($query);
             if (isset($_SESSION['rol']) && in_array($_SESSION['rol'], [1, 7, 8])) {
                 $ps->bindParam(':id_tecnico', $_SESSION['id'], PDO::PARAM_INT);
+            }
+            //se agregaron estos dos bindParam
+            if (!empty($idElectro)) {
+                $ps->bindParam(':idElectro', $idElectro, PDO::PARAM_INT);
+            }
+            
+            if (!empty($idCli)) {
+                $ps->bindParam(':idCli', $idCli, PDO::PARAM_INT);
             }
             $ps->execute();
 
@@ -269,6 +305,8 @@ class Electro {
                 $reparacion->setFechaFinGarantia($fila['fecha_finaliza_garantia']);
                 $reparacion->setDescReparacion($fila['descripcion_re']);
                 $reparacion->setEstadoReparacion($fila['estado_reparacion']);
+                $reparacion->setEdComentario($fila['comentarios']);
+                $reparacion->setEdFechaIng($fila['fecha_ingElectro']);
     
                 $reparacion->setMarca($fila['marca']);
                 $reparacion->setModelo($fila['modelo']);
@@ -364,8 +402,52 @@ class Electro {
             return [];
         }
     }
+    public function obtenerElectrosPorCliente($idCliente, $estadoPresu) {
+        try{
+            $query = "SELECT 
+                    e.idelectrodomesticos, e.marca, e.modelo, e.num_serie, 
+                    t.nom_tipo, 
+                    ed.descripcion, ed.idemp_atencion, r.id_reparacion, 
+                    r.id_tecnico, r.fecha_finaliza_garantia
+                FROM electrodomesticos e
+                INNER JOIN electro_desc ed ON e.idelectrodomesticos = ed.id_electro
+                INNER JOIN tipo_electro t ON e.tipo_electro = t.idtipo_electro
+                INNER JOIN reparaciones r ON e.idelectrodomesticos = r.idelectrodomesticos
+                INNER JOIN atencion_presupuesto a ON a.id_reparacion = r.id_reparacion
+                WHERE a.estado_presup = :e_presu
+                AND e.idclientes = :idCli";
+                
+            //'Reparacion Cobrada' es lo que por el momento se busca pero con parametros es + escalable el metodo
 
-    public function enviarPresupuesto($idRe){
+            $ps = $this->db->prepare($query);
+            $ps->bindParam(':e_presu', $estadoPresu);
+            $ps->bindParam(':idCli', $idCliente, PDO::PARAM_INT);
+            $ps->execute();
+            $electros = [];
+
+            while ($fila = $ps->fetch(PDO::FETCH_ASSOC)) {
+                $electro = new Electro($this->db);
+                $electro->setIdElectro($fila['idelectrodomesticos']);
+                $electro->setMarca($fila['marca']);
+                $electro->setModelo($fila['modelo']);
+                $electro->setNumSerie($fila['num_serie']);
+                $electro->setNomTipo($fila['nom_tipo']);
+                $electro->setDescReparacion($fila['descripcion']);
+                $electro->setIdEmpAtencion($fila['idemp_atencion']);
+                $electro->setIdTecnico($fila['id_tecnico']);
+                $electro->setFechaFinGarantia($fila['fecha_finaliza_garantia']);
+        
+                $electros[] = $electro;
+            }
+    
+            return $electros;
+        } catch (Exception $e) {
+            echo "Error al obtener los Electros: " . $e->getMessage();
+            return [];
+        }
+    }
+
+    public function enviarPresupuesto($idRe, $xqNoCubre = null){
         try{
             $this->db->beginTransaction();
             $queryAtencion = "UPDATE atencion_presupuesto SET presupuesto = :presu, idemp_presup = :idemp, observaciones = :desc_presu, estado_presup = :estado, fecha_env_presup = NOW() WHERE id_reparacion = :id_repa";
@@ -385,6 +467,21 @@ class Electro {
 
             $psAtencion->execute();
 
+            if(!empty($xqNoCubre)){
+                // Insertar ID DE REPARACION ANTERIOR
+               $queryElectro_desc = "UPDATE electro_desc SET comentarios = :coment WHERE fecha_ingElectro = :fecha AND id_electro = :id_electro";
+
+
+        
+                $psElectro_desc = $this->db->prepare($queryElectro_desc);
+                $fecha = $this->getEdFechaIng();
+                $id_electro = $this->getIdElectro();
+                $xqNoCubreTexto = $xqNoCubre ?? ''; // usar el valor recibido, no getEdComentario
+                $psElectro_desc->bindParam(':coment', $xqNoCubreTexto);
+                $psElectro_desc->bindParam(':fecha', $fecha);
+                $psElectro_desc->bindParam(':id_electro', $id_electro, PDO::PARAM_INT);
+                $psElectro_desc->execute();
+            }
             $this->db->commit();
             return true;
 
@@ -573,8 +670,8 @@ class Electro {
             $this->db->beginTransaction();
     
             // Insertar electrodoméstico
-            $queryElectro = "INSERT INTO electrodomesticos (marca, modelo, num_serie, descripcion, idclientes, tipo_electro) 
-                             VALUES (:marca, :modelo, :num_serie, :descripcion, :id_cli, :tipo_e)";
+            $queryElectro = "INSERT INTO electrodomesticos (marca, modelo, num_serie, idclientes, tipo_electro) 
+                             VALUES (:marca, :modelo, :num_serie, :id_cli, :tipo_e)";
     
             $psElectro = $this->db->prepare($queryElectro);
     
@@ -582,7 +679,6 @@ class Electro {
             $marca = $this->getMarca();
             $modelo = $this->getModelo();
             $num_serie = $this->getNumSerie();
-            $descripcion = $this->getDescripcion();
             $id_cli = $this->getIdCli();
             $tipo_e = $this->getTipoElectro();
     
@@ -590,14 +686,28 @@ class Electro {
             $psElectro->bindParam(':marca', $marca, PDO::PARAM_STR);
             $psElectro->bindParam(':modelo', $modelo, PDO::PARAM_STR);
             $psElectro->bindParam(':num_serie', $num_serie, PDO::PARAM_STR);
-            $psElectro->bindParam(':descripcion', $descripcion, PDO::PARAM_STR);
             $psElectro->bindParam(':id_cli', $id_cli, PDO::PARAM_INT);
             $psElectro->bindParam(':tipo_e', $tipo_e, PDO::PARAM_STR);
             
             $psElectro->execute();
     
             $id_electro = $this->db->lastInsertId();
-    
+            
+            //Insertar electro_desc
+            $queryDesc = "INSERT INTO electro_desc (id_electro,idemp_atencion, fecha_ingElectro, descripcion ) 
+                             VALUES (:id_electro, :id_emp, NOW(), :descripcion)";
+
+            $psDesc = $this->db->prepare($queryDesc);
+
+            $id_emp = $this->getIdEmpAtencion();
+            $descripcion = $this->getDescripcion();
+            
+            $psDesc->bindParam(':id_electro', $id_electro, PDO::PARAM_INT);
+            $psDesc->bindParam(':descripcion', $descripcion, PDO::PARAM_STR);
+            $psDesc->bindParam(':id_emp', $id_emp, PDO::PARAM_INT);
+
+            $psDesc->execute();
+            
             // Insertar reparación
             $queryRepa = "INSERT INTO reparaciones (idelectrodomesticos, id_tecnico, estado_reparacion) 
                           VALUES (:id_electro, :id_tecnico, :estado_re)";
@@ -616,17 +726,15 @@ class Electro {
             $id_repa = $this->db->lastInsertId();
     
             // Insertar en atención_presupuesto
-            $queryPresu = "INSERT INTO atencion_presupuesto (id_reparacion, idemp_atencion,fecha_ing_electro,estado_presup) 
-                           VALUES (:id_repa, :id_emp, NOW(), :estado_presup)";
+            $queryPresu = "INSERT INTO atencion_presupuesto (id_reparacion, fecha_ing_electro,estado_presup) 
+                           VALUES (:id_repa, NOW(), :estado_presup)";
     
             $psPresu = $this->db->prepare($queryPresu);
     
             // Guardamos el valor en una variable
-            $id_emp = $this->getIdEmpAtencion();
             $estado_presup = $this->getEstadoPresu();
     
             $psPresu->bindParam(':id_repa', $id_repa, PDO::PARAM_INT);
-            $psPresu->bindParam(':id_emp', $id_emp, PDO::PARAM_INT);
             $psPresu->bindParam(':estado_presup', $estado_presup);
             $psPresu->execute();
 
@@ -655,9 +763,109 @@ class Electro {
         } catch (PDOException $e) {
             $this->db->rollBack();
             error_log("Error al dar de alta el electrodoméstico, cobro e inicio del presupuesto: " . $e->getMessage());
+            echo "Error: " . $e->getMessage();
+            echo "Error: " . $e->getLine();
             return false;
         }
     }
+    //HACER
+    public function addNuevaRepa($desc_reparacion = null) {
+        try {
+            $this->db->beginTransaction();
+
+            //Insertar electro_desc
+            $queryDesc = "INSERT INTO electro_desc (id_electro,idemp_atencion, fecha_ingElectro, descripcion, comentarios ) 
+                             VALUES (:id_electro, :id_emp, NOW(), :descripcion, :ed_coment)";
+
+            $psDesc = $this->db->prepare($queryDesc);
+
+            $id_electro = $this->getIdElectro();
+            $id_emp = $this->getIdEmpAtencion();
+            $descripcion = $this->getDescripcion();
+            $ed_comentario = $this->getEdComentario();
+            
+            $psDesc->bindParam(':id_electro', $id_electro, PDO::PARAM_INT);
+            $psDesc->bindParam(':descripcion', $descripcion, PDO::PARAM_STR);
+            $psDesc->bindParam(':id_emp', $id_emp, PDO::PARAM_INT);
+            $psDesc->bindParam(':ed_coment', $ed_comentario, PDO::PARAM_STR);
+
+            $psDesc->execute();
+            
+            // Insertar reparación
+            $queryRepa = "INSERT INTO reparaciones (idelectrodomesticos, id_tecnico, estado_reparacion) 
+                          VALUES (:id_electro, :id_tecnico, :estado_re)";
+    
+            $psRepa = $this->db->prepare($queryRepa);
+    
+            // Guardamos los valores en variables
+            $id_tecnico = $this->getIdTecnico();
+            $estado_re = $this->getEstadoReparacion();
+    
+            $psRepa->bindParam(':id_electro', $id_electro, PDO::PARAM_INT);
+            $psRepa->bindParam(':id_tecnico', $id_tecnico, PDO::PARAM_INT);
+            $psRepa->bindParam(':estado_re', $estado_re, PDO::PARAM_STR);
+            $psRepa->execute();
+    
+            $id_repa = $this->db->lastInsertId();
+
+            //SOLO SI REGRESA POR GARANTÍA
+            if(!empty($desc_reparacion)){
+                // Insertar ID DE REPARACION ANTERIOR
+                $queryRepa_desc = "UPDATE reparaciones SET descripcion_re = :desc_re WHERE id_reparacion = $id_repa";
+        
+                $psRepa_desc = $this->db->prepare($queryRepa_desc);
+
+                $desc_reparacion = $this->getDescReparacion();
+        
+                $psRepa_desc->bindParam(':desc_re', $desc_reparacion);
+                $psRepa_desc->execute();
+            }
+    
+            // Insertar en atención_presupuesto
+            $queryPresu = "INSERT INTO atencion_presupuesto (id_reparacion, fecha_ing_electro,estado_presup) 
+                           VALUES (:id_repa, NOW(), :estado_presup)";
+    
+            $psPresu = $this->db->prepare($queryPresu);
+    
+            // Guardamos el valor en una variable
+            $estado_presup = $this->getEstadoPresu();
+    
+            $psPresu->bindParam(':id_repa', $id_repa, PDO::PARAM_INT);
+            $psPresu->bindParam(':estado_presup', $estado_presup);
+            $psPresu->execute();
+
+            // Insertar en cobros
+            $queryCobros = "INSERT INTO cobros (id_reparacion, fecha_cobro_inicial,arancel_fijo_cobrado, medio_pago_inicial, nro_comprobante_inicial, observacion) 
+                           VALUES (:id_repa, NOW(), :arancel_fijo, :medio_pago, :nro_compro_ini, :comentarios)";
+    
+            $psCobros = $this->db->prepare($queryCobros);
+    
+            // Guardamos el valor en una variable
+            $monto_fijo_cobro_ini = $this->getMontoFijoIni();
+            $medio_pago_inicial = $this->getMedioPagoIni();
+            $nro_compro_inicial = $this->getNroComproIni();
+            $comentarios = $this->getComentariosCobro();
+    
+            $psCobros->bindParam(':id_repa', $id_repa, PDO::PARAM_INT);
+            $psCobros->bindParam(':arancel_fijo', $monto_fijo_cobro_ini);
+            $psCobros->bindParam(':medio_pago', $medio_pago_inicial);
+            $psCobros->bindParam(':nro_compro_ini', $nro_compro_inicial);
+            $psCobros->bindParam(':comentarios', $comentarios);
+            $psCobros->execute();
+    
+            $this->db->commit();
+            return true;
+    
+        } catch (PDOException $e) {
+            $this->db->rollBack();
+            error_log("Error al agregar reparación al electrodoméstico: " . $e->getMessage());
+            echo "Error: " . $e->getMessage();
+            echo "Error: " . $e->getLine();
+            return false;
+        }
+    }
+
+
 
     // Getters y Setters
     public function getIdElectro() { return $this->id_electro; }
@@ -674,6 +882,12 @@ class Electro {
 
     public function getDescripcion() { return $this->descripcion; }
     public function setDescripcion($descripcion) { $this->descripcion = $descripcion; }
+
+    public function getEdComentario() { return $this->ed_comentario; }
+    public function setEdComentario($ed_comentario) { $this->ed_comentario = $ed_comentario; }
+
+    public function getEdFechaIng() { return $this->ed_fecha_ing; }
+    public function setEdFechaIng($ed_fecha_ing) { $this->ed_fecha_ing = $ed_fecha_ing; }
 
     public function getIdCli() { return $this->id_cli; }
     public function setIdCli($id_cli) { $this->id_cli = $id_cli; }

@@ -48,50 +48,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Historial Electrodomesticos</title>
     <link rel="stylesheet" href="../static/styles/style.css" />
     <link rel="stylesheet" href="../static/styles/card.css" />
+    <link rel="stylesheet" href="../static/styles/filtrosPosicion.css" />
     <script src="../static/js/funciones_empleados.js"></script>
     <script src="../static/js/funciones_select_nav.js"></script>
-    <style>
-            .section-btns {
-                display: flex;
-                justify-content: center;
-                flex-wrap: wrap;
-                gap: 10px;
-                margin-bottom: 20px;
-            }
 
-            .section-btns button,
-            .section-btns form {
-                margin: 0;
-            }
-
-            .grid-container {
-                display: grid;
-                grid-template-columns: repeat(auto-fill, minmax(300px, 3fr));
-                gap: 40px;
-                padding: 40px;
-            }
-
-            /* Estilo para los mensajes de sin resultados */
-            .no-results-message {
-                grid-column: 1 / -1;
-                text-align: center;
-                margin-top: 20px;
-            }
-            
-            .reject-btn{
-                background-color:#f45752;
-            }
-            .reject-btn:hover{
-                background-color: red;
-            }
-    </style>
     <script>
         function mostrarFiltros(filtroId) {
             event.preventDefault();
             var filtros = document.getElementById(filtroId);
+
+            filtros.classList.toggle('mostrar');
+            var gridContainer = document.querySelector('.grid-container');
             // Puedes agregar aquí algún ajuste al container de la cuadrícula si es necesario
             if (filtros.style.display === 'none' || filtros.style.display === '') {
                 filtros.style.display = 'block';
+                gridContainer.style.marginTop = '50px';  
+
             } else {
                 filtros.style.display = 'none';
             }
@@ -115,7 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </button>
         </div>
 
-        <div class="div-con-botones" id="filtrosRepa" style="grid-column: 1 / -1; text-align:center; margin-bottom:55px; display: none;">
+        <div class="div-con-botones" id="filtrosRepa">
             <form action="" method="post">
                 <div class="form-group">
                     <h2 style="margin:5px;">Filtros elija por fecha o por cliente o ambos: </h2>
@@ -147,19 +119,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $fecha_fin = date("d/m/Y", strtotime($rep->getFechaFin()));
                 $fecha_retiro_electro = date("d/m/Y", strtotime($rep->getFechaDeRetiro()));
                 $fecha_fin_garantia = date("d/m/Y", strtotime($rep->getFechaFinGarantia()));
+                
                 $descPresu = $rep->getObservaciones();
                 $partes = explode(" Detalle de la Reparación: ", $descPresu);
 
                 // La primera parte contiene "Materiales: ..."
-                $materiales = trim(str_replace("Materiales: ", "", $partes[0]));
-                                
+                $materiales = isset($partes[0])
+                    ? trim(str_replace("Materiales: ", "", $partes[0]))
+                    : 'Sin materiales registrados';
+
                 // La segunda parte contiene el detalle de la reparación
-                $detalleReparacion = trim($partes[1]);
+                $detalleReparacion = isset($partes[1])
+                    ? trim($partes[1])
+                    : 'Sin detalle de reparación';
+
                 $presup = $rep->getPresupuesto();
                 $monto_fijo = $rep->getMontoFijoIni();
                 $cant_a_abonar = $presup - $monto_fijo;
                 $medio_pago_fin = $rep->getMedioPagoFin();
         ?>
+        
             <div class="card" onclick="expandirDetalle(<?= $rep->getIdReparacion() ?>)">
 
                 <div class="card-header">Reparación Cobrada #<?= $rep->getIdReparacion() ?></div>
@@ -175,6 +154,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     
                 </ul>
             </div>
+        
         <?php endif; endforeach; ?>
 
         <?php if ($contador_reparaciones == 0): ?>
@@ -198,76 +178,90 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ?>
             
     <script>
-
-      
-
         //Expandir tarjetas
+            const reparaciones = <?= json_encode(array_map(function ($r) {
+                return [
+                    'id' => $r->getIdReparacion(),
+                    'fechaIng' => $r->getFechaIngElectro() ? date("d/m/Y", strtotime($r->getFechaIngElectro())) : '-',
+                    'marca' => strtoupper($r->getMarca() ?? ''),
+                    'modelo' => $r->getModelo() ?? '',
+                    'tipo' => ucwords($r->getNomTipo() ?? ''),
+                    'numSerie' => $r->getNumSerie() ?? '',
+                    'cliente' => ucwords(($r->getNomCli() ?? '') . " " . ($r->getApeCliente() ?? '')),
+                    'email' => $r->getEmailCliente() ?? '',
+                    'descripcion' => ucwords($r->getDescripcion() ?? ''),
+                    'tecnico' => ucwords(($r->getNomTecnico() ?? '') . " " . ($r->getApeTecnico() ?? '')),
+                    'estadoPresu' => $r->getEstadoPresu() ?? '',
+                    'observaciones' => $r->getObservaciones() ?? '',
+                    'fechaEnv' => $r->getFechaEnvioPresup() ? date("d/m/Y", strtotime($r->getFechaEnvioPresup())) : '-',
+                    'fechaConfirm' => $r->getFechaConfirmReparacion() ? date("d/m/Y", strtotime($r->getFechaConfirmReparacion())) : '-',
+                    'fechaGaran' => $r->getFechaFinGarantia() ? date("d/m/Y", strtotime($r->getFechaFinGarantia())) : '-',
+                    'fechaCobro' => $r->getFechaCobroFin() ? date("d/m/Y", strtotime($r->getFechaCobroFin())) : '-',
+                    'fechaFinEst' => $r->getFechaFinEst() ? date("d/m/Y", strtotime($r->getFechaFinEst())) : '-',
+                    'fechaFin' => $r->getFechaFin() ? date("d/m/Y", strtotime($r->getFechaFin())) : '-',
+                    'presupuesto' => $r->getPresupuesto() ?? '',
+                    'montoFijo' => $r->getMontoFijoIni() ?? '',
+                    'medioPago' => ucwords($r->getMedioPagoIni() ?? ''),
+                    'nroCompro' => $r->getNroComproIni() ?? '',
+                    'montoFijoFin' => $r->getMontoFinRepa() ?? '',
+                    'medioPagoFin' => ucwords($r->getMedioPagoFin() ?? ''),
+                    'nroComproFin' => $r->getNroComproFin() ?: '-',
+                ];
+            }, $reparaciones), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES); ?>;
 
         function expandirDetalle(id) {
-            let overlay = document.getElementById("overlay");
-            let contenido = document.getElementById("contenido-reparacion");
+           
+            const reparacion = reparaciones.find(r => r.id == id);
+            if (!reparacion) return;
 
-            // Obtener los datos de la reparación seleccionada
-            <?php foreach ($reparaciones as $reparacion) : ?>
-                if (id === <?= $reparacion->getIdReparacion() ?>) {
-                    <?php  $fecha_ing_electro = date("d/m/Y", strtotime($reparacion->getFechaIngElectro()));?>
-                    contenido.innerHTML = `
-                        <div class="card-header">
-                            Reparación #<?= $reparacion->getIdReparacion() ?>
-                        </div>
+            let materiales = "", detalleReparacion = "";
+            if (reparacion.observaciones.includes("Detalle de la Reparación:")) {
+                const partes = reparacion.observaciones.split(" Detalle de la Reparación: ");
+                materiales = partes[0].replace("Materiales: ", "").trim();
+                detalleReparacion = partes[1]?.trim() || "";
+            }
+
+            const contenido = document.getElementById("contenido-reparacion");
+
+                contenido.innerHTML = `
+                    <div class="card-header">
+                        Reparación #${reparacion.id}
+                    </div>
+                    <ul class="list-group">
+                        <li class="list-group-item"><strong style='color:red'>Garantía Válida Hasta:</strong> ${reparacion.fechaGaran}</li>
+                        <li class="list-group-item"><strong>Electrodoméstico:</strong> ${reparacion.marca} ${reparacion.modelo}<br>
+                        Tipo: ${reparacion.tipo}<br>N° de Serie: ${reparacion.numSerie}</li>
+                        <li class="list-group-item"><strong>Cliente:</strong> ${reparacion.cliente}<br>Email: ${reparacion.email}<br>
+                        <strong>Problema según el Cliente:</strong> ${reparacion.descripcion}</li>
+                        <li class="list-group-item"><strong>Técnico Asignado:</strong> ${reparacion.tecnico}</li>
+                    </ul>
+                    
                         <ul class="list-group">
-                            <li class="list-group-item"><strong>Fecha que Ingresó el Electrodoméstico:</strong> <?= $fecha_ing_electro ?></li>
-                            <li class="list-group-item"><strong>Electrodoméstico:</strong> <?= strtoupper($reparacion->getMarca()) . " " . $reparacion->getModelo() ?> <?= "<br>Tipo: ". ucwords($reparacion->getNomTipo()) ."<br>N° de Serie: ". $reparacion->getNumSerie() ?></li>
-                            <li class="list-group-item"><strong>Cliente:</strong> <?= "<br>Nombre: ". ucwords($reparacion->getNomCli() . " " . $reparacion->getApeCliente())."<br>Email: ". $reparacion->getEmailCliente(). "<br><strong>Problema según el Cliente: </strong>". ucwords($reparacion->getDescripcion()) ?></li>
-                            <li class="list-group-item"><strong>Técnico Asignado:</strong> <?= ucwords($reparacion->getNomTecnico() . " " . $reparacion->getApeTecnico()) ?></li>
-                        </ul>
-                        <?php if ($reparacion->getEstadoPresu() == 'Reparacion Cobrada'):?>
-                            <?php 
-                            $fecha_inicio = date("d/m/Y", strtotime($reparacion->getFechaInicio()));
-                            $fecha_fin = date("d/m/Y", strtotime($reparacion->getFechaFin()));
-                            $fecha_retiro_electro = date("d/m/Y", strtotime($reparacion->getFechaDeRetiro()));
-                            $fecha_fin_garantia = date("d/m/Y", strtotime($reparacion->getFechaFinGarantia()));
-                            $descPresu = $reparacion->getObservaciones();
-                            $partes = explode(" Detalle de la Reparación: ", $descPresu);
+                            <li class="list-group-item"><strong>Fecha que Ingresó el Electrodoméstico:</strong> ${reparacion.fechaIng}</li>
+                            <li class="list-group-item"><strong>Fecha Envío Presupuesto:</strong> ${reparacion.fechaEnv}</li>
+                            <li class="list-group-item"><strong>Fecha que Confirmó el Presupuesto:</strong> ${reparacion.fechaConfirm}</li>
+                            <li class="list-group-item"><strong>Arancel Inicial Abonado:</strong> $${reparacion.montoFijo} <strong>Medio de Pago:</strong> ${reparacion.medioPago} <strong>Nro de Comprobante:</strong> ${reparacion.nroCompro}</li>
+                            <li class="list-group-item"><strong>Presupuesto Total:</strong> $${reparacion.presupuesto}</li>
+                            <li class="list-group-item"><strong>Materiales utilizados:</strong> ${materiales}</li>
+                            <li class="list-group-item"><strong>Detalles de la reparación realizada:</strong> ${detalleReparacion}</li>
+                            <li class="list-group-item"><strong>Fecha de Fin Estimada:</strong> ${reparacion.fechaFinEst} <strong>Fecha de Fin Real:</strong> ${reparacion.fechaFin}</li>
+                            <li class="list-group-item"><strong>Arancel Final Abonado:</strong> $${reparacion.montoFijoFin} <strong>Medio de Pago:</strong> ${reparacion.medioPagoFin} <strong>Nro de Comprobante:</strong> ${reparacion.nroComproFin}</li>
+                            <li class="list-group-item"><strong>Fecha de Retiro del Electro:</strong> ${reparacion.fechaCobro}</li>
 
-                            // La primera parte contiene "Materiales: ..."
-                            $materiales = trim(str_replace("Materiales: ", "", $partes[0]));
-                                            
-                            // La segunda parte contiene el detalle de la reparación
-                            $detalleReparacion = trim($partes[1]);
-                            $presup = $reparacion->getPresupuesto();
-                            $monto_fijo = $reparacion->getMontoFijoIni();
-                            $medio_pago_ini =$reparacion->getMedioPagoIni();
-                            $medio_pago_fin =$reparacion->getMedioPagoFin();
-
-                        ?>
-                            <ul class="list-group">
-                                <li class="list-group-item centered"><strong>Fecha Retiro Electro:</strong> <?= $fecha_retiro_electro ?> &nbsp; <strong style="color:red;">Garantía Válida hasta:</strong> <?= $fecha_fin_garantia ?></li>
-                                <li class="list-group-item centered"><strong>Fecha Inicio:</strong> <?= $fecha_inicio ?> &nbsp; <strong>Fecha Fin:</strong> <?= $fecha_fin ?></li>
-                                <li class="list-group-item"><strong>Monto Abonado:</strong> <strong style="color:red;">$<?= $reparacion->getMontoFinRepa() ?> </strong> <strong>Medio de pago: </strong><?= ucwords($medio_pago_fin) ?> </li>
-                                <li class="list-group-item"><strong>Presupuesto:</strong> $<?= $presup ?></li>
-                                <li class="list-group-item"><strong>Arancel Inicio Abonado:</strong> $<?= $monto_fijo ?> <strong>Medio de pago: </strong><?= ucwords($medio_pago_ini)?></li>
                             
-                                <li class="list-group-item"><strong>Detalle de la reparación a realizada:</strong> <?= $detalleReparacion  ?></li>
-                                <li class="list-group-item"><strong>Materiales a utilizados:</strong> <?= ucwords($materiales) ?></li>
-                                    
-                            </ul> 
-                       
-                        <?php endif;?>
-                       
-                    `;
-                }
-            <?php endforeach; ?>
-            
-            overlay.style.display = "flex";  // Mostrar el overlay centrado
+                            
+                        </ul>
+            `;
+            document.getElementById("overlay").style.display = "flex";
         }
+
 
         function cerrarDetalle() {
             document.getElementById("overlay").style.display = "none";
-        }    
-
+        }
         
     </script>
+
 
 
 </body>

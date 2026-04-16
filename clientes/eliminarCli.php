@@ -23,11 +23,7 @@
         $resultado = $clientesModel->bajaCliente($id);
 
         echo $resultado;
-        /*if ($resultado) {
-            echo "<h2 style='text-align:center;'>El proveedor ha sido dado de baja correctamente.</h2>";
-        } else {
-            echo "<h2 style='text-align:center;'>Error al dar de baja al proveedor.</h2>";
-        }*/
+
     } else {
         echo "<h2 style='text-align:center;'>Ups! Ocurrió un error imprevisto.</h2>";
     }

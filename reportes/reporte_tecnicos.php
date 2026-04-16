@@ -14,74 +14,17 @@ include("../empleados/empleados_class.php");
     <title>Reportes</title>
     <link rel="stylesheet" href="../static/styles/style.css" />
     <link rel="stylesheet" href="../static/styles/tablas.css" />
+    <link rel="stylesheet" href="../static/styles/reportes.css" />
     <script src="../static/js/funciones_select_nav.js"></script>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <style>
-        .form-reporte {
-            margin: 20px auto;
-            padding: 20px;
-            max-width: 500px;
-            background-color: #f0f0f0;
-            border-radius: 10px;
-            box-shadow: 0 0 10px #ccc;
-        }
-
-        .form-reporte label {
-            display: block;
-            margin-bottom: 10px;
-            font-weight: bold;
-        }
-
-        .form-reporte input[type="text"] {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 15px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-
-        .form-reporte button {
-            padding: 8px 16px;
-            border: none;
-            border-radius: 5px;
-            margin-right: 10px;
-            cursor: pointer;
-        }
-
-        .form-reporte button[type="submit"] {
-            background-color: #007BFF;
-            color: white;
-        }
-
-        .form-reporte button#limpiar {
-            background-color: #6c757d;
-            color: white;
-        }
-
-        .mensaje-reporte {
-            margin-top: 20px;
-            background-color: #e8f4ff;
-            padding: 10px;
-            border-left: 4px solid #007BFF;
-            font-size: 16px;
-            width: fit-content;
-            margin-left: auto;
-            margin-right: auto;
-            border-radius: 6px;
-        }
-
-        .tabla {
-            margin-top: 25px;
-        }
-    </style>
 </head>
 
 <body>
-    <h1 class="titulo">Generar reporte</h1>
+    <h1 class="titulo">Estadísticas de Técnicos</h1>
 
     <form class="form-reporte" method="POST" action="" id="formFiltro">
         <label for="rango">Selecciona un rango de fechas:</label>

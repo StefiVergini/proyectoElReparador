@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 // Cargar las clases de PHPMailer
 require_once __DIR__ . '/../PHPMailer/src/Exception.php';
 require_once __DIR__ . '/../PHPMailer/src/PHPMailer.php';

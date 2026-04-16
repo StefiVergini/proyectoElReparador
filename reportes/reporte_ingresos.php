@@ -13,6 +13,7 @@
     <title>Reportes</title>
     <link rel="stylesheet" href="../static/styles/style.css" />
     <link rel="stylesheet" href="../static/styles/tablas.css" />
+    <link rel="stylesheet" href="../static/styles/reportes.css" />
     <script src="../static/js/funciones_select_nav.js"></script>
     <head>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
@@ -20,7 +21,7 @@
 </head>
 
 <body>
-    <h1  class="titulo">Generar reporte</h1>
+    <h1  class="titulo">Reportes de Ingreso de Dinero</h1>
     <?php
 // Construir cadena de query para exportación
 $params = [
@@ -32,59 +33,56 @@ $params = [
 $queryString = http_build_query($params);
 ?>
 
-<form method="POST" action="">
-    <label style="padding-left: 20;" class="label" for="rango">Selecciona un rango de fechas:</label>
+<form method="POST" action="" class="form-reporte" id="formFiltro">
+    <label class="label" for="rango">Selecciona un rango de fechas:</label>
     <input class="input-reportes" type="text" id="rango" name="rango" placeholder="YYYY-MM-DD to YYYY-MM-DD" required
        value="<?php echo isset($_POST['rango']) ? htmlspecialchars($_POST['rango']) : ''; ?>">
 
-    <div class="form-group">
-        <label style="padding-left: 20;" class="label" for="medio_pago">Medio de pago</label>
-        <select class="input-reportes" name="medio_pago" id="medio_pago">
+    <div class="formulario-contenedor">
+        <label class="label" for="medio_pago">Medio de pago
+            <select class="input-reportes" name="medio_pago" id="medio_pago">
+                <option value="">Todos</option>
+                <option value="Efectivo" <?php echo (isset($_POST['medio_pago']) && $_POST['medio_pago'] == 'Efectivo') ? 'selected' : ''; ?>>Efectivo</option>
+                <option value="Transferencia" <?php echo (isset($_POST['medio_pago']) && $_POST['medio_pago'] == 'Transferencia') ? 'selected' : ''; ?>>Transferencia</option>
+
+            </select>
+        </label>
+    </div>
+
+    <div class="formulario-contenedor">
+        <label class="label" for="tipo_ingreso">Tipo de ingreso
+            <select class="input-reportes" name="tipo_ingreso" id="tipo_ingreso">
+                <option value="">Todos</option>
+                <option value="fijo" <?php echo (isset($_POST['tipo_ingreso']) && $_POST['tipo_ingreso'] == 'fijo') ? 'selected' : ''; ?>>Monto Fijo</option>
+                <option value="saldo" <?php echo (isset($_POST['tipo_ingreso']) && $_POST['tipo_ingreso'] == 'saldo') ? 'selected' : ''; ?>>Monto Reparación</option>
+
+            </select>
+        </label>
+    </div>
+
+    <div class="formulario-contenedor">
+        <label class="label" for="tipo">Tipo de Electrodoméstico
+            <select class="input-reportes" name="tipo" id="tipo">
             <option value="">Todos</option>
-            <option value="Efectivo" <?php echo (isset($_POST['medio_pago']) && $_POST['medio_pago'] == 'Efectivo') ? 'selected' : ''; ?>>Efectivo</option>
-            <option value="Transferencia" <?php echo (isset($_POST['medio_pago']) && $_POST['medio_pago'] == 'Transferencia') ? 'selected' : ''; ?>>Transferencia</option>
-
-        </select>
+            <?php 
+                $electros = new Electro($base);
+                $tipos = $electros->leerTipoElectro();
+                foreach ($tipos as $tipoObj) {
+                    $tipoId = $tipoObj->getTipoElectro();
+                    $nomTipo = $tipoObj->getNomTipo();
+                    $selected = ($tipoId == ($_GET['tipo'] ?? '')) ? 'selected' : '';
+                    echo "<option value=\"$tipoId\" $selected>" . ucwords($nomTipo) . "</option>";
+                }
+            ?>
+            </select>
+        </label>
     </div>
+     
+    <div style="margin-top: 30px;">
+        <button type="submit">Filtrar</button>
+        <button type="button" id="limpiar">Limpiar</button>
+    </div>   
 
-    <div class="form-group">
-        <label style="padding-left: 20;" class="label" for="tipo_ingreso">Tipo de ingreso</label>
-        <select class="input-reportes" name="tipo_ingreso" id="tipo_ingreso">
-            <option value="">Todos</option>
-            <option value="fijo" <?php echo (isset($_POST['tipo_ingreso']) && $_POST['tipo_ingreso'] == 'fijo') ? 'selected' : ''; ?>>Monto fijo</option>
-            <option value="saldo" <?php echo (isset($_POST['tipo_ingreso']) && $_POST['tipo_ingreso'] == 'saldo') ? 'selected' : ''; ?>>Saldo</option>
-
-        </select>
-    </div>
-
-    <div class="form-group">
-        <label style="padding-left: 20;" class="label" for="tipo">Tipo de Electrodoméstico</label>
-        <select class="input-reportes" name="tipo" id="tipo">
-        <option value="">Todos</option>
-    <?php 
-        $electros = new Electro($base);
-        $tipos = $electros->leerTipoElectro();
-        foreach ($tipos as $tipoObj) {
-            $tipoId = $tipoObj->getTipoElectro();
-            $nomTipo = $tipoObj->getNomTipo();
-            $selected = ($tipoId == ($_GET['tipo'] ?? '')) ? 'selected' : '';
-            echo "<option value=\"$tipoId\" $selected>" . ucwords($nomTipo) . "</option>";
-        }
-    ?>
-        </select>
-    </div>
-    </div>  
-        <div style="display: flex; align-items: flex-start; gap: 1rem; margin: 30px 20px;">
-            <button class="btn-reportes" type="submit">Filtrar</button>
-    
-        <div class="desplegable">
-            <button class="btn-reportes">Exportar &#9207;</button>
-                <div class="link">
-                    <a target="_blank" href="pdf_ingresos.php?<?php echo $queryString; ?>">PDF</a>
-                    <a class="excel" href="excel_ingresos.php?<?php echo $queryString; ?>">Excel</a>
-                </div>
-        </div>
-    </div>
 </form>
 
 <?php
@@ -163,44 +161,56 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST["rango"])) {
         }
 
 if ($resultados) {
-    echo "<div style='text-align: center; margin: -55px 0 15px 0;'>
+    echo  "<div style='text-align: center; margin-top:40px;'>
             <strong style='color: black;'>Mostrando resultados desde el $fecha_inicio hasta el $fecha_fin</strong>
           </div>";
-
-    echo "<div style='text-align: center; margin-bottom: 25px;'>
-            <p><strong style='color: blue'>Total ingreso por monto fijo:</strong> $" . number_format($total_fijo, 2, ',', '.') . "</p>
-            <p><strong style='color: blue'>Total ingreso por saldo:</strong> $" . number_format($total_saldo, 2, ',', '.') . "</p>
+    
+    echo "<div style='text-align: center; margin-top:40px; margin-bottom: 5px;'>
+            <p><strong style='color: blue'>Total ingresos por monto fijo:</strong> $" . number_format($total_fijo, 2, ',', '.') . "</p>
+            <p><strong style='color: blue'>Total ingresos por Reparaciones:</strong> $" . number_format($total_saldo, 2, ',', '.') . "</p>
           </div>";
 
+    ?>
+        <div class="div-con-botones">
+            <div class="desplegable">
+                <button class="btn-reportes">Exportar &#9207;</button>
+                    <div class="link">
+                        <a target="_blank" href="pdf_ingresos.php?<?php echo $queryString; ?>">PDF</a>
+                        <a class="excel" href="excel_ingresos.php?<?php echo $queryString; ?>">Excel</a>
+                    </div>
+            </div>
+        </div>
+    <?php
+    echo "<div class='table-container'>";
     echo "<table class='tabla'>";
 
             echo "<thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Cliente</th>
-                        <th>Electrodomestico</th>
-                        <th>Fecha Cobro inicial</th>
-                        <th>Medio Pago Inicial</th>
-                        <th>Fecha cobro Final</th>
-                        <th>Medio Pago Final</th>
-                        <th>Monto Fijo</th>
-                        <th>Saldo</th>
+                        <th class='tabla-head'>ID</th>
+                        <th class='tabla-head'>Cliente</th>
+                        <th class='tabla-head'>Electrodomestico</th>
+                        <th class='tabla-head'>Fecha Cobro inicial</th>
+                        <th class='tabla-head'>Medio Pago Inicial</th>
+                        <th class='tabla-head'>Fecha cobro Final</th>
+                        <th class='tabla-head'>Medio Pago Final</th>
+                        <th class='tabla-head'>Monto Fijo</th>
+                        <th class='tabla-head'>Saldo</th>
                     </tr>
                   </thead><tbody>";
             foreach ($resultados as $fila) {
                 echo "<tr>";
-                echo "<td>{$fila['id_cobro']}</td>";
-                echo "<td>{$fila['nom_cliente']} {$fila['ape_cliente']}</td>";
-                echo "<td>{$fila['tipo_electro_nombre']}</td>";
-                echo "<td>{$fila['fecha_cobro_inicial']}</td>";
-                echo "<td>{$fila['medio_pago_inicial']}</td>";
-                echo "<td>{$fila['fecha_cobro_final']}</td>";
-                echo "<td>{$fila['medio_pago_final']}</td>";
-                echo "<td>{$fila['arancel_fijo_cobrado']}</td>";
-                echo "<td>{$fila['monto_final_repa']}</td>";
+                echo "<td class='tabla-data'>{$fila['id_cobro']}</td>";
+                echo "<td class='tabla-data'>{$fila['nom_cliente']} {$fila['ape_cliente']}</td>";
+                echo "<td class='tabla-data'>{$fila['tipo_electro_nombre']}</td>";
+                echo "<td class='tabla-data'>{$fila['fecha_cobro_inicial']}</td>";
+                echo "<td class='tabla-data'>{$fila['medio_pago_inicial']}</td>";
+                echo "<td class='tabla-data'>{$fila['fecha_cobro_final']}</td>";
+                echo "<td class='tabla-data'>{$fila['medio_pago_final']}</td>";
+                echo "<td class='tabla-data'>{$fila['arancel_fijo_cobrado']}</td>";
+                echo "<td class='tabla-data'>{$fila['monto_final_repa']}</td>";
                 echo "</tr>";
             }
-            echo "</tbody></table>";
+            echo "</tbody></table></div>";
 
         } else {
             echo "<p>No se encontraron resultados.</p>";
@@ -217,7 +227,14 @@ if ($resultados) {
             mode: "range",
             dateFormat: "Y-m-d"
         });
-    </script>  
+        document.getElementById("limpiar").addEventListener("click", function() {
+                document.getElementById("rango").value = "";
+                document.getElementById("medio_pago").value = "";
+                document.getElementById("tipo_ingreso").value = "";
+                document.getElementById("tipo").value = "";
+                document.getElementById("formFiltro").submit(); // Envía el formulario para limpiar resultados
+            });
+    </script>
      
 </body>
 </html>

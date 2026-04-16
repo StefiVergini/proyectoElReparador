@@ -153,7 +153,7 @@ if (
       // MOSTRAR EL FORMULARIO DE ALTA DEL ELECTRODOMÉSTICO SI CORRESPONDE
       if ($mostrarFormElectro && isset($cliente) && is_object($cliente)) {
       ?>
-        <form action="guardarAltaElectro.php" method="post">
+        <div class="tipo_form" >
           <div class="form-group">
             <p class="label">ID: <?= $cliente->getIdCli(); ?></p>
           </div>
@@ -172,9 +172,40 @@ if (
           <div class="form-group">
             <p class="label">Email: <?= $cliente->getEmailCli(); ?></p>
           </div>
+        </div>
+        <?php
+         $electrosCliente = $electros->obtenerElectrosPorCliente($cliente->getIdCli(), 'Reparacion Cobrada');
+         //verificamos que ya se hayan reparado y cobrado otros electros en dicho cliente para que tenga estas opciones
+          if (!empty($electrosCliente)) {?>
+             <h2>Otras Acciones:</h2>
+              <br>
+              <div class="form-group" >
+                  <!-- Reparación Electro Cargado -->
+                <div class="button-group" style="justify-content:center; align-items:center; margin-left:16%;"> 
+                  <form action="addRepa.php" method="post">
+                      <input type="hidden" name="idCli" value="<?= $cliente->getIdCli() ?>">
+                      <input type="hidden" name="dniCli" value="<?=  $cliente->getDniCli() ?>">
+                      <input type="hidden" name="emailCli" value="<?= $cliente->getEmailCli() ?>">
+                      <input type="hidden" name="telCli" value="<?= $cliente->getTelCli() ?>">
+                      <button type="submit" class="boton submit" style=" width: 100%; text-align:center;padding: 8px 16px; font-size: 14px; margin:0;">Nueva Reparación Electro Cargado</button>
+                  </form>
 
+                  <!-- Reparación Garantía Activa -->
+                  <form action="garantiaActiva.php" method="post" >
+                      <input type="hidden" name="idCli" value="<?= $cliente->getIdCli() ?>">
+                      <input type="hidden" name="dniCli" value="<?=  $cliente->getDniCli() ?>">
+                      <input type="hidden" name="emailCli" value="<?= $cliente->getEmailCli() ?>">
+                      <input type="hidden" name="telCli" value="<?= $cliente->getTelCli() ?>">
+                      <button type="submit" class="boton submit" style=" width: 100%; text-align:center;padding: 8px 16px; font-size: 14px; margin:0;">Reparación Garantía Activa</button>
+                  </form>
+                </div>
+              </div>
+        <?php } 
+        ?>
 
-          <h2>Detalles Electrodoméstico:</h2>
+        <form action="guardarAltaElectro.php" method="post">
+          
+          <h2>Cargar Nuevo Electrodoméstico:</h2>
           <br><br>
           <input type="hidden" name="n_id" value="<?= $cliente->getIdCli(); ?>">
           <div class="form-group">
@@ -268,7 +299,8 @@ if (
   <script>
     document.getElementById('tipo').addEventListener('change', function() {
       if (this.value === 'nuevo_tipo') {
-        window.location.href = 'altatipoelectro.php';
+        let idCliente = "<?= $cliente->getIdCli(); ?>";
+        window.location.href = 'altatipoelectro.php?idCli=' + idCliente;
       }
     });
   </script>

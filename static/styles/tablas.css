@@ -17,7 +17,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    border: none; 
+    border: none;
 }
         
 .tabla {
@@ -88,14 +88,73 @@
 .boton-agregar:hover {
     text-transform: uppercase;
     border: 3px double #353535;
+
 }
 .div-con-botones{
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
     margin-bottom: 10px;
+    gap: 20px;
     height: 100px;
 
+}
+.form-group{
+    padding: 10px;
+    border-radius: 8px;
+    max-width: 80%;
+    align-items: center;
+    justify-items: center;
+}
+.form-group .input{
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    width: 20%;
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+#filtros {
+    display: none;
+    margin: 0;
+}
+@media (min-width: 694px) and (max-width: 1196px) {
+  #filtros {
+    display: none;
+    margin-bottom: 0;
+  }
+
+  #filtros.mostrar {
+    display: block;
+    margin-top: 10%;
+    margin-bottom: 15%; 
+  }
+  .form-group .input{
+    display: block;
+  }
+  .btn-iconos{
+    display: block;
+  }
+}
+@media (max-width: 599px){
+    #filtros {
+        display: none;
+        margin-bottom: 0;
+    }
+
+    #filtros.mostrar {
+        display: block;
+        margin-top: 10%;
+        margin-bottom: 30%; /* o más si hace falta espacio */
+    }
+
+
+}
+@media (max-width: 694px){
+    .div-con-botones .desplegable{
+        display: none;
+    }
 }
 .button-group {
     grid-column: span 2;
@@ -132,11 +191,15 @@
     text-decoration: none;
 }
 
+
+
+
 /* Vista móvil: Cambia a una columna */
 @media (max-width: 768px) {
     table {
         font-size: 12px;
     }
+
 
 }
 

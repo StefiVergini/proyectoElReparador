@@ -1,0 +1,123 @@
+.section-btns {
+                display: flex;
+                justify-content: center;
+                flex-wrap: wrap;
+                gap: 10px;
+                margin-bottom: 20px;
+            }
+
+            .section-btns button,
+            .section-btns form {
+                margin: 0;
+            }
+
+            .grid-container {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(300px, 3fr));
+                gap: 40px;
+                padding: 40px;
+            }
+
+            /* Estilo para los mensajes de sin resultados */
+            .no-results-message {
+                grid-column: 1 / -1;
+                text-align: center;
+                margin-top: 20px;
+            }
+            
+            .reject-btn{
+                background-color:#f45752;
+            }
+            .reject-btn:hover{
+                background-color: red;
+            }
+            #filtrosRepa {
+                width: 100%;
+                grid-column: 1 / -1;
+                text-align: center;
+                border-radius: 10px;
+                padding: 15px;
+                margin-bottom: 80px;
+                display: none;
+                z-index: 10;
+            }
+            #filtrosRepa.mostrar {
+                display: block;
+            }
+            #filtrosPresu {
+                width: 100%;
+                grid-column: 1 / -1;
+                text-align: center;
+                border-radius: 10px;
+                padding: 15px;
+                margin-bottom: 80px;
+                display: none;
+                z-index: 10;
+            }
+            #filtrosPresu.mostrar {
+                display: block;
+            }
+
+            @media (min-width: 820px) and (max-width: 1197px) {
+                #filtrosRepa.mostrar {
+                    position: relative; /* antes fixed o absolute lo sacaban del flujo */
+                    margin-bottom: 20%;
+                    display: block;
+                }
+                #filtrosPresu.mostrar {
+                    position: relative; /* antes fixed o absolute lo sacaban del flujo */
+                    margin-bottom: 20%;
+                    display: block;
+                }
+                .grid-container {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    gap: 20px;
+                    padding: 20px;
+                }
+                /*.grid-container {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    gap: 40px;
+                }*/
+            }
+            @media (min-width: 750px) and (max-width: 819px){
+                #filtrosRepa.mostrar {
+                    position: relative; /* antes fixed o absolute lo sacaban del flujo */
+                    margin-bottom: 30%;
+                    display: block;
+                }
+                #filtrosPresu.mostrar{
+                    position: relative; /* antes fixed o absolute lo sacaban del flujo */
+                    margin-bottom: 30%;
+                    display: block;  
+                }
+                .grid-container {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    gap: 50px;
+                    padding: 20px;
+                }
+            }
+            @media (max-width: 749px){
+                #filtrosRepa.mostrar {
+                    position: relative; /* antes fixed o absolute lo sacaban del flujo */
+                    margin-bottom: 60%;
+                    display: block;
+                }
+                #filtrosPresu.mostrar {
+                    position: relative; /* antes fixed o absolute lo sacaban del flujo */
+                    margin-bottom: 75%;
+                    display: block;
+                }
+                .grid-container {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    gap: 50px;
+                    padding: 20px;
+                }
+            }

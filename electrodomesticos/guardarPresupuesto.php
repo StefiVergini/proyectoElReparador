@@ -61,7 +61,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             ];
 
 
-            include_once '../mail/mail_inter.php'; 
+            include_once '../mail/mail_inter.php';
             exit;
 
             

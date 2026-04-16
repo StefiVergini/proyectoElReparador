@@ -40,39 +40,35 @@
 
     <h1  class="titulo">Proveedores</h1>
     <div class="div-con-botones">
-        <div class="form-container">
-            <div class="desplegable" style="margin-right: 5rem;">
-                <button class="btn">Exportar &#9207;</button>
-                <div class="link">
-                    <a target="_blank" href="pdf_prov.php">pdf</a>
-                    <a class="excel" href="excel_prov.php">excel</a>
-                </div>
-            </div>
-            <div style="margin-right: 5rem;">
-                <form action="" method="post">
-                    <input class="input" type="text" name="buscar" placeholder="Buscar por CUIT o nombre" id="buscar" required>
-                    <button class="btn-iconos" type="submit"><img src="../static/images/lupa.png" alt="Buscar" width='30' height='20' /></button>
-                </form>
-            </div>
-            <form action='altaProv.php' method='post' style='display:inline;'>
-                <button type='submit' class='btn'> Agregar +
+        <form action='altaProv.php' method='post' style='display:inline;'>
+            <button type='submit' class='btn'> Agregar +
 
-                </button>
-            </form>
+            </button>
+        </form>
+        <div class="desplegable">
+            <button class="btn">Exportar &#9207;</button>
+            <div class="link">
+                <a target="_blank" href="pdf_prov.php">pdf</a>
+                <a class="excel" href="excel_prov.php">excel</a>
+            </div>
+        </div>
+        <div class="desplegable">
+            <button class="btn">Pedidos &#9207;</button>
+            <div class="link">
+                <a href="../pedidos/nuevoPedido.php">Nuevo Pedido</a>
+                <a href="../pedidos/pedidosActivos.php">Pedidos Activos</a>
+                <a href="../pedidos/historialPedidos.php">Historial de Pedidos</a>
 
+            </div>
         </div>
     </div>
-    <div class="div-con-botones">
-        <div class="form-container">
-            <div class="desplegable" style="margin-right: 5rem;">
-                <button class="btn">Pedidos &#9207;</button>
-                <div class="link">
-                    <a href="../pedidos/nuevoPedido.php">Nuevo Pedido</a>
-                    <a href="../pedidospedidosActivos.php">Pedidos Activos</a>
-                    <a href="../pedidos/historialPedidos.php">Historial de Pedidos</a>
 
-                </div>
-            </div>
+    <div class="div-con-botones">
+        <div class="form-group">
+            <form action="" method="post">
+                <input class="input" type="text" name="buscar" placeholder="Buscar por CUIT o nombre" id="buscar" required>
+                <button class="btn-iconos" type="submit"><img src="../static/images/lupa.png" alt="Buscar" width='30' height='20' /></button>
+            </form>
         </div>
     </div>
 

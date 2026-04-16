@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 05, 2025 at 08:05 PM
+-- Generation Time: Apr 06, 2026 at 01:42 AM
 -- Server version: 11.1.2-MariaDB
 -- PHP Version: 8.2.12
 
@@ -29,7 +29,6 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `atencion_presupuesto` (
   `id_reparacion` int(11) NOT NULL,
-  `idemp_atencion` int(11) NOT NULL,
   `idemp_presup` int(11) DEFAULT NULL,
   `presupuesto` decimal(9,2) DEFAULT NULL,
   `fecha_ing_electro` date DEFAULT NULL,
@@ -44,13 +43,15 @@ CREATE TABLE `atencion_presupuesto` (
 -- Dumping data for table `atencion_presupuesto`
 --
 
-INSERT INTO `atencion_presupuesto` (`id_reparacion`, `idemp_atencion`, `idemp_presup`, `presupuesto`, `fecha_ing_electro`, `fecha_env_presup`, `fecha_confirma_re`, `confirm_presup`, `estado_presup`, `observaciones`) VALUES
-(45, 1, 12, 100000.00, '2025-05-22', '2025-06-05', NULL, 0, 'Presupuesto enviado', 'Materiales: - bateria moto edge 30 Detalle de la Reparación: cambiar la bateria, incluye limpieza interna del celular'),
-(46, 1, NULL, NULL, '2025-05-22', NULL, NULL, 0, 'Presupuesto a Enviar', NULL),
-(47, 1, NULL, NULL, '2025-05-22', NULL, NULL, 0, 'Presupuesto a Enviar', NULL),
-(48, 1, NULL, NULL, '2025-05-22', NULL, NULL, 0, 'Presupuesto a Enviar', NULL),
-(49, 1, NULL, NULL, '2025-05-22', NULL, NULL, 0, 'Presupuesto a Enviar', NULL),
-(50, 1, NULL, NULL, '2025-05-22', NULL, NULL, 0, 'Presupuesto a Enviar', NULL);
+INSERT INTO `atencion_presupuesto` (`id_reparacion`, `idemp_presup`, `presupuesto`, `fecha_ing_electro`, `fecha_env_presup`, `fecha_confirma_re`, `confirm_presup`, `estado_presup`, `observaciones`) VALUES
+(45, 12, 100000.00, '2025-05-22', '2025-06-05', '2025-06-09', 0, 'Presupuesto Rechazado', 'Materiales: - bateria moto edge 30 Detalle de la Reparación: cambiar la bateria, incluye limpieza interna del celular'),
+(46, 12, 170000.00, '2025-05-22', '2025-06-07', '2025-06-07', 1, 'Reparacion Cobrada', 'Materiales: mother cooler Detalle de la Reparación: se cambiara el mother y cooler, ya que producen los apagados repentinos'),
+(47, 12, 50000.00, '2025-05-22', '2025-06-07', '2025-06-07', 1, 'Reparacion Cobrada', 'Materiales: motor Detalle de la Reparación: se cambiara el motor'),
+(48, 12, 250000.00, '2025-05-22', '2025-06-10', '2025-08-19', 1, 'Presupuesto Confirmado', 'Materiales: pantalla Detalle de la Reparacion: se cambia pantalla Smart TV'),
+(49, 1, 115000.00, '2025-05-22', '2025-09-17', NULL, 0, 'Presupuesto enviado', 'Materiales: fdffff Detalle de la Reparación: fffff'),
+(50, NULL, NULL, '2025-05-22', NULL, NULL, 0, 'Presupuesto a Enviar', NULL),
+(51, 1, 42000.00, '2025-06-10', '2025-06-12', '2025-08-19', 1, 'Reparacion Finalizada', 'Materiales: khghg Detalle de la Reparación: gjcjg'),
+(52, NULL, NULL, '2025-10-04', NULL, NULL, 0, 'Reparacion por Garantia', NULL);
 
 -- --------------------------------------------------------
 
@@ -88,7 +89,15 @@ INSERT INTO `calendario` (`idcalendario`, `descripcion_evento`, `fecha_inicio`, 
 (13, 'stefania vergini', '2024-11-12', '12:00:00', '12:00:00', '2024-11-15', 1, 0),
 (14, 'stef', '2024-08-06', '11:00:00', '12:00:00', '2024-08-07', 1, 0),
 (15, '678', '2024-12-05', '01:00:00', '16:33:00', '2024-12-06', 1, 0),
-(16, 'sui generis', '2024-12-04', '15:00:00', '15:00:00', '2024-12-06', 1, 0);
+(16, 'sui generis', '2024-12-04', '15:00:00', '15:00:00', '2024-12-06', 1, 0),
+(17, 'Reparación ID 46', '2025-06-07', '15:20:00', '15:20:00', '2025-06-10', 12, 0),
+(18, 'Reparación ID 47', '2025-06-07', '17:17:00', '17:17:00', '2025-06-07', 12, 0),
+(19, 'Reparación #21 Revisar Materialesa utilizar', '2025-06-27', '20:00:00', '00:00:00', '2025-06-30', 1, 0),
+(20, '#45 detalle reparacion', '2025-06-30', '12:00:00', '10:00:00', '2025-07-03', 1, 0),
+(21, 'Realizar Reportes del Mes', '2025-06-30', '18:00:00', '18:00:00', '2025-07-01', 1, 0),
+(22, 'probando', '2025-08-07', '16:00:00', '18:00:00', '2025-08-07', 1, 0),
+(23, 'Reparación51', '2025-08-19', '13:25:00', '13:25:00', '2025-08-27', 1, 0),
+(24, 'Reparación 48', '2025-08-19', '13:35:00', '13:35:00', '2025-08-21', 1, 0);
 
 -- --------------------------------------------------------
 
@@ -141,7 +150,7 @@ INSERT INTO `clientes` (`idclientes`, `dni_cliente`, `nom_cliente`, `ape_cliente
 (1, 25332233, 'pablo', 'pereyra', '44442222', 'av. la plata 540', 'stefanialvergini@gmail.com', 1),
 (2, 37223344, 'olivia', 'malganti', '1132887733', 'escalada 1130', 'olimalganti@hotmail.com', 1),
 (3, 34556699, 'aylen', 'pierre', '43833505', 'colombres 132', 'pierreaylen@gmail.com', 1),
-(4, 30400111, 'luciano', 'tribiani', '43358282', 'cnel. ramon falcon 2589', 'ltribiani@gmail.com', 1),
+(4, 30400111, 'Luciano', 'Tribiani', '43358282', 'Cnel. Ramon Falcon 2589', 'ltribiani@gmail.com', 1),
 (5, 17226856, 'maria', 'perez', '1155667722', 'olazabal 3323', 'marperez@gmail.com', 1),
 (7, 37217999, 'stefania', 'vergini', '1164777337', 'lalala 1234', 'stefanialvergini@gmail.com', 1);
 
@@ -170,12 +179,14 @@ CREATE TABLE `cobros` (
 --
 
 INSERT INTO `cobros` (`id_cobro`, `id_reparacion`, `fecha_cobro_inicial`, `arancel_fijo_cobrado`, `medio_pago_inicial`, `nro_comprobante_inicial`, `fecha_cobro_final`, `monto_final_repa`, `medio_pago_final`, `nro_comprobante_final`, `observacion`) VALUES
-(12, 45, '2025-05-22 17:18:39', 20000, 'transferencia', '5548879/6479845hd', NULL, NULL, NULL, NULL, 'de mp a mp'),
-(13, 46, '2025-05-22 17:21:05', 20000, 'transferencia', 'ax3344jk325g', NULL, NULL, NULL, NULL, 'de santander a mp'),
-(14, 47, '2025-05-22 17:22:48', 10000, 'transferencia', '33ertydfgba334567', NULL, NULL, NULL, NULL, 'de mp a mp'),
+(12, 45, '2025-05-22 17:18:39', 20000, 'transferencia', '5548879/6479845hd', NULL, 0, '-', '-', 'de mp a mp - Presupuesto Rechazado - finaliza aquí la Reparación'),
+(13, 46, '2025-05-22 17:21:05', 20000, 'transferencia', 'ax3344jk325g', '2025-10-04 19:24:35', 150000, 'efectivo', '-', 'de santander a mp '),
+(14, 47, '2025-05-22 17:22:48', 10000, 'transferencia', '33ertydfgba334567', '2025-06-09 13:33:04', 40000, 'efectivo', '-', 'de mp a mp de santander a mp'),
 (15, 48, '2025-05-22 20:35:11', 20000, 'transferencia', '546788942331--bbvsc--4', NULL, NULL, NULL, NULL, 'de bna a mp'),
 (16, 49, '2025-05-22 21:19:45', 15000, 'efectivo', '-', NULL, NULL, NULL, NULL, ''),
-(17, 50, '2025-05-22 22:45:30', 15000, 'efectivo', '-', NULL, NULL, NULL, NULL, '');
+(17, 50, '2025-05-22 22:45:30', 15000, 'efectivo', '-', NULL, NULL, NULL, NULL, ''),
+(18, 51, '2025-06-10 14:02:40', 15000, 'efectivo', '-', NULL, NULL, NULL, NULL, ''),
+(19, 52, '2025-10-04 19:26:24', 0, 'No corresponde', '-', NULL, NULL, NULL, NULL, 'Ingresa por garantia, no debe abonar antes de revisarlo.');
 
 -- --------------------------------------------------------
 
@@ -198,7 +209,8 @@ INSERT INTO `credenciales` (`idcredenciales`, `idempleados`, `usuario`, `passwor
 (1, 1, 'ernesabato@gmail.com', '$2y$08$VaUDHFhkbnvN75QxwZVzO.GTBaM16PT5ti6blPihUU9vLtEv5dSfO'),
 (3, 2, 'felorca@hotmail.com', '$2y$08$.T7qRJ8qXC6YVCLIJ4zabOzC8gu4/QizS28jmShoUrpjb3bTbY1mi'),
 (4, 12, 'jlennon@gmail.com', '$2y$08$AQy5CHUbc3eRWy/pPfS4du0Hjrn53yGueBoRKqjzBgw.CPSfOhsVS'),
-(5, 13, 'mbenedetti@gmail.com', '$2y$08$nZ5gf21ky.u7plIMy2cR7ushxefDeujkCz4Qc0DGnFRuWOlxG5kyS');
+(5, 13, 'mbenedetti@gmail.com', '$2y$08$nZ5gf21ky.u7plIMy2cR7ushxefDeujkCz4Qc0DGnFRuWOlxG5kyS'),
+(6, 14, 'jcortazar@gmail.com', '$2y$08$5QwgbamKuy5uBsQRkHO5pehX7rbtEZpiMyhIv9fZLBJ5JC0z3KHZK');
 
 -- --------------------------------------------------------
 
@@ -211,7 +223,6 @@ CREATE TABLE `electrodomesticos` (
   `marca` varchar(100) NOT NULL,
   `modelo` varchar(100) NOT NULL,
   `num_serie` varchar(100) DEFAULT NULL,
-  `descripcion` longtext DEFAULT NULL,
   `idclientes` int(11) NOT NULL,
   `tipo_electro` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_spanish2_ci;
@@ -220,13 +231,42 @@ CREATE TABLE `electrodomesticos` (
 -- Dumping data for table `electrodomesticos`
 --
 
-INSERT INTO `electrodomesticos` (`idelectrodomesticos`, `marca`, `modelo`, `num_serie`, `descripcion`, `idclientes`, `tipo_electro`) VALUES
-(45, 'motorola', 'edge 30', '555555555555555555555', 'batería agotada', 1, 2),
-(46, 'assus', 'ass324', '666666pwert2345hh', 'se apaga la computadora repentinamente', 1, 6),
-(47, 'molinex', 'w45', '77755566666', 'no funciona el motor', 1, 5),
-(48, 'samsung', 'smarttv542', 'ggggggggwws34567678', 'pantalla rota', 1, 3),
-(49, 'lenovo', 'ideapad330', 'llffws34567', 'hfañoier', 1, 6),
-(50, 'samsung', 's24', '777777777777777777', 'derthnh', 1, 2);
+INSERT INTO `electrodomesticos` (`idelectrodomesticos`, `marca`, `modelo`, `num_serie`, `idclientes`, `tipo_electro`) VALUES
+(45, 'motorola', 'edge 30', '555555555555555555555', 1, 2),
+(46, 'assus', 'ass324', '666666pwert2345hh', 1, 6),
+(47, 'molinex', 'w45', '77755566666', 1, 5),
+(48, 'samsung', 'smarttv542', 'ggggggggwws34567678', 1, 3),
+(49, 'lenovo', 'ideapad330', 'llffws34567', 1, 6),
+(50, 'samsung', 's24', '777777777777777777', 1, 2),
+(51, 'atma', 'at4567', 'yat8888888sjheb3', 7, 9);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `electro_desc`
+--
+
+CREATE TABLE `electro_desc` (
+  `id_electro` int(11) NOT NULL,
+  `idemp_atencion` int(11) NOT NULL,
+  `fecha_ingElectro` date DEFAULT NULL,
+  `descripcion` longtext DEFAULT NULL,
+  `comentarios` longtext DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish2_ci;
+
+--
+-- Dumping data for table `electro_desc`
+--
+
+INSERT INTO `electro_desc` (`id_electro`, `idemp_atencion`, `fecha_ingElectro`, `descripcion`, `comentarios`) VALUES
+(45, 1, '2025-05-22', 'batería agotada', NULL),
+(46, 1, '2025-05-22', 'se apaga la computadora repentinamente', NULL),
+(47, 1, '2025-05-22', 'no funciona el motor', NULL),
+(48, 1, '2025-05-22', 'pantalla rota', NULL),
+(49, 1, '2025-05-22', 'hfañoier', NULL),
+(50, 1, '2025-05-22', 'derthnh', NULL),
+(51, 1, '2025-06-10', 'no calienta correctamente', NULL),
+(46, 1, '2025-10-04', 'continuan los apagados repentinos', 'Reparacion Anterior ID: 46');
 
 -- --------------------------------------------------------
 
@@ -258,7 +298,8 @@ INSERT INTO `empleados` (`idempleados`, `dni_empleado`, `nom_empleado`, `ape_emp
 (6, 39505733, 'susana', 'gomez', '43813909', 'susigomez@gmail.com', 'formosa 35 8to B', 3),
 (10, 42000000, 'Charly', 'Garcia', '1165656565', 'saynomore@gmail.com', 'Ugarteche 5030 3ro B', 1),
 (12, 17225056, 'John', 'Lennon', '1156564477', 'jlennon@gmail.com', 'Lope De Vega 1324', 2),
-(13, 35266869, 'Mario', 'Benedetti', '1145457896', 'mbenedetti@gmail.com', 'Gracias 1142', 2);
+(13, 35266869, 'Mario', 'Benedetti', '1145457896', 'mbenedetti@gmail.com', 'Gracias 1142', 2),
+(14, 12121212, 'Julio', 'Cortazar', '1562626299', 'jcortazar@gmail.com', 'Larrea 3324', 2);
 
 -- --------------------------------------------------------
 
@@ -282,14 +323,18 @@ CREATE TABLE `historial_empleados` (
 
 INSERT INTO `historial_empleados` (`idhistorial_empleados`, `fecha_inicio_puesto`, `fecha_fin_puesto`, `idcategorias_empleados`, `idempleados`, `estado_empleado`, `descripcion_cambio`) VALUES
 (1, '2012-05-10', NULL, 2, 1, 1, NULL),
-(2, '2018-07-01', NULL, 1, 2, 1, NULL),
-(3, '2017-11-22', NULL, 4, 3, 1, NULL),
+(2, '2018-07-01', '2025-06-03', 1, 2, 1, 'ascenso de categoría'),
+(3, '2017-11-22', '2025-06-20', 4, 3, 1, ''),
 (4, '2019-04-10', '2024-11-07', 7, 4, 0, 'renuncio'),
 (5, '2022-02-18', NULL, 3, 5, 1, NULL),
 (6, '2023-09-25', NULL, 5, 6, 1, NULL),
 (7, '2024-09-16', NULL, 1, 10, 1, NULL),
 (9, '2025-03-10', NULL, 1, 12, 1, NULL),
-(10, '2025-05-20', NULL, 8, 13, 1, NULL);
+(10, '2025-05-20', NULL, 8, 13, 1, NULL),
+(11, '2025-06-03', NULL, 8, 14, 1, NULL),
+(12, '2025-06-11', '2025-06-11', 7, 4, 0, 'renuncia'),
+(16, '2025-06-04', NULL, 8, 2, 1, NULL),
+(17, '2025-06-21', NULL, 5, 3, 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -334,7 +379,18 @@ CREATE TABLE `mails` (
 --
 
 INSERT INTO `mails` (`idmail`, `id_reparacion`, `idemp_envia`, `id_cliente`, `destinatario_mail`, `asunto`, `token`, `fecha_hora`) VALUES
-(1, 45, 12, 1, 'stefanialvergini@gmail.com', 'Cotizacion de la Reparacion', '987687c2640aac4680bf91b8562552e9', '2025-06-05 14:56:48');
+(1, 45, 12, 1, 'stefanialvergini@gmail.com', 'Cotizacion de la Reparacion', '987687c2640aac4680bf91b8562552e9', '2025-06-05 14:56:48'),
+(2, 46, 12, 1, 'stefanialvergini@gmail.com', 'Cotizacion de la Reparacion', 'expirado', '2025-06-07 15:18:58'),
+(3, 47, 12, 1, 'stefanialvergini@gmail.com', 'Cotizacion de la Reparacion', 'expirado', '2025-06-07 17:13:02'),
+(4, 47, 12, 1, 'stefanialvergini@gmail.com', 'Reparacion Finalizada', 'Sin token', '2025-06-07 22:55:19'),
+(5, 47, 12, 1, 'stefanialvergini@gmail.com', 'Reparacion Cobrada', 'Sin token', '2025-06-09 13:33:04'),
+(6, 46, 1, 1, 'stefanialvergini@gmail.com', 'Reparacion Finalizada', 'Sin token', '2025-06-10 13:04:13'),
+(7, 48, 12, 1, 'stefanialvergini@gmail.com', 'Cotizacion de la Reparacion', 'expirado', '2025-06-10 15:12:00'),
+(8, 51, 1, 7, 'stefanialvergini@gmail.com', 'Cotizacion de la Reparacion', 'b806bb1563440fe574b4cdee01b80c77', '2025-06-12 10:19:03'),
+(9, 51, 1, 7, 'stefanialvergini@gmail.com', 'Reparacion Finalizada', 'Sin token', '2025-08-19 13:28:19'),
+(10, 49, 1, 1, 'stefanialvergini@gmail.com', 'Cotizacion de la Reparacion', 'b310dbd668e38725974664be5e25aada', '2025-09-17 20:01:36'),
+(11, 46, 1, 1, 'stefanialvergini@gmail.com', 'Reparacion Cobrada', 'Sin token', '2025-10-04 19:24:09'),
+(12, 46, 1, 1, 'stefanialvergini@gmail.com', 'Reparacion Cobrada', 'Sin token', '2025-10-04 19:24:35');
 
 -- --------------------------------------------------------
 
@@ -358,7 +414,26 @@ CREATE TABLE `notificaciones` (
 INSERT INTO `notificaciones` (`id_notificacion`, `id_usuario`, `mensaje`, `link`, `fue_leido`, `fecha_creado`) VALUES
 (1, 12, 'Ha ingresado un nuevo Electrodoméstico que te han asignado. Podrás visualizarlo acá:', '/php/proyectoElReparador/electrodomesticos/inicioElectro.php', 1, '2025-05-22 23:35:11'),
 (2, 12, 'Ha ingresado un nuevo Electrodoméstico que te han asignado. Podrás visualizarlo acá:', '/php/proyectoElReparador/electrodomesticos/inicioElectro.php', 1, '2025-05-23 00:19:45'),
-(3, 12, 'Ha ingresado un nuevo Electrodoméstico que te han asignado.', '/php/proyectoElReparador/electrodomesticos/inicioElectro.php', 1, '2025-05-23 01:45:30');
+(3, 12, 'Ha ingresado un nuevo Electrodoméstico que te han asignado.', '/php/proyectoElReparador/electrodomesticos/inicioElectro.php', 1, '2025-05-23 01:45:30'),
+(4, 12, 'La Reparación #46 del cliente: Pablo Pereyra ha sido Confirmada', '/php/proyectoElReparador/electrodomesticos/inicioElectro.php', 1, '2025-06-07 18:19:20'),
+(5, 1, 'La Reparación #46 del cliente: Pablo Pereyra ha sido Confirmada', '/php/proyectoElReparador/electrodomesticos/inicioElectro.php', 1, '2025-06-07 18:19:20'),
+(6, 12, 'Se ha confirmado la Reparación #46 y se ha agregado al Calendario con Fecha de Fin: 16/06/2025', '/php/proyectoElReparador/electrodomesticos/inicioElectro.php', 1, '2025-06-07 18:20:31'),
+(7, 12, 'La Reparación #47 del cliente: Pablo Pereyra ha sido Confirmada', '/php/proyectoElReparador/electrodomesticos/inicioElectro.php', 1, '2025-06-07 20:13:58'),
+(8, 1, 'La Reparación #47 del cliente: Pablo Pereyra ha sido Confirmada', '/php/proyectoElReparador/electrodomesticos/inicioElectro.php', 1, '2025-06-07 20:13:58'),
+(9, 12, 'Se ha confirmado la Reparación #47 y se ha agregado al Calendario con Fecha de Fin: 11/06/2025', '/php/proyectoElReparador/electrodomesticos/inicioElectro.php', 1, '2025-06-07 20:17:47'),
+(10, 12, 'Has Finalizado la Reparación #47 !! y se ha finalizado la reparación en calendario', '/php/proyectoElReparador/electrodomesticos/inicioElectro.php', 0, '2025-06-08 01:55:19'),
+(11, 12, 'Se ha cobrado la reparacion #47 - la podrás encontrar en Historial de Reparaciones', '/php/proyectoElReparador/electrodomesticos/historialReparaciones.php', 0, '2025-06-09 16:33:05'),
+(12, 12, 'Se ha rechazado la Reparación #45 - registrada en Historial', '/php/proyectoElReparador/electrodomesticos/historialReparaciones.php', 0, '2025-06-09 16:34:21'),
+(13, 1, 'Has Finalizado la Reparación #46 !! y se ha finalizado la reparación en calendario', '/php/proyectoElReparador/electrodomesticos/inicioElectro.php', 1, '2025-06-10 16:04:13'),
+(14, 13, 'Ha ingresado un nuevo Electrodoméstico que te han asignado.', '/php/proyectoElReparador/electrodomesticos/inicioElectro.php', 0, '2025-06-10 17:02:40'),
+(15, 12, 'La Reparación #48 del cliente: Pablo Pereyra ha sido Rechazada.', '/php/proyectoElReparador/electrodomesticos/inicioElectro.php', 0, '2025-06-10 18:12:19'),
+(16, 1, 'La Reparación #48 del cliente: Pablo Pereyra ha sido Rechazada.', '/php/proyectoElReparador/electrodomesticos/inicioElectro.php', 1, '2025-06-10 18:12:19'),
+(17, 1, 'Se ha confirmado la Reparación #51 y se ha agregado al Calendario con Fecha de Fin: 27/08/2025', '/php/proyectoElReparador/calendario/inicioCalendario.php', 1, '2025-08-19 16:25:33'),
+(18, 1, 'Has Finalizado la Reparación #51 !! y se ha finalizado la reparación en calendario', '/php/proyectoElReparador/electrodomesticos/inicioElectro.php', 1, '2025-08-19 16:28:19'),
+(19, 1, 'Se ha confirmado la Reparación #48 y se ha agregado al Calendario con Fecha de Fin: 21/08/2025', '/php/proyectoElReparador/calendario/inicioCalendario.php', 1, '2025-08-19 16:35:04'),
+(20, 1, 'Se ha cobrado la reparacion #46 - la podrás encontrar en Historial de Reparaciones', '/php/proyectoElReparador/electrodomesticos/historialReparacionesCobradas.php', 0, '2025-10-04 22:24:09'),
+(21, 1, 'Se ha cobrado la reparacion #46 - la podrás encontrar en Historial de Reparaciones', '/php/proyectoElReparador/electrodomesticos/historialReparacionesCobradas.php', 0, '2025-10-04 22:24:35'),
+(22, 12, 'Ha ingresado una nueva Reparación por Garantía que te han asignado.', '/php/proyectoElReparador/electrodomesticos/inicioElectro.php', 0, '2025-10-04 22:26:24');
 
 -- --------------------------------------------------------
 
@@ -389,9 +464,14 @@ INSERT INTO `pedidos` (`id_ped`, `idproveedores`, `idempleados`, `fecha_pedido`,
 (14, 1, 1, '2025-02-10 14:17:24', '2025-02-14', '0'),
 (15, 2, 1, '2025-02-17 17:18:59', '2025-02-17', '0'),
 (16, 3, 1, '2025-02-17 16:57:53', '2025-02-17', '0'),
-(17, 3, 1, '2025-02-17 18:46:37', NULL, '1'),
-(18, 1, 2, '2025-02-19 13:08:48', NULL, '1'),
-(19, 5, 1, '2025-03-04 18:37:52', NULL, '1');
+(17, 3, 1, '2025-02-17 18:46:37', '2025-02-25', '0'),
+(18, 1, 2, '2025-02-19 13:08:48', '2025-03-03', '0'),
+(19, 5, 1, '2025-03-04 18:37:52', '2025-03-10', '0'),
+(20, 1, 12, '2025-06-07 15:07:49', '2025-06-07', '0'),
+(21, 6, 12, '2025-06-07 16:01:43', '2025-06-07', '0'),
+(22, 5, 12, '2025-06-07 16:20:29', '2025-06-07', '0'),
+(23, 5, 12, '2025-06-07 16:20:58', '2025-06-01', '0'),
+(24, 6, 12, '2025-06-07 16:23:33', '2025-06-07', '0');
 
 -- --------------------------------------------------------
 
@@ -415,10 +495,23 @@ INSERT INTO `pedidos_desc` (`id_pedido`, `idstock`, `cant_pedida`, `cant_ingresa
 (14, 5, 3, 2),
 (15, 2, 100, 50),
 (16, 4, 2, 2),
-(17, 4, 2, NULL),
-(18, 5, 3, NULL),
-(19, 9, 2, NULL),
-(19, 10, 2, NULL);
+(17, 4, 2, 2),
+(18, 5, 3, 3),
+(19, 9, 2, 2),
+(19, 10, 2, 2),
+(20, 1, 10, 10),
+(20, 3, 10, 10),
+(20, 11, 15, 15),
+(20, 12, 20, 20),
+(20, 13, 20, 20),
+(20, 14, 20, 20),
+(20, 15, 20, 20),
+(20, 16, 20, 20),
+(20, 17, 20, 20),
+(21, 18, 10, 10),
+(22, 10, 2, 2),
+(23, 9, 2, 2),
+(24, 18, 2, 2);
 
 -- --------------------------------------------------------
 
@@ -447,7 +540,8 @@ INSERT INTO `proveedores` (`idproveedores`, `cuit`, `nombre_prov`, `tel_prov`, `
 (3, '36221155999', 'Materiales Importados Srl', '58796666', 'Bartolome Mitre 3740', 'ventas@matimportados.com', 0.00, 1),
 (4, '11290400111', 'Yo Lo Tengo', '1162323718', 'Av. Juan Bautista Alberdi 2889', 'yolotengo@gmail.com', 0.00, 1),
 (5, '13225225225', 'Electronica Mataderos', '1138355451', 'Murguiondo 2555', 'electronicamataderos@gmail.com', 0.00, 1),
-(6, '30223223221', 'El Coso Del Cosito', '1165892323', 'Av. Rivadadia 6845', 'cosodecosito@gmail.com', 0.00, 1);
+(6, '30223223221', 'El Coso Del Cosito', '1165892323', 'Av. Rivadadia 6845', 'cosodecosito@gmail.com', 0.00, 1),
+(8, '44141414147', 'Tengo De Todo SRL', '11144422288', 'Nicaragua 3322', 'tengodetodosrl@gmail.com', 0.00, 1);
 
 -- --------------------------------------------------------
 
@@ -473,12 +567,14 @@ CREATE TABLE `reparaciones` (
 --
 
 INSERT INTO `reparaciones` (`id_reparacion`, `idelectrodomesticos`, `id_tecnico`, `fecha_inicio`, `fecha_fin_estimada`, `fecha_finalizacion`, `fecha_retiro_electro`, `fecha_finaliza_garantia`, `descripcion_re`, `estado_reparacion`) VALUES
-(45, 45, 12, NULL, NULL, NULL, NULL, NULL, NULL, 0),
-(46, 46, 12, NULL, NULL, NULL, NULL, NULL, NULL, 0),
-(47, 47, 12, NULL, NULL, NULL, NULL, NULL, NULL, 0),
-(48, 48, 12, NULL, NULL, NULL, NULL, NULL, NULL, 0),
+(45, 45, 12, NULL, NULL, '2025-06-09', NULL, NULL, NULL, 0),
+(46, 46, 12, '2025-06-07', '2025-06-16', '2025-06-10', '2025-10-04', '2026-01-04', NULL, 0),
+(47, 47, 12, '2025-06-07', '2025-06-11', '2025-06-07', '2025-06-09', '2025-09-09', NULL, 0),
+(48, 48, 12, '2025-08-19', '2025-08-21', NULL, NULL, NULL, NULL, 1),
 (49, 49, 12, NULL, NULL, NULL, NULL, NULL, NULL, 0),
-(50, 50, 12, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+(50, 50, 12, NULL, NULL, NULL, NULL, NULL, NULL, 0),
+(51, 51, 13, '2025-08-19', '2025-08-27', '2025-08-19', NULL, NULL, NULL, 0),
+(52, 46, 12, NULL, NULL, NULL, NULL, NULL, '46', 0);
 
 -- --------------------------------------------------------
 
@@ -500,15 +596,24 @@ CREATE TABLE `stock` (
 --
 
 INSERT INTO `stock` (`idstock`, `descripcion_art`, `cantidad`, `tipo_stock`, `idproveedores`, `estado_stock`) VALUES
-(1, 'tornillos', 60, 'Herramientas', 1, 1),
-(2, 'tuercas', 150, 'Herramientas', 2, 1),
-(3, 'Tornillos 8cm', 80, 'Insumos', 1, 1),
-(4, 'Resma Gloria', 19, 'Libreria', 3, 1),
-(5, 'Estaño para soldar (1 klg)', 3, 'Herramientas', 1, 1),
+(1, 'tornillos', 64, 'Herramientas', 1, 1),
+(2, 'tuercas', 147, 'Herramientas', 2, 1),
+(3, 'Tornillos 8cm', 90, 'Insumos', 1, 1),
+(4, 'Resma Gloria', 21, 'Libreria', 3, 1),
+(5, 'Estaño para soldar (1 klg)', 6, 'Herramientas', 1, 1),
 (6, 'Modulo Moto G8 Plus', 15, 'Electronica', 1, 1),
 (7, 'Fundas Moto A43', 16, 'Insumos', 1, 1),
-(9, 'Display Samsung A54', 0, 'Electronica', 5, 0),
-(10, 'Placa Moto Edge 30', 0, 'Herramientas', 5, 0);
+(9, 'Display Samsung A54', 3, 'Electronica', 5, 1),
+(10, 'Placa Moto Edge 30', 4, 'Herramientas', 5, 1),
+(11, 'Display Celular', 14, 'Herramientas', 1, 1),
+(12, 'Display Notebook', 20, 'Herramientas', 1, 1),
+(13, 'Mother Cpu', 20, 'Herramientas', 1, 1),
+(14, 'Mother Notebook', 20, 'Herramientas', 1, 1),
+(15, 'Pantalla Celular', 20, 'Herramientas', 1, 1),
+(16, 'Cooler Notebook', 20, 'Herramientas', 1, 1),
+(17, 'Pasta Termica', 19, 'Herramientas', 1, 1),
+(18, 'Memoria Ram 16 Gb', 12, 'Electronica', 6, 1),
+(19, 'Resma A4', 0, 'Herramientas', 4, 0);
 
 -- --------------------------------------------------------
 
@@ -532,7 +637,8 @@ INSERT INTO `tipo_electro` (`idtipo_electro`, `nom_tipo`) VALUES
 (4, 'lavarropas'),
 (5, 'licuadora'),
 (6, 'notebook'),
-(7, 'pc');
+(7, 'pc'),
+(9, 'Hornito Electrico');
 
 --
 -- Indexes for dumped tables
@@ -542,7 +648,6 @@ INSERT INTO `tipo_electro` (`idtipo_electro`, `nom_tipo`) VALUES
 -- Indexes for table `atencion_presupuesto`
 --
 ALTER TABLE `atencion_presupuesto`
-  ADD KEY `empleados_idempleados` (`idemp_atencion`),
   ADD KEY `id_reparacion` (`id_reparacion`),
   ADD KEY `idemp_presup` (`idemp_presup`);
 
@@ -587,6 +692,13 @@ ALTER TABLE `electrodomesticos`
   ADD PRIMARY KEY (`idelectrodomesticos`),
   ADD KEY `fk_electrodomesticos_clientes1_idx` (`idclientes`),
   ADD KEY `fk_electrodomesticos_tipo_electro1_idx` (`tipo_electro`);
+
+--
+-- Indexes for table `electro_desc`
+--
+ALTER TABLE `electro_desc`
+  ADD KEY `idelectrodomesticos` (`id_electro`),
+  ADD KEY `idempleados` (`idemp_atencion`);
 
 --
 -- Indexes for table `empleados`
@@ -675,7 +787,7 @@ ALTER TABLE `tipo_electro`
 -- AUTO_INCREMENT for table `calendario`
 --
 ALTER TABLE `calendario`
-  MODIFY `idcalendario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `idcalendario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `categorias_empleados`
@@ -693,31 +805,31 @@ ALTER TABLE `clientes`
 -- AUTO_INCREMENT for table `cobros`
 --
 ALTER TABLE `cobros`
-  MODIFY `id_cobro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id_cobro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `credenciales`
 --
 ALTER TABLE `credenciales`
-  MODIFY `idcredenciales` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `idcredenciales` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `electrodomesticos`
 --
 ALTER TABLE `electrodomesticos`
-  MODIFY `idelectrodomesticos` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
+  MODIFY `idelectrodomesticos` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
 
 --
 -- AUTO_INCREMENT for table `empleados`
 --
 ALTER TABLE `empleados`
-  MODIFY `idempleados` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `idempleados` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `historial_empleados`
 --
 ALTER TABLE `historial_empleados`
-  MODIFY `idhistorial_empleados` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `idhistorial_empleados` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `locales`
@@ -729,53 +841,47 @@ ALTER TABLE `locales`
 -- AUTO_INCREMENT for table `mails`
 --
 ALTER TABLE `mails`
-  MODIFY `idmail` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `idmail` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `notificaciones`
 --
 ALTER TABLE `notificaciones`
-  MODIFY `id_notificacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_notificacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `pedidos`
 --
 ALTER TABLE `pedidos`
-  MODIFY `id_ped` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id_ped` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `proveedores`
 --
 ALTER TABLE `proveedores`
-  MODIFY `idproveedores` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `idproveedores` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `reparaciones`
 --
 ALTER TABLE `reparaciones`
-  MODIFY `id_reparacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
+  MODIFY `id_reparacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
 
 --
 -- AUTO_INCREMENT for table `stock`
 --
 ALTER TABLE `stock`
-  MODIFY `idstock` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `idstock` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `tipo_electro`
 --
 ALTER TABLE `tipo_electro`
-  MODIFY `idtipo_electro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `idtipo_electro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- Constraints for dumped tables
 --
-
---
--- Constraints for table `atencion_presupuesto`
---
-ALTER TABLE `atencion_presupuesto`
-  ADD CONSTRAINT `fk_atencion_presupuesto_empleados1` FOREIGN KEY (`idemp_atencion`) REFERENCES `empleados` (`idempleados`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `calendario`

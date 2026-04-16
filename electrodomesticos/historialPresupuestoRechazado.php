@@ -48,6 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Historial Electrodomesticos</title>
     <link rel="stylesheet" href="../static/styles/style.css" />
     <link rel="stylesheet" href="../static/styles/card.css" />
+    <link rel="stylesheet" href="../static/styles/filtrosPosicion.css" />
     <script src="../static/js/funciones_empleados.js"></script>
     <script src="../static/js/funciones_select_nav.js"></script>
     <style>
@@ -89,9 +90,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         function mostrarFiltros(filtroId) {
             event.preventDefault();
             var filtros = document.getElementById(filtroId);
+            filtros.classList.toggle('mostrar');
+            var gridContainer = document.querySelector('.grid-container');
             // Puedes agregar aquí algún ajuste al container de la cuadrícula si es necesario
             if (filtros.style.display === 'none' || filtros.style.display === '') {
                 filtros.style.display = 'block';
+                gridContainer.style.marginTop = '50px'; 
             } else {
                 filtros.style.display = 'none';
             }
@@ -116,7 +120,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </button>
         </div>
 
-        <div class="div-con-botones" id="filtrosPresu"  style="grid-column: 1 / -1; text-align:center; margin-bottom:55px; display: none;">
+        <div class="div-con-botones" id="filtrosPresu">
             <form action="" method="post">
                 <div class="form-group">
                     <h2 style="margin:5px;">Filtros elija por fecha o por cliente o ambos: </h2>
@@ -212,23 +216,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <li class="list-group-item"><strong>Cliente:</strong> <?= "<br>Nombre: ". ucwords($reparacion->getNomCli() . " " . $reparacion->getApeCliente())."<br>Email: ". $reparacion->getEmailCliente(). "<br><strong>Problema según el Cliente: </strong>". ucwords($reparacion->getDescripcion()) ?></li>
                             <li class="list-group-item"><strong>Técnico Asignado:</strong> <?= ucwords($reparacion->getNomTecnico() . " " . $reparacion->getApeTecnico()) ?></li>
                         </ul>
-                        <?php if ( $reparacion->getEstadoPresu() == 'Presupuesto Rechazado' ):?>
+                       <?php if ($reparacion->getEstadoPresu() == 'Presupuesto Rechazado'): ?>
                             <?php
-                            $descPresu = $reparacion->getObservaciones();
+                            $descPresu = $reparacion->getObservaciones() ?? '';
                             $partes = explode(" Detalle de la Reparación: ", $descPresu);
 
-                            // La primera parte contiene "Materiales: ..."
-                            $materiales = trim(str_replace("Materiales: ", "", $partes[0]));
-                                            
-                            // La segunda parte contiene el detalle de la reparación
-                            $detalleReparacion = trim($partes[1]);
+                            // Asegurar que ambas partes existan
+                            $materiales = '';
+                            $detalleReparacion = '';
+
+                            if (!empty($partes[0])) {
+                                $materiales = trim(str_replace("Materiales: ", "", $partes[0]));
+                            }
+
+                            if (isset($partes[1])) {
+                                $detalleReparacion = trim($partes[1]);
+                            }
+
                             $fecha_env_presu = date("d/m/Y", strtotime($reparacion->getFechaEnvioPresup()));
                             $fecha_rechaza = date("d/m/Y", strtotime($reparacion->getFechaConfirmReparacion()));
 
                             $presup = $reparacion->getPresupuesto();
                             $monto_fijo = $reparacion->getMontoFijoIni();
-                                        
-                        ?>
+                            ?>
                     
                             <ul class="list-group">
                                 <li class="list-group-item"><strong>Fecha Envío Presupuesto:</strong> <?= $fecha_env_presu ?></li>

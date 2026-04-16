@@ -1,10 +1,18 @@
 <?php
 // INCLUIMOS LAS DEPENDENCIAS Y ARCHIVOS NECESARIOS
-include("../header.php");
+
 include("../conexionPDO.php");
 include("electro_class.php");
 include("../clientes/clientes_class.php");
 include("../empleados/empleados_class.php");
+$idCli = $_GET['idCli'] ?? null;
+
+if (empty($idCli) || !ctype_digit($idCli)) {
+    // Redirigir si no es válido
+    header("Location: altaElectro.php");
+    exit;
+}
+include("../header.php");
 ?>
 
 <!DOCTYPE html>
@@ -13,7 +21,7 @@ include("../empleados/empleados_class.php");
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nueva Reparacion</title>
+    <title>Agregar Tipo De Electro</title>
     <link rel="stylesheet" href="../static/styles/style.css" />
     <link rel="stylesheet" href="../static/styles/formularios.css" />
     <script src="../static/js/funciones_empleados.js"></script>
@@ -66,6 +74,7 @@ include("../empleados/empleados_class.php");
             <div class="section-btns">
                 <form action="guardartipoelectro.php" method="POST">
                     <h3 for="nom_tipo">Nombre del Tipo </h3>
+                    <input type="hidden" name="idCli" value="<?= $idCli ?>">
                     <input type="text" id="nom_tipo" name="nom_tipo" style="width: 100%; max-width: 600px; padding: 10px; font-size: 18px;" required>
 
                     <br>
@@ -73,8 +82,14 @@ include("../empleados/empleados_class.php");
 
                     <div class="button-group">
                         <button class="boton submit" type="submit">Agregar</button>
-                        <button class="boton cancelar" type="button" onclick="window.location.href='altaElectro.php'">Cancelar</button>
+                        <button class="boton cancelar" type="button"  onclick="document.getElementById('cancelarForm').submit();">
+                            Cancelar
+                        </button>
                     </div>
+                </form>
+                 <!-- Formulario oculto para volver a altaElectro con IdCliente -->
+                <form id="cancelarForm" action="altaElectro.php" method="post" style="display:none;">
+                    <input type="hidden" name="n_id" value="<?= $idCli ?>">
                 </form>
             </div>
 

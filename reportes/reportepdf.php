@@ -90,7 +90,7 @@ class PDF extends FPDF {
         $this->Cell(28,7,'F. Estimada fin',1,0,'C',true);
         $this->Cell(28,7,'Fin reparacion',1,0,'C',true);
         $this->Cell(28,7, 'Diferencia dias',1,0,'C',true);
-        $this->Cell(25,7,'Estado',1,0,'C',true);
+        $this->Cell(32,7,'Estado',1,0,'C',true);
         $this->Cell(25,7,'Tipo',1,0,'C',true);
         $this->Cell(25,7,'Marca',1,0,'C',true);
         $this->Cell(30,7,'Tecnico',1,0,'C',true);
@@ -136,7 +136,7 @@ class PDF extends FPDF {
         $this->Cell(28, $maxAltura, $fechaEstimada, 1);
         $this->Cell(28, $maxAltura, $fechaFinal, 1);
         $this->Cell(28, $maxAltura, $diferenciaTexto, 1);
-        $this->Cell(25, $maxAltura, ucwords($fila['estado_reparacion']), 1);
+        $this->Cell(32, $maxAltura, ucwords($fila['estado_presup']), 1);
         $this->Cell(25, $maxAltura, ucwords($fila['nom_tipo']), 1);
         $this->Cell(25, $maxAltura, $fila['marca'], 1);
         $this->Cell(30, $maxAltura, ucwords($fila['nom_empleado'] . ' ' . $fila['ape_empleado']), 1);
@@ -163,7 +163,7 @@ if (!empty($rango)) {
         $inicio = trim($fechas[0]);
         $fin = trim($fechas[1]);
 
-        $sql = "SELECT r.id_reparacion, r.fecha_inicio, r.fecha_fin_estimada, r.fecha_finalizacion, r.estado_reparacion,
+        $sql = "SELECT r.id_reparacion, r.fecha_inicio, r.fecha_fin_estimada, r.fecha_finalizacion, a.estado_presup,
                t.nom_tipo, el.marca, el.modelo, e.nom_empleado, e.ape_empleado, a.observaciones
                FROM reparaciones r
                INNER JOIN electrodomesticos el ON r.idelectrodomesticos = el.idelectrodomesticos

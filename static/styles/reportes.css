@@ -1,0 +1,87 @@
+.form-reporte {
+    margin: 20px auto;
+    padding: 20px;
+    max-width: 500px;
+    background-color: #fcfcf9c9;
+    /*background-color: #faf9f3cb;*/
+    border-radius: 10px;
+    /*box-shadow: 0 0 10px #ccc;*/
+}
+
+.form-reporte label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.form-reporte input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    
+}
+.input-reportes{
+    padding: 2px;
+    border: 1px solid #484848;
+}
+.form-reporte button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.form-reporte button[type="submit"] {
+    background-color: #007BFF;
+    color: white;
+}
+
+.form-reporte button#limpiar {
+    background-color: #6c757d;
+    color: white;
+}
+
+.mensaje-reporte {
+    margin-top: 20px;
+    background-color: #e8f4ff;
+    padding: 10px;
+    border-left: 4px solid #007BFF;
+    font-size: 16px;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 6px;
+}
+.table-container {
+    width: 95%;
+    max-width: 98%; /* controla el ancho máximo */
+    margin: 20px auto;
+    background: white;
+    padding: 5px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    overflow-x: auto; /* solo aparece scroll si hace falta */
+}
+
+/* Tabla */
+.tabla {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    text-align: center;
+        margin-top: 25px;
+}
+
+/* Celdas */
+th, td {
+    padding: 7px 12px;
+    border: 1px solid #ccc;
+    white-space: normal;
+    word-wrap: break-word;
+}
+
+.label{
+    margin-bottom: 4px;
+}

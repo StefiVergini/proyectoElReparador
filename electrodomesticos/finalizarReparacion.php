@@ -58,7 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($idCalendar) {
             $updateCalendar->execute([$idCalendar['idcalendario']]);
         } else {
-            echo "Error: No se encontró un evento en el calendario para la reparación ID $idRepa.";
+            echo "<h3 style='color: red;'>Error: No se encontró un evento en el calendario para la reparación ID $idRepa. Ha sido modificada.</h3>";
         }
         
         $_POST = [

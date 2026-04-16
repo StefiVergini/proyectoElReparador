@@ -107,3 +107,21 @@ text-align:center;
 .icono-eventos:hover{
     border: 3px outset #07eafa;
 }
+
+@media (max-width: 694px){
+    .div-calendario {
+        display: grid;
+        grid-template-columns: 1fr;
+        justify-items: center;
+    }
+
+    #calendar {
+        width: 100%;
+        min-width: 350px;
+        overflow-x: auto;
+    }
+
+    .lista-eventos {
+        width: 90%;
+    }
+}

@@ -44,11 +44,12 @@
             event.preventDefault();
 
             var filtros = document.getElementById('filtros');
+            filtros.classList.toggle('mostrar');
             var tablaContainer = document.querySelector('.table-container');
 
             if (filtros.style.display === 'none' || filtros.style.display === '') {
                 filtros.style.display = 'block';
-                tablaContainer.style.marginTop = '10px'; // Ajusta este valor según sea necesario
+                tablaContainer.style.marginTop = '50px'; // Ajusta este valor según sea necesario
             } else {
                 filtros.style.display = 'none';
             }
@@ -94,28 +95,30 @@
     <div class="filtro " id="filtros" style="display:none;">
         <form action="" method="post">
             <div class="div-con-botones" >
-                <input class="input" type="text" name="buscar" placeholder="Buscar por ID o Descripción" id="buscar">
+                <div class="form-group">
+                    <input class="input" type="text" name="buscar" placeholder="Buscar por ID o Descripción" id="buscar">
 
-                <select class="input" name="filtro_cantidad">
-                    <option value="">Filtrar por cantidad</option>
-                    <option value="sinArt">Sin Unidades</option>
-                    <option value="menor10">Menor a 10 Unidades</option>
-                    <option value="mayor10">Mayor a 10 Unidades</option>
-                </select>
+                    <select class="input" name="filtro_cantidad">
+                        <option value="">Filtrar por cantidad</option>
+                        <option value="sinArt">Sin Unidades</option>
+                        <option value="menor10">Menor a 10 Unidades</option>
+                        <option value="mayor10">Mayor a 10 Unidades</option>
+                    </select>
 
-                <select class="input" name="filtro_proveedor">
-                    <option value="">Filtrar por proveedor</option>
-                    <?php
-                    $proveedores = $stockModel->leerProv(); // Debes crear esta función en la clase Stock
-                    foreach ($proveedores as $prov) {?>
-                        <option value="<?= $prov->getIdProv(); ?>"><?= $prov->getNomProv(); ?></option>
-                    <?php }
-                    ?>
-                </select>
+                    <select class="input" name="filtro_proveedor">
+                        <option value="">Filtrar por proveedor</option>
+                        <?php
+                        $proveedores = $stockModel->leerProv();
+                        foreach ($proveedores as $prov) {?>
+                            <option value="<?= $prov->getIdProv(); ?>"><?= $prov->getNomProv(); ?></option>
+                        <?php }
+                        ?>
+                    </select>
 
-                <button class="btn-iconos" type="submit">
-                    <img src="../static/images/lupa.png" alt="Buscar" width='30' height='20' />
-                </button>
+                    <button class="btn-iconos" type="submit">
+                        <img src="../static/images/lupa.png" alt="Buscar" width='30' height='20' />
+                    </button>
+                </div>
             </div>
         </form>
     </div>
@@ -193,3 +196,5 @@
         return confirm(`¿Estás seguro de que deseas eliminar el artículo "${nombre}"?`);
     }
 </script>
+
+
