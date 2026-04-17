@@ -151,7 +151,7 @@ Event tracking with visual alerts based on deadlines.
 1. Clone or download the repository:
 
 ```bash
-git clone https://github.com/your-username/el-reparador.git
+git clone https://github.com/StefiVergini/proyectoElReparador.git
 ```
 
 2. Move the project into your local server directory:

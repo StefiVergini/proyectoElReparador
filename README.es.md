@@ -156,7 +156,7 @@ Seguimiento de eventos con alertas visuales según vencimientos.
 1. Clonar o descargar el repositorio:
 
 ```bash
-git clone https://github.com/your-username/el-reparador.git
+git clone https://github.com/StefiVergini/proyectoElReparador.git
 ```
 
 2. Ubicar el proyecto en el servidor local:
