@@ -54,7 +54,7 @@ Centralized view of the system.
 
 ### Employee Management
 
-![Employees](screenshots/empleados.png)
+![Employees](screenshots/employees.png)
 Manage employees, categories, and records.
 
 ---

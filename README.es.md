@@ -58,7 +58,7 @@ Vista centralizada del sistema.
 
 ### Gestión de Empleados
 
-![Employees](screenshots/empleados.png)
+![Employees](screenshots/employees.png)
 Administración de empleados, categorías e historial.
 
 ---
