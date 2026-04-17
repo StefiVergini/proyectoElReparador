@@ -72,7 +72,7 @@ Formularios dinámicos para crear y actualizar registros.
 
 ### Calendario y Eventos
 
-![Calendar](screenshots/calendario.png)
+![Calendar](screenshots/calendar.png)
 Seguimiento de eventos con alertas visuales según vencimientos.
 
 ---
