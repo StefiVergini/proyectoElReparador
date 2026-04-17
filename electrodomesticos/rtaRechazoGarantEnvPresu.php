@@ -13,6 +13,9 @@ function rtaAutomaticaConfirmacion($mailCli,$nomCli,$idRepa, $nomTipo, $marca, $
     $urlReject  = "http://localhost/php/proyectoElReparador/electrodomesticos/respuestaPresupuesto.php?accion=rechazar&token=" . urlencode($token);
 
     $mail = new PHPMailer(true);
+    require_once __DIR__ . '/../env.php';
+    loadEnv(__DIR__ . '/../.env');
+    
     
     try {
         $nomTipo = strtoupper($nomTipo);
@@ -22,12 +25,12 @@ function rtaAutomaticaConfirmacion($mailCli,$nomCli,$idRepa, $nomTipo, $marca, $
         $mail->isSMTP();                                 
         $mail->SMTPAuth   = true;   
         $mail->Host       = 'smtp.gmail.com';                       
-        $mail->Username   = 'srlelreparador@gmail.com';  
-        $mail->Password   = 'vxqwokxorbpdjnbn';  // contraseña de aplicación
+        $mail->Username = $_ENV['MAIL_USERNAME'];
+        $mail->Password = $_ENV['MAIL_PASSWORD']; 
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; //ENCRYPTION_SMTPS Puerto seria 465
         $mail->Port       = 587;
     
-        $mail->setFrom('srlelreparador@gmail.com', 'EL REPARADOR SRL'); 
+        $mail->setFrom($_ENV['MAIL_USERNAME'], 'EL REPARADOR SRL'); 
         $mail->addAddress(htmlspecialchars($mailCli)); 
 
         $logoPath = '../static/images/logo.png'; // Ruta al logo
