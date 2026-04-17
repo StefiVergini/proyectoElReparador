@@ -141,7 +141,7 @@ Event tracking with visual alerts based on deadlines.
 
 ### 🔧 Requirements
 
-* XAMPP (or similar local server)
+* XAMPP
 * Apache and MySQL services running
 
 ---
