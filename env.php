@@ -12,3 +12,5 @@ function loadEnv($path) {
         $_ENV[trim($key)] = trim($value);
     }
 }
+
+?>

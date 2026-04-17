@@ -1,5 +1,7 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 // Cargar las clases de PHPMailer
 require_once __DIR__ . '/../PHPMailer/src/Exception.php';
 require_once __DIR__ . '/../PHPMailer/src/PHPMailer.php';
@@ -10,9 +12,12 @@ include_once __DIR__ . '/mail.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
-require_once 'env.php';
-loadEnv(__DIR__ . '/.env');
+
+require_once __DIR__ . '/../env.php';
+loadEnv(__DIR__ . '/../.env');
+
 $mail = new PHPMailer(true);
+//$mail->SMTPDebug = 0; 2 para hacer debug.
 
 if (isset($_POST["enviar"])) {
     //var_dump($_POST);
@@ -41,9 +46,11 @@ if (isset($_POST["enviar"])) {
         // Configuración del servidor SMTP
         $mail->isSMTP();                                 
         $mail->SMTPAuth   = true;   
-        $mail->Host       = $_ENV['MAIL_USERNAME'];                     
-        $mail->Username   =$_ENV['MAIL_PASSWORD'];
-        $mail->Password   = 'vxqwokxorbpdjnbn';  // contraseña de aplicación
+        $mail->isSMTP();
+        $mail->Host = 'smtp.gmail.com';             
+        $mail->Username = $_ENV['MAIL_USERNAME'];
+        $mail->Password = $_ENV['MAIL_PASSWORD']; 
+
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; //ENCRYPTION_SMTPS Puerto seria 465
         $mail->Port       = 587;
 
