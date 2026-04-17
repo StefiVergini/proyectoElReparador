@@ -186,6 +186,19 @@ el_reparador_db.sql
 
 ---
 
+### 🔐 Variables de Entorno
+
+Este proyecto utiliza variables de entorno para manejar datos sensibles (por ejemplo, credenciales de email).
+
+Creá un archivo `.env` en la raíz del proyecto con lo siguiente:
+
+MAIL_USERNAME=tu_email@gmail.com  
+MAIL_PASSWORD=tu_contraseña_de_aplicacion  
+
+> Asegurate de que este archivo no se suba a GitHub.
+
+---
+
 ### ▶️ Ejecución del Proyecto
 
 1. Iniciar Apache y MySQL desde XAMPP
@@ -230,6 +243,8 @@ Para probar la funcionalidad de correos:
 * Asegurarse de que Apache y MySQL estén en ejecución
 * Verificar que la base de datos esté correctamente importada
 * El proyecto ya está configurado para usar la base de datos `el_reparador_db`
+* No exponer credenciales reales en el repositorio
+* Utilizar variables de entorno para la configuración sensible
 
 ---
 
@@ -238,6 +253,8 @@ Para probar la funcionalidad de correos:
 * Sistema de login implementado
 * Acceso basado en roles (Gerente / Técnico / Atención al cliente)
 * Secciones protegidas
+* A los nuevos usuarios se les asigna una contraseña temporal al crear su cuenta.
+* Para garantizar la seguridad de la cuenta, los usuarios deben actualizar su contraseña al iniciar sesión por primera vez.
 
 ---
 

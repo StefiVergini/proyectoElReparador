@@ -179,6 +179,20 @@ el_reparador_db
 el_reparador_db.sql
 ```
 ---
+### 🔐 Environment Variables
+
+This project uses environment variables for sensitive data (e.g., email credentials).
+
+Create a `.env` file in the root directory with the following:
+
+
+MAIL_USERNAME=your_email@gmail.com
+
+MAIL_PASSWORD=your_app_password
+
+
+> Make sure this file is not uploaded to GitHub.
+---
 
 ### ▶️ Running the Project
 
@@ -221,6 +235,8 @@ To test the email workflow:
 * Make sure Apache and MySQL are running before accessing the system
 * Ensure the database is properly imported before logging in
 * The project is preconfigured to use the database `el_reparador_db`
+* Do not expose real credentials in the repository 
+* Use environment variables for sensitive configuration
 
 
 ## 🔐 Authentication
@@ -228,6 +244,8 @@ To test the email workflow:
 * Login system implemented
 * Role-based access (Manager / Repair Technician / Customer Service)
 * Protected sections
+* New users are assigned a temporary password upon creation
+* Users are required to update their password on first login to ensure account security
 
 ---
 
