@@ -146,7 +146,7 @@ Seguimiento de eventos con alertas visuales según vencimientos.
 
 ### 🔧 Requisitos
 
-* XAMPP (o servidor local similar)
+* XAMPP
 * Apache y MySQL en ejecución
 
 ---
