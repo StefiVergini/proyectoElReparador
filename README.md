@@ -9,7 +9,7 @@
 
 This project was developed as part of my experience as a Full-Stack Developer, with the goal of designing a complete management system for a real-world repair business.
 
-It reflects my ability to build scalable and modular applications using PHP and MySQL, apply object-oriented programming principles, and design solutions that address practical business needs such as employee management, order tracking, document handling, and event scheduling.
+It reflects my ability to build scalable and modular applications using PHP and MySQL, apply object-oriented programming principles, and design solutions that address practical business needs such as employee management, repair tracking, order and stock management, reporting, and task planning.
 
 Throughout the development process, I focused on writing clean, maintainable code and organizing the system by business domains to ensure clarity and scalability.
 
@@ -35,7 +35,7 @@ Repair businesses often struggle with:
 This system centralizes operations by:
 - Automating communication workflows via email
 - Managing repair lifecycle from intake to completion
-- Integrating scheduling with technician availability
+- Different roles and functionalities depending on the type of employee.
 
 ---
 ## 🎬 Full Workflow Demo

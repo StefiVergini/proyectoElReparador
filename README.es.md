@@ -9,7 +9,7 @@
 
 Este proyecto fue desarrollado como parte de mi experiencia como Desarrolladora Full-Stack, con el objetivo de diseñar un sistema de gestión completo para un negocio real de reparaciones.
 
-Refleja mi capacidad para construir aplicaciones modulares utilizando PHP y MySQL, aplicar principios de programación orientada a objetos y desarrollar soluciones que abordan necesidades concretas del negocio, como la gestión de empleados, seguimiento de pedidos, manejo de documentación y planificación de tareas.
+Refleja mi capacidad para construir aplicaciones modulares utilizando PHP y MySQL, aplicar principios de programación orientada a objetos y desarrollar soluciones que abordan necesidades concretas del negocio como: la gestión de empleados, seguimiento de reparaciones, gestión de pedidos y stock, reportes y planificación de tareas.
 
 Durante el desarrollo, me enfoqué en escribir código claro y mantenible, organizando el sistema por dominios de negocio para facilitar su comprensión y escalabilidad.
 
@@ -38,8 +38,8 @@ Los negocios de reparación suelen enfrentar dificultades para:
 Este sistema centraliza las operaciones mediante:
 
 * Automatización de la comunicación con clientes a través de correos electrónicos
-* Gestión del ciclo completo de reparación (desde ingreso hasta finalización)
-* Integración de la planificación según disponibilidad de técnicos
+* Gestión del ciclo completo de reparación (desde ingreso hasta la Garantía)
+* Diferentes roles y funcionalidades según el tipo de empleado.
 
 ---
 ## 🎬 Demo Flujo de Reparación Completa
