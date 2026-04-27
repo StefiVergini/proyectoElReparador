@@ -38,7 +38,11 @@ This system centralizes operations by:
 - Integrating scheduling with technician availability
 
 ---
+## 🎬 Full Workflow Demo
+End-to-end repair workflow with automated email approvals and notifications.
+![End-to-end repair workflow](screenshots/WorkFlowRepair-EndToEnd.gif)
 
+---
 ## 📸 Screenshots
 
 ### Login System

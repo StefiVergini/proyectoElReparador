@@ -2,6 +2,9 @@
 
 # 🛠️ El Reparador - Sistema de Gestión
 
+## 🎬 Demo Rápida
+![Ingreso - Crear Presupuesto - Respuesta Autómatica en Sistema - Token - Evento de Calendario Automático](screenshots/FromLogin-ToCalendar.gif)
+
 ## 💼 Sobre el Proyecto
 
 Este proyecto fue desarrollado como parte de mi experiencia como Desarrolladora Full-Stack, con el objetivo de diseñar un sistema de gestión completo para un negocio real de reparaciones.
@@ -37,6 +40,11 @@ Este sistema centraliza las operaciones mediante:
 * Automatización de la comunicación con clientes a través de correos electrónicos
 * Gestión del ciclo completo de reparación (desde ingreso hasta finalización)
 * Integración de la planificación según disponibilidad de técnicos
+
+---
+## 🎬 Demo Flujo de Reparación Completa
+Flujo de trabajo de reparación integral con aprobaciones automatizadas por correo electrónico y notificaciones.
+![End-to-end repair workflow](screenshots/WorkFlowRepair-EndToEnd.gif)
 
 ---
 
