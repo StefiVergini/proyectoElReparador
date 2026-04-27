@@ -3,8 +3,7 @@
 # 🛠️ El Reparador - Management System
 
 ## 🎬 Quick Demo
-![Login - Create Budget - Automatic Response - Token - Automatic Event Calendar]
-(screenshots/FromLogin-ToCalendar.gif)
+![Login - Create Budget - Automatic Response - Token - Automatic Event Calendar](screenshots/FromLogin-ToCalendar.gif)
 
 ## 💼 About This Project
 
