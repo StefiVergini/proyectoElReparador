@@ -27,7 +27,7 @@
             
             if ($resultado->execute()) {
                 echo "<script> alert('Contraseña Actualizada con Éxito!');
-                window.location.href = ' /php/proyectoElReparador/electrodomesticos/electrodomesticos.php';</script>";
+                window.location.href = ' /php/proyectoElReparador/electrodomesticos/inicioElectro.php';</script>";
                 exit();
             } else {
                 echo "<script> alert('Error al Actualizar la Contraseña.');
